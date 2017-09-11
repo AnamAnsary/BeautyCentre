@@ -32,8 +32,11 @@ public class Dashboard extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        welcome = (TextView) findViewById(R.id.welcomename);
-        user_email = (TextView) findViewById(R.id.user_email);
+       /* NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        View hView =  navigationView.getHeaderView(0);
+        TextView nav_user = (TextView)hView.findViewById(R.id.nav_name);
+        nav_user.setText(user);
+        */
 
       /*  Bundle i = getIntent().getExtras();
 
@@ -41,11 +44,6 @@ public class Dashboard extends AppCompatActivity
 
         String username = MstUsers.getFullname();
         String email = MstUsers.getEmail();
-
-
-        //String wname = "Welcome " +i.getString("fullname");
-        welcome.setText(username);
-        user_email.setText(email);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -64,6 +62,13 @@ public class Dashboard extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        View hdView =  navigationView.getHeaderView(0);
+        welcome = (TextView) hdView.findViewById(R.id.welcomename);
+        user_email = (TextView) hdView.findViewById(R.id.user_email);
+        welcome.setText("Welcome "+username);
+        user_email.setText(email);
+
     }
 
     @Override
