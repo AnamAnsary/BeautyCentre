@@ -52,12 +52,17 @@ public class LoginActivity  extends AppCompatActivity {
             public void onClick(View view) {
                 Lemail = email.getText().toString();
                 Lpass = password.getText().toString();
-                Log.w(TAG, "onClick: email and password is "+Lemail+" "+password);
+                Log.w(TAG, "onClick: email and password is "+Lemail+" "+Lpass);
                 if (Lemail.length() != 0 && Lpass.length() != 0)
                 {
                     try {
-                        MstUsers user = db.checkUser(Lemail, Lpass);
-                        Toast.makeText(LoginActivity.this, "FullName, contact no and usertype is " + user.getFullname() + " " + user.getContactno() + " " + user.getUsertype(), Toast.LENGTH_LONG).show();
+                        mstUser = db.checkUser(Lemail, Lpass);
+                        Toast.makeText(LoginActivity.this, "FullName, contact no and usertype is " + mstUser.getFullname() + " " + mstUser.getContactno() + " " + mstUser.getUsertype(), Toast.LENGTH_LONG).show();
+
+                        Intent intent = new Intent(LoginActivity.this,Dashboard.class);
+                      /*  intent.putExtra("email",mstUser.getEmail());
+                        intent.putExtra("fullname",mstUser.getFullname());*/
+                        startActivity(intent);
 
                     }
                     catch (Exception e) {

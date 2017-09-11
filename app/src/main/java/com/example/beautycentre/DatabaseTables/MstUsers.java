@@ -7,8 +7,8 @@ package com.example.beautycentre.DatabaseTables;
 public class MstUsers {
 
     int id;
-    String fullname;
-    String email;
+    static String fullname;
+    static String email;
     String password;
     String username;
     String contactno;
@@ -47,7 +47,7 @@ public class MstUsers {
         this.id = id;
     }
 
-    public String getFullname() {
+    public static String getFullname() {
         return fullname;
     }
 
@@ -55,7 +55,7 @@ public class MstUsers {
         this.fullname = fullname;
     }
 
-    public String getEmail() {
+    public static String getEmail() {
         return email;
     }
 

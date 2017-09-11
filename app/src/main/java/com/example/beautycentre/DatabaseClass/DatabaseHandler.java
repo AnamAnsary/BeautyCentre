@@ -103,7 +103,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
             cursor.moveToFirst();
 
         MstUsers userDetail = new MstUsers(Integer.parseInt(cursor.getString(0)), cursor.getString(1),cursor.getString(2),cursor.getString(3),
-                cursor.getString(4),cursor.getString(5),cursor.getString(6), Integer.parseInt(cursor.getString(8)));
+                cursor.getString(4),cursor.getString(5),cursor.getString(6), Integer.parseInt(cursor.getString(7)));
         // return contact
         return userDetail;
     }
