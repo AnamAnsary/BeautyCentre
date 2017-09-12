@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.beautycentre.DatabaseClass.DatabaseHandler;
+import com.example.beautycentre.DatabaseTables.MstProducts;
 import com.example.beautycentre.DatabaseTables.MstUsers;
 
 /**
@@ -19,6 +20,7 @@ import com.example.beautycentre.DatabaseTables.MstUsers;
 public class LoginActivity  extends AppCompatActivity {
 
     MstUsers mstUser;
+    MstProducts mstProducts;
     EditText password;
     EditText email;
     Button login;
@@ -46,6 +48,13 @@ public class LoginActivity  extends AppCompatActivity {
         db.addUser(mstUser);
         mstUser = new MstUsers("Aariz Ansari", "anamansary.developer@gmail.com","anamgmail", "AarizAnsary","9876543210", 1);
         db.addUser(mstUser);
+
+        mstProducts = new MstProducts("Garnier Shampoo","Shampoo for long hair",10, 15,1);
+        db.addProduct(mstProducts);
+        mstProducts = new MstProducts("XYZ Hair Straightener","Hair Straightener",4, 12,1);
+        db.addProduct(mstProducts);
+        mstProducts = new MstProducts("Lotus Bleach Cream","Bleach Cream",8, 8,1);
+        db.addProduct(mstProducts);
 
         login.setOnClickListener(new View.OnClickListener() {
             @Override
