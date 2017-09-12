@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -69,6 +71,9 @@ public class Dashboard extends AppCompatActivity
         welcome.setText("Welcome "+username);
         user_email.setText(email);
 
+        //add this line to display menu1 when the activity is loaded
+        displaySelectedScreen(R.id.nav_product);
+
     }
 
     @Override
@@ -106,7 +111,8 @@ public class Dashboard extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
+
+       /* // Handle navigation view item clicks here.
         int id = item.getItemId();
 
         if (id == R.id.nav_product) {
@@ -117,14 +123,60 @@ public class Dashboard extends AppCompatActivity
 
         } else if (id == R.id.nav_inventory) {
 
-        } else if (id == R.id.nav_share) {
+        } else if (id == R.id.nav_changepwd) {
 
-        } else if (id == R.id.nav_send) {
+        } else if (id == R.id.nav_logout) {
+            Intent i = new Intent(Dashboard.this,LoginActivity.class);
+            startActivity(i);
+        }
 
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);*/
+
+
+        displaySelectedScreen(item.getItemId());
+        return true;
+    }
+
+
+    private void displaySelectedScreen(int itemId) {
+
+        //creating fragment object
+        Fragment fragment = null;
+
+        //initializing the fragment object which is selected
+        switch (itemId) {
+            case R.id.nav_product:
+                fragment = new Product();
+                break;
+            case R.id.nav_salon:
+                fragment = new Salon();
+                break;
+            case R.id.nav_branches:
+                fragment = new Branch();
+                break;
+            case R.id.nav_inventory:
+                fragment = new Inventory();
+                break;
+            case R.id.nav_changepwd:
+                Intent  i = new Intent(Dashboard.this,CreateTable.class);
+                startActivity(i);
+                break;
+            case R.id.nav_logout:
+                Intent  i2 = new Intent(Dashboard.this,LoginActivity.class);
+                startActivity(i2);
+                break;
+        }
+
+        //replacing the fragment
+        if (fragment != null) {
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.content_frame, fragment);
+            ft.commit();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
-        return true;
     }
+
 }

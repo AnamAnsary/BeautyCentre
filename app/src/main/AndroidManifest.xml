@@ -28,6 +28,8 @@
             </intent-filter>
 
         </activity>
+
+        <activity android:name=".CreateTable"></activity>
     </application>
 
 </manifest>

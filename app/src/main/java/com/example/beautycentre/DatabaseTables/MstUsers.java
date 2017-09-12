@@ -18,24 +18,22 @@ public class MstUsers {
     public MstUsers() {
     }
 
-    public MstUsers(int id, String fullname, String email, String password, String username, String contactno, String usertype, int active) {
+    public MstUsers(int id, String fullname, String email, String password, String username, String contactno, int active) {
         this.id = id;
         this.fullname = fullname;
         this.email = email;
         this.password = password;
         this.username = username;
         this.contactno = contactno;
-        this.usertype = usertype;
         this.active = active;
     }
 
-    public MstUsers(String fullname, String email, String password, String username, String contactno, String usertype, int active) {
+    public MstUsers(String fullname, String email, String password, String username, String contactno, int active) {
         this.fullname = fullname;
         this.email = email;
         this.password = password;
         this.username = username;
         this.contactno = contactno;
-        this.usertype = usertype;
         this.active = active;
     }
 
@@ -85,14 +83,6 @@ public class MstUsers {
 
     public void setContactno(String contactno) {
         this.contactno = contactno;
-    }
-
-    public String getUsertype() {
-        return usertype;
-    }
-
-    public void setUsertype(String usertype) {
-        this.usertype = usertype;
     }
 
     public int getActive() {

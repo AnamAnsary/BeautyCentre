@@ -40,11 +40,11 @@ public class LoginActivity  extends AppCompatActivity {
         login = (Button) findViewById(R.id.btnlogin);
 
 
-        mstUser = new MstUsers("Anam Ansari", "anam.ansary36@gmail.com","anam123", "AnamAnsary","9168567787","distributor", 1);
+        mstUser = new MstUsers("Anam Ansari", "anam.ansary36@gmail.com","anam123", "AnamAnsary","9168567787", 1);
         db.addUser(mstUser);
-        mstUser = new MstUsers("Zain Ansari", "anam.ansari36@yahoo.in","anamyahoo", "ZainAnsary","0123456789","distributor", 1);
+        mstUser = new MstUsers("Zain Ansari", "anam.ansari36@yahoo.in","anamyahoo", "ZainAnsary","0123456789", 1);
         db.addUser(mstUser);
-        mstUser = new MstUsers("Aariz Ansari", "anamansary.developer@gmail.com","anamgmail", "AarizAnsary","9876543210","distributor", 1);
+        mstUser = new MstUsers("Aariz Ansari", "anamansary.developer@gmail.com","anamgmail", "AarizAnsary","9876543210", 1);
         db.addUser(mstUser);
 
         login.setOnClickListener(new View.OnClickListener() {
@@ -57,7 +57,7 @@ public class LoginActivity  extends AppCompatActivity {
                 {
                     try {
                         mstUser = db.checkUser(Lemail, Lpass);
-                        Toast.makeText(LoginActivity.this, "FullName, contact no and usertype is " + mstUser.getFullname() + " " + mstUser.getContactno() + " " + mstUser.getUsertype(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(LoginActivity.this, "FullName, contact no and usertype is " + mstUser.getFullname() + " " + mstUser.getContactno(), Toast.LENGTH_LONG).show();
 
                         Intent intent = new Intent(LoginActivity.this,Dashboard.class);
                       /*  intent.putExtra("email",mstUser.getEmail());
