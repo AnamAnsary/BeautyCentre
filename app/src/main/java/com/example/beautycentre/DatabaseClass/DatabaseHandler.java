@@ -201,6 +201,9 @@ public class DatabaseHandler extends SQLiteOpenHelper{
                 MstProducts prod = new MstProducts();
                 prod.setPid(Integer.parseInt(cursor.getString(0)));
                 prod.setPname(cursor.getString(1));
+                prod.setDescrip(cursor.getString(2));
+                prod.setIntial_quantity(cursor.getInt(3));
+                prod.setQuantity(cursor.getInt(4));
                 // Adding contact to list
                 prodList.add(prod);
             } while (cursor.moveToNext());

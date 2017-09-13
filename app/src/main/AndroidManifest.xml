@@ -30,6 +30,7 @@
         </activity>
 
         <activity android:name=".CreateTable"></activity>
+        <activity android:name=".AddProduct"></activity>
     </application>
 
 </manifest>
