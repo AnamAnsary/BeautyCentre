@@ -45,7 +45,7 @@ public class AddProduct  extends AppCompatActivity {
                 {
                     MstProducts mstProducts = new MstProducts(pname,descriptn,quantity,quantity,1);
                     db.addProduct(mstProducts);
-                    Intent i = new Intent(AddProduct.this,Dashboard.class);
+                    Intent i = new Intent(AddProduct.this,Product.class);
                     startActivity(i);
                     finish();//finishing activity
 

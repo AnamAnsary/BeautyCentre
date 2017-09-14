@@ -1,6 +1,8 @@
 package com.example.beautycentre;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -21,15 +23,27 @@ import android.widget.Toast;
 
 import com.example.beautycentre.DatabaseTables.MstUsers;
 
+import static com.example.beautycentre.AddSalon.FRAGMENT_S;
+
+
 public class Dashboard extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final String TAG = "Dashboard";
+
+    public static final String MyPREFERENCES = "MyPrefs" ;
+    public static final String Name = "nameKey";
+    public static final String Phone = "phoneKey";
+    public static final String Email = "emailKey";
+    public static final String Pwd = "pwdKey";
+    SharedPreferences sharedpreferences;
+
     //MstUsers mstUsers;
     NavigationView navigationView;
     DrawerLayout drawer;
     TextView welcome,user_email;
     FloatingActionButton fab;
+    private Bundle intentFragment = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +51,47 @@ public class Dashboard extends AppCompatActivity
         setContentView(R.layout.activity_dashboard);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+        String name = sharedpreferences.getString(Name,null);
+        String email1 = sharedpreferences.getString(Email,null);
+
+
+       /* intentFragment = getIntent().getExtras().getString("frgToLoad");
+        Log.w(TAG, "onCreate: intentfragment is "+intentFragment);
+
+        if(intentFragment != null) {
+            Log.w(TAG, "onCreate: inside " );
+            Fragment fragment = null;
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            switch (intentFragment) {
+                case FRAGMENT_S:
+                    // Load corresponding fragment
+                    fragment = new Salon();
+                    FragmentTransaction selectFr = ft.replace(R.id.content_frame, fragment, "Salon");
+                    selectFr.commit();
+
+                    break;
+           *//* case FRAGMENT_B:
+                // Load corresponding fragment
+                break;
+            case FRAGMENT_C:
+                // Load corresponding fragment
+                break;*//*
+            }
+        }
+*/
+        if((email1 == null) && (name == null))
+        {
+
+            Intent intent = new Intent(Dashboard.this,LoginActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                      /*  intent.putExtra("email",mstUser.getEmail());
+                        intent.putExtra("fullname",mstUser.getFullname());*/
+            startActivity(intent);
+            finish();
+        }
 
        /* NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         View hView =  navigationView.getHeaderView(0);
@@ -68,7 +123,10 @@ public class Dashboard extends AppCompatActivity
                         finish();
                         break;
                     case "Salon":
-                        Snackbar.make(view, "Salon", Snackbar.LENGTH_LONG).show();
+                        Intent  i2 = new Intent(Dashboard.this,AddSalon.class);
+                        startActivity(i2);
+                        finish();
+                        //Snackbar.make(view, "Salon", Snackbar.LENGTH_LONG).show();
                         break;
                     case "Branch":
                         Snackbar.make(view, "Branch", Snackbar.LENGTH_LONG).show();
@@ -97,8 +155,14 @@ public class Dashboard extends AppCompatActivity
         View hdView =  navigationView.getHeaderView(0);
         welcome = (TextView) hdView.findViewById(R.id.welcomename);
         user_email = (TextView) hdView.findViewById(R.id.user_email);
-        welcome.setText("Welcome "+username);
-        user_email.setText(email);
+
+
+       /* // email
+        String email = user.get(SessionManager.KEY_EMAIL);
+        */
+
+        welcome.setText("Welcome "+name);
+        user_email.setText(email1);
 
         //add this line to display menu1 when the activity is loaded
         displaySelectedScreen(R.id.nav_product);
@@ -170,6 +234,13 @@ public class Dashboard extends AppCompatActivity
 
     private void displaySelectedScreen(int itemId) {
 
+      /*  intentFragment = getIntent().getExtras();
+        Log.w(TAG, "onCreate: intentfragment is "+intentFragment);
+
+        if (intentFragment != null) {
+            itemId = Integer.parseInt(intentFragment.getString("frgToLoad"));
+        }*/
+
         //creating fragment object
         Fragment fragment = null;
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -198,7 +269,16 @@ public class Dashboard extends AppCompatActivity
                 break;
             case R.id.nav_logout:
                 Intent  i2 = new Intent(Dashboard.this,LoginActivity.class);
+
+                SharedPreferences sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedpreferences.edit();
+                editor.clear();
+                editor.commit();
+
+                i2.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                i2.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(i2);
+                finish();
                 break;
         }
 

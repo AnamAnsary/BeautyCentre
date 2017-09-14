@@ -7,7 +7,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.example.beautycentre.DatabaseTables.MstBranches;
 import com.example.beautycentre.DatabaseTables.MstProducts;
+import com.example.beautycentre.DatabaseTables.MstSalons;
 import com.example.beautycentre.DatabaseTables.MstUsers;
 
 import java.util.ArrayList;
@@ -31,6 +33,8 @@ public class DatabaseHandler extends SQLiteOpenHelper{
     // Contacts table name
     private static final String TABLE_USERS = "users";
     private static final String TABLE_PRODUCTS = "products";
+    private static final String TABLE_SALONS = "salons";
+    private static final String TABLE_BRANCHES = "branches";
 
     //Common columns
     private static final String KEY_ID = "id";
@@ -51,6 +55,16 @@ public class DatabaseHandler extends SQLiteOpenHelper{
     private static final String KEY_INITQUAN = "initial_quantity";
     private static final String KEY_QUANTITY= "quantity";
 
+    //MstSalon Table column names
+    private static final String KEY_SNAME = "salonname";
+    private static final String KEY_SDESC = "Sdescription";
+    private static final String KEY_OWNER= "ownername";
+
+    //MstBranch Table column names
+    private static final String KEY_BRNAME= "branchName";
+    private static final String KEY_BRADD= "branchAdd";
+    private static final String KEY_BREMAIL= "branchEmail";
+    private static final String KEY_BRCNTCT= "branchCntct";
 
     public DatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -78,8 +92,27 @@ public class DatabaseHandler extends SQLiteOpenHelper{
                 + KEY_ACTIVE + " INTEGER"
                 + ")";
 
+        String CREATE_SALONS_TABLE = "CREATE TABLE " + TABLE_SALONS + "("
+                + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + KEY_SNAME + " TEXT,"
+                + KEY_SDESC + " TEXT,"
+                + KEY_OWNER + " TEXT,"
+                + KEY_ACTIVE + " INTEGER"
+                + ")";
+
+        String CREATE_BRANCHES_TABLE = "CREATE TABLE " + TABLE_BRANCHES + "("
+                + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + KEY_BRNAME + " TEXT,"
+                + KEY_BRADD + " TEXT,"
+                + KEY_BREMAIL + " TEXT,"
+                + KEY_BRCNTCT + " INTEGER,"
+                + KEY_ACTIVE + " INTEGER"
+                + ")";
+
         db.execSQL(CREATE_USERS_TABLE);
         db.execSQL(CREATE_PRODUCTS_TABLE);
+        db.execSQL(CREATE_SALONS_TABLE);
+        db.execSQL(CREATE_BRANCHES_TABLE);
         Log.w(TAG, "onCreate: Database created");
     }
 
@@ -88,6 +121,8 @@ public class DatabaseHandler extends SQLiteOpenHelper{
 
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_USERS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_PRODUCTS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_SALONS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_BRANCHES);
         Log.w(TAG, "onUpgrade: Database upgrade" );
         // Create tables again
         onCreate(db);
@@ -129,6 +164,39 @@ public class DatabaseHandler extends SQLiteOpenHelper{
     }
 
 
+    public void addSalon(MstSalons mstSalons) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_SNAME, mstSalons.getSname());
+        values.put(KEY_SDESC, mstSalons.getDescrip());
+        values.put(KEY_OWNER, mstSalons.getOwner_name());
+        values.put(KEY_ACTIVE, mstSalons.getActive());
+
+        // Inserting Row
+        db.insert(TABLE_SALONS, null, values);
+        Log.w(TAG, "addSalon: added salon" );
+        //Toast.makeText(context, "User Added", Toast.LENGTH_LONG).show();
+        db.close(); // Closing database connection
+    }
+
+    public void addBranch(MstBranches mstBranches) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_BRNAME, mstBranches.getbName());
+        values.put(KEY_BRADD, mstBranches.getBrAdd());
+        values.put(KEY_BREMAIL, mstBranches.getBrEmail());
+        values.put(KEY_BRCNTCT, mstBranches.getBrContact());
+        values.put(KEY_ACTIVE, mstBranches.getActive());
+
+        // Inserting Row
+        db.insert(TABLE_SALONS, null, values);
+        Log.w(TAG, "addBranch: added branch" );
+        //Toast.makeText(context, "User Added", Toast.LENGTH_LONG).show();
+        db.close(); // Closing database connection
+    }
+
     // Getting single contact
     MstUsers getSingleUser(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
@@ -161,6 +229,37 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         // return contact
         return prodDetail;
     }
+
+    MstSalons getSingleSalon(int id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(TABLE_SALONS, null,
+                KEY_ID + "=?",new String[] { String.valueOf(id) }, null, null, null, null);
+
+        if (cursor != null)
+            cursor.moveToFirst();
+
+        MstSalons salonDetail = new MstSalons(Integer.parseInt(cursor.getString(0)), cursor.getString(1),cursor.getString(2),cursor.getString(3),
+               Integer.parseInt(cursor.getString(4)));
+        // return contact
+        return salonDetail;
+    }
+
+    MstBranches getSingleBranch (int id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(TABLE_BRANCHES, null,
+                KEY_ID + "=?",new String[] { String.valueOf(id) }, null, null, null, null);
+
+        if (cursor != null)
+            cursor.moveToFirst();
+
+        MstBranches branchDetail = new MstBranches (Integer.parseInt(cursor.getString(0)), cursor.getString(1),cursor.getString(2),cursor.getString(3),
+              cursor.getString(4), Integer.parseInt(cursor.getString(5)));
+        // return contact
+        return branchDetail;
+    }
+
 
 
     public List<MstUsers> getAllUsers() {
@@ -210,6 +309,59 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         }
         // return contact list
         return prodList;
+    }
+
+    public List<MstSalons> getAllSalons() {
+        List<MstSalons> salonList = new ArrayList<MstSalons>();
+        // Select All Query
+        String selectQuery = "SELECT  * FROM " + TABLE_SALONS;
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery,null);
+
+        // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+                MstSalons salon = new MstSalons();
+                salon.setSid(Integer.parseInt(cursor.getString(0)));
+                salon.setSname(cursor.getString(1));
+                salon.setDescrip(cursor.getString(2));
+                salon.setOwner_name(cursor.getString(3));
+                // Adding contact to list
+                salonList.add(salon);
+            } while (cursor.moveToNext());
+        }
+
+        // return contact list
+        return salonList;
+
+    }
+
+    public List<MstBranches> getAllBranches() {
+        List<MstBranches> branchList = new ArrayList<MstBranches>();
+        // Select All Query
+        String selectQuery = "SELECT  * FROM " + TABLE_BRANCHES;
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery,null);
+
+        // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+                MstBranches branch = new MstBranches();
+                branch.setBid(Integer.parseInt(cursor.getString(0)));
+                branch.setbName(cursor.getString(1));
+                branch.setBrAdd(cursor.getString(2));
+                branch.setBrEmail(cursor.getString(3));
+                branch.setBrContact(cursor.getString(4));
+                // Adding contact to list
+                branchList.add(branch);
+            } while (cursor.moveToNext());
+        }
+
+        // return contact list
+        return branchList;
+
     }
 
 
@@ -268,6 +420,34 @@ public class DatabaseHandler extends SQLiteOpenHelper{
                 new String[] { String.valueOf(mstProducts.getPid()) });
     }
 
+    public int updateSalon(MstSalons mstSalons) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_SNAME, mstSalons.getSname());
+        values.put(KEY_SDESC, mstSalons.getDescrip());
+        values.put(KEY_OWNER, mstSalons.getOwner_name());
+        values.put(KEY_ACTIVE, mstSalons.getActive());
+
+        // updating row
+        return db.update(TABLE_SALONS, values, KEY_ID + " = ?",
+                new String[] { String.valueOf(mstSalons.getSid()) });
+    }
+
+    public int updateBranch(MstBranches mstBranches) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_BRNAME, mstBranches.getbName());
+        values.put(KEY_BRADD, mstBranches.getBrAdd());
+        values.put(KEY_BREMAIL, mstBranches.getBrEmail());
+        values.put(KEY_BRCNTCT, mstBranches.getBrContact());
+        values.put(KEY_ACTIVE, mstBranches.getActive());
+
+        // updating row
+        return db.update(TABLE_BRANCHES, values, KEY_ID + " = ?",
+                new String[] { String.valueOf(mstBranches.getBid()) });
+    }
 
     // Deleting single contact
     public void deleteUser(MstUsers mstUsers) {
@@ -282,6 +462,22 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_PRODUCTS, KEY_ID + " = ?",
                 new String[] { String.valueOf(mstProducts.getPid()) });
+        db.close();
+    }
+
+    // Deleting single contact
+    public void deleteSalon(MstSalons mstSalons) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_SALONS, KEY_ID + " = ?",
+                new String[] { String.valueOf(mstSalons.getSid()) });
+        db.close();
+    }
+
+    // Deleting single contact
+    public void deleteBranch(MstBranches mstBranches) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_BRANCHES, KEY_ID + " = ?",
+                new String[] { String.valueOf(mstBranches.getBid()) });
         db.close();
     }
 
