@@ -33,6 +33,7 @@
         <activity android:name=".CreateTable"></activity>
         <activity android:name=".AddProduct"></activity>
         <activity android:name=".AddSalon"></activity>
+        <activity android:name=".AddBranch"></activity>
     </application>
 
 </manifest>
