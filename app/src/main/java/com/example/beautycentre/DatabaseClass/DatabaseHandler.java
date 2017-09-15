@@ -326,7 +326,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
                 salon.setSid(Integer.parseInt(cursor.getString(0)));
                 salon.setSname(cursor.getString(1));
                 salon.setDescrip(cursor.getString(2));
-                salon.setOwner_name(cursor.getString(3));
+                salon.setOwner_name(cursor.getString(3)); //contactPerson
                 // Adding contact to list
                 salonList.add(salon);
             } while (cursor.moveToNext());

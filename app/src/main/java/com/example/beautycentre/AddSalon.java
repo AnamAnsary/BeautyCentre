@@ -55,7 +55,7 @@ public class AddSalon extends AppCompatActivity {
                     Intent i = new Intent(AddSalon.this,Dashboard.class);
                   /*  Bundle b = new Bundle();
                     b.putString("frgToLoad", "nav_salon");*/
-                    //i.putExtra("frgToLoad", FRAGMENT_S);
+                    i.putExtra("frgToLoad", FRAGMENT_S);
                     startActivity(i);
                     finish();//finishing activity
 

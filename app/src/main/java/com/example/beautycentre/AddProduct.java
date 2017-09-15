@@ -17,6 +17,7 @@ import com.example.beautycentre.DatabaseTables.MstProducts;
 
 public class AddProduct  extends AppCompatActivity {
 
+    public static final String FRAGMENT_P = "Fragment_Product";
     EditText name,descr,qt;
     Button btAdd;
     String pname,descriptn;
@@ -45,7 +46,8 @@ public class AddProduct  extends AppCompatActivity {
                 {
                     MstProducts mstProducts = new MstProducts(pname,descriptn,quantity,quantity,1);
                     db.addProduct(mstProducts);
-                    Intent i = new Intent(AddProduct.this,Product.class);
+                    Intent i = new Intent(AddProduct.this,Dashboard.class);
+                    i.putExtra("frgToLoad", FRAGMENT_P);
                     startActivity(i);
                     finish();//finishing activity
 

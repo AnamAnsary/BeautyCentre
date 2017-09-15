@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.example.beautycentre.DatabaseTables.MstUsers;
 
+import static com.example.beautycentre.AddProduct.FRAGMENT_P;
 import static com.example.beautycentre.AddSalon.FRAGMENT_S;
 
 
@@ -43,7 +44,7 @@ public class Dashboard extends AppCompatActivity
     DrawerLayout drawer;
     TextView welcome,user_email;
     FloatingActionButton fab;
-    private Bundle intentFragment = null;
+    private String intentFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,34 +57,8 @@ public class Dashboard extends AppCompatActivity
         String name = sharedpreferences.getString(Name,null);
         String email1 = sharedpreferences.getString(Email,null);
 
-
-       /* intentFragment = getIntent().getExtras().getString("frgToLoad");
-        Log.w(TAG, "onCreate: intentfragment is "+intentFragment);
-
-        if(intentFragment != null) {
-            Log.w(TAG, "onCreate: inside " );
-            Fragment fragment = null;
-            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            switch (intentFragment) {
-                case FRAGMENT_S:
-                    // Load corresponding fragment
-                    fragment = new Salon();
-                    FragmentTransaction selectFr = ft.replace(R.id.content_frame, fragment, "Salon");
-                    selectFr.commit();
-
-                    break;
-           *//* case FRAGMENT_B:
-                // Load corresponding fragment
-                break;
-            case FRAGMENT_C:
-                // Load corresponding fragment
-                break;*//*
-            }
-        }
-*/
         if((email1 == null) && (name == null))
         {
-
             Intent intent = new Intent(Dashboard.this,LoginActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -99,14 +74,7 @@ public class Dashboard extends AppCompatActivity
         nav_user.setText(user);
         */
 
-      /*  Bundle i = getIntent().getExtras();
-
-        Log.w(TAG, "onCreate: "+i.getString("fullname")+" "+i.getString("email"));*/
-
-        String username = MstUsers.getFullname();
-        String email = MstUsers.getEmail();
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -156,17 +124,40 @@ public class Dashboard extends AppCompatActivity
         welcome = (TextView) hdView.findViewById(R.id.welcomename);
         user_email = (TextView) hdView.findViewById(R.id.user_email);
 
-
        /* // email
         String email = user.get(SessionManager.KEY_EMAIL);
         */
 
-        welcome.setText("Welcome "+name);
+        welcome.setText("Welcome " +name);
         user_email.setText(email1);
 
-        //add this line to display menu1 when the activity is loaded
-        displaySelectedScreen(R.id.nav_product);
-
+        if(getIntent().getExtras() != null) {
+            intentFragment = getIntent().getExtras().getString("frgToLoad");
+            Log.w(TAG, "onCreate: intentfragment is "+intentFragment);
+            Fragment fragment = null;
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            switch (intentFragment) {
+                case FRAGMENT_P:
+                    fragment = new Product();
+                    Log.w(TAG, "onCreate: Product to add" );
+                    ft.replace(R.id.content_frame, fragment, "Product");
+                    break;
+                case FRAGMENT_S:
+                    // Load corresponding fragment
+                    fragment = new Salon();
+                    Log.w(TAG, "onCreate: Salon to add" );
+                    ft.replace(R.id.content_frame, fragment, "Salon");
+                    break;
+           /* case FRAGMENT_C:
+                // Load corresponding fragment
+                break;*/
+            }
+            getIntent().removeExtra("frgToLoad");
+            ft.commit();
+        }
+        else
+            //add this line to display menu1 when the activity is loaded
+            displaySelectedScreen(R.id.nav_product);
     }
 
     @Override
@@ -226,7 +217,6 @@ public class Dashboard extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);*/
 
-
         displaySelectedScreen(item.getItemId());
         return true;
     }
@@ -279,6 +269,10 @@ public class Dashboard extends AppCompatActivity
                 i2.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(i2);
                 finish();
+                break;
+            default:
+                fragment = new Product();
+                ft.replace(R.id.content_frame, fragment,"Product");
                 break;
         }
 
