@@ -26,22 +26,7 @@ import java.util.List;
 public class Salon extends ListFragment {
 
     private static final String TAG = "Salon";
-    String[] nameofBatt = new String[] {
-            "Li-Rack", "Joulie", "Li-Rack Eco", "Joulie+", "Li-V"
-    };
-    // Array of integers points to images stored in /res/drawable/
-    int[] imageId = new int[]{
-            R.drawable.lirack, R.drawable.lirack, R.drawable.lirack, R.drawable.lirack, R.drawable.lirack
-    };
 
-    // Array of strings to store description of battery
-    String[] desc = new String[]{
-            "Life Cycle : 20 Years\nCharging Time: 2~3 Hrs",
-            "Life Cycle: 20 Years\nCharging Time: 2~3 Hrs",
-            "Life Cycle: 10 Years\nCharging Time: 2~3 Hrs",
-            "Life Cycle: 20 Years\nCharging Time: 2~3 Hrs",
-            "Life Cycle : 13.5 Years\nCharging Time: .5~3 Hrs"
-    };
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -53,14 +38,13 @@ public class Salon extends ListFragment {
 
         List<HashMap<String,String>> aList = new ArrayList<HashMap<String,String>>();
 
-/*
-        List<HashMap<String,String>> aList = new ArrayList<HashMap<String,String>>();
-        HashMap<String, String> hm = new HashMap<String,String>();
-        hm.put("id", "ID");
-        hm.put("name","Salon Name");
-        hm.put("desc", "Description");
-        hm.put("owner","Owner Name");
-        aList.add(hm);*/
+
+        HashMap<String, String> hm1 = new HashMap<String,String>();
+        hm1.put("id", "ID");
+        hm1.put("name","Salon Name");
+        hm1.put("desc", "Description");
+        hm1.put("owner","Owner Name");
+        aList.add(hm1);
 /*
         for(int i=0;i<nameofBatt.length;i++){
             hm.put("nametext", nameofBatt[i]);
