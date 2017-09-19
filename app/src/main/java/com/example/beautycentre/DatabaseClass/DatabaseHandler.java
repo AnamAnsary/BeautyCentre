@@ -42,7 +42,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
 
     // Mst_Users Table - column names
     //private static final String KEY_USERID = "userId";
-    private static final String KEY_USERNAME = "username";
+    private static final String KEY_GENDER = "gender";
     private static final String KEY_PASSWORD = "password";
     private static final String KEY_FULLNAME = "fullname";
     private static final String KEY_CONTACT = "contactno";
@@ -52,8 +52,10 @@ public class DatabaseHandler extends SQLiteOpenHelper{
     //MstProduct Table column names
     private static final String KEY_PNAME = "productname";
     private static final String KEY_DESC = "description";
-    private static final String KEY_INITQUAN = "initial_quantity";
+    private static final String KEY_BRAND= "productBrand";
+    private static final String KEY_CATEGORY= "productCategory";
     private static final String KEY_QUANTITY= "quantity";
+    private static final String KEY_STOCKALERT= "stockAlert";
 
     //MstSalon Table column names
     private static final String KEY_SNAME = "salonname";
@@ -61,10 +63,12 @@ public class DatabaseHandler extends SQLiteOpenHelper{
     private static final String KEY_OWNER= "ownername";
 
     //MstBranch Table column names
+    private static final String KEY_SALONID= "salonID";
     private static final String KEY_BRNAME= "branchName";
     private static final String KEY_BRADD= "branchAdd";
-    private static final String KEY_BREMAIL= "branchEmail";
-    private static final String KEY_BRCNTCT= "branchCntct";
+    private static final String KEY_BRCPNAME= "contactPName";
+    private static final String KEY_BRCPEMAIL= "contactPEmail";
+    private static final String KEY_BRCPCNTCT= "contactPMob";
 
     public DatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -78,7 +82,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
                 + KEY_FULLNAME + " TEXT,"
                 + KEY_EMAIL + " TEXT,"
                 + KEY_PASSWORD + " TEXT,"
-                + KEY_USERNAME + " INTEGER,"
+                + KEY_GENDER + " INTEGER,"
                 + KEY_CONTACT + " TEXT,"
                 + KEY_ACTIVE + " INTEGER"
                 + ")";
@@ -87,8 +91,10 @@ public class DatabaseHandler extends SQLiteOpenHelper{
                 + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + KEY_PNAME + " TEXT,"
                 + KEY_DESC + " TEXT,"
-                + KEY_INITQUAN + " INTEGER,"
+                + KEY_BRAND + " TEXT,"
+                + KEY_CATEGORY + " TEXT,"
                 + KEY_QUANTITY + " INTEGER,"
+                + KEY_STOCKALERT + " INTEGER,"
                 + KEY_ACTIVE + " INTEGER"
                 + ")";
 
@@ -104,10 +110,13 @@ public class DatabaseHandler extends SQLiteOpenHelper{
                 + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + KEY_BRNAME + " TEXT,"
                 + KEY_BRADD + " TEXT,"
-                + KEY_BREMAIL + " TEXT,"
-                + KEY_BRCNTCT + " INTEGER,"
+                + KEY_BRCPNAME + " TEXT,"
+                + KEY_BRCPEMAIL + " TEXT,"
+                + KEY_BRCPCNTCT + " TEXT,"
                 + KEY_ACTIVE + " INTEGER"
-                + ")";
+                + " FOREIGN KEY ("+KEY_ID+") REFERENCES "+TABLE_SALONS+"("+KEY_ID+")" +
+                ");";
+                //+ ")";
 
         db.execSQL(CREATE_USERS_TABLE);
         db.execSQL(CREATE_PRODUCTS_TABLE);
@@ -132,7 +141,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(KEY_USERNAME, mstUsers.getUsername()); // Contact Name
+        values.put(KEY_GENDER, mstUsers.getGender()); // Contact Name
         values.put(KEY_PASSWORD, mstUsers.getPassword()); // Contact Phone
         values.put(KEY_FULLNAME, mstUsers.getFullname()); // Contact Name
         values.put(KEY_CONTACT, mstUsers.getContactno());
@@ -150,9 +159,11 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(KEY_PNAME, mstProducts.getPname()); // Contact Name
-        values.put(KEY_DESC, mstProducts.getDescrip()); // Contact Phone
-        values.put(KEY_INITQUAN, mstProducts.getIntial_quantity()); // Contact Name
+        values.put(KEY_PNAME, mstProducts.getPname());
+        values.put(KEY_DESC, mstProducts.getDescrip());
+        values.put(KEY_BRAND, mstProducts.getPbrand());
+        values.put(KEY_CATEGORY, mstProducts.getPcategory());
+        values.put(KEY_STOCKALERT, mstProducts.getStockAlert());
         values.put(KEY_QUANTITY, mstProducts.getQuantity());
         values.put(KEY_ACTIVE, mstProducts.getActive());
 
@@ -184,14 +195,17 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
+        values.put(KEY_SALONID, mstBranches.getSalonId());
+        values.put(KEY_BRNAME, mstBranches.getbName());
         values.put(KEY_BRNAME, mstBranches.getbName());
         values.put(KEY_BRADD, mstBranches.getBrAdd());
-        values.put(KEY_BREMAIL, mstBranches.getBrEmail());
-        values.put(KEY_BRCNTCT, mstBranches.getBrContact());
+        values.put(KEY_BRCPNAME, mstBranches.getBrCPName());
+        values.put(KEY_BRCPEMAIL, mstBranches.getBrCPEmail());
+        values.put(KEY_BRCPCNTCT, mstBranches.getBrCPMob());
         values.put(KEY_ACTIVE, mstBranches.getActive());
 
         // Inserting Row
-        db.insert(TABLE_SALONS, null, values);
+        db.insert(TABLE_BRANCHES, null, values);
         Log.w(TAG, "addBranch: added branch" );
         //Toast.makeText(context, "User Added", Toast.LENGTH_LONG).show();
         db.close(); // Closing database connection
@@ -208,7 +222,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
             cursor.moveToFirst();
 
         MstUsers userDetail = new MstUsers(Integer.parseInt(cursor.getString(0)), cursor.getString(1),cursor.getString(2),cursor.getString(3),
-                cursor.getString(4),cursor.getString(5), Integer.parseInt(cursor.getString(8)));
+                Integer.parseInt(cursor.getString(4)),cursor.getString(5), Integer.parseInt(cursor.getString(8)));
         // return contact
         return userDetail;
     }
@@ -224,8 +238,8 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         if (cursor != null)
             cursor.moveToFirst();
 
-        MstProducts prodDetail = new MstProducts(Integer.parseInt(cursor.getString(0)), cursor.getString(1),cursor.getString(2),Integer.parseInt(cursor.getString(3)),
-                Integer.parseInt(cursor.getString(4)), Integer.parseInt(cursor.getString(5)));
+        MstProducts prodDetail = new MstProducts(Integer.parseInt(cursor.getString(0)), cursor.getString(1),cursor.getString(2),cursor.getString(3),
+              cursor.getString(4), Integer.parseInt(cursor.getString(5)),  Integer.parseInt(cursor.getString(6)),  Integer.parseInt(cursor.getString(7)));
         // return contact
         return prodDetail;
     }
@@ -254,8 +268,9 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         if (cursor != null)
             cursor.moveToFirst();
 
-        MstBranches branchDetail = new MstBranches (Integer.parseInt(cursor.getString(0)), cursor.getString(1),cursor.getString(2),cursor.getString(3),
-              cursor.getString(4), Integer.parseInt(cursor.getString(5)));
+        MstBranches branchDetail = new MstBranches (Integer.parseInt(cursor.getString(0)),Integer.parseInt(cursor.getString(1)),
+                cursor.getString(1),cursor.getString(2),cursor.getString(3),
+              cursor.getString(4),cursor.getString(5), Integer.parseInt(cursor.getString(6)));
         // return contact
         return branchDetail;
     }
@@ -276,6 +291,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
                 MstUsers user = new MstUsers();
                 user.setId(Integer.parseInt(cursor.getString(0)));
                 user.setFullname(cursor.getString(3));
+                user.setGender(Integer.parseInt(cursor.getString(4)));
                 // Adding contact to list
                 userList.add(user);
             } while (cursor.moveToNext());
@@ -301,8 +317,10 @@ public class DatabaseHandler extends SQLiteOpenHelper{
                 prod.setPid(Integer.parseInt(cursor.getString(0)));
                 prod.setPname(cursor.getString(1));
                 prod.setDescrip(cursor.getString(2));
-                prod.setIntial_quantity(cursor.getInt(3));
-                prod.setQuantity(cursor.getInt(4));
+                prod.setPbrand(cursor.getString(3));
+                prod.setPcategory(cursor.getString(4));
+                prod.setQuantity(cursor.getInt(5));
+                prod.setStockAlert(cursor.getInt(6));
                 // Adding contact to list
                 prodList.add(prod);
             } while (cursor.moveToNext());
@@ -352,8 +370,9 @@ public class DatabaseHandler extends SQLiteOpenHelper{
                 branch.setBid(Integer.parseInt(cursor.getString(0)));
                 branch.setbName(cursor.getString(1));
                 branch.setBrAdd(cursor.getString(2));
-                branch.setBrEmail(cursor.getString(3));
-                branch.setBrContact(cursor.getString(4));
+                branch.setBrCPName(cursor.getString(3));
+                branch.setBrCPEmail(cursor.getString(4));
+                branch.setBrCPMob(cursor.getString(5));
                 // Adding contact to list
                 branchList.add(branch);
             } while (cursor.moveToNext());
@@ -393,7 +412,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(KEY_USERNAME, mstUsers.getUsername());
+        values.put(KEY_GENDER, mstUsers.getGender());
         values.put(KEY_PASSWORD, mstUsers.getPassword());
         values.put(KEY_FULLNAME, mstUsers.getFullname());
         values.put(KEY_CONTACT, mstUsers.getContactno());
@@ -412,8 +431,10 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         ContentValues values = new ContentValues();
         values.put(KEY_PNAME, mstProducts.getPname());
         values.put(KEY_DESC, mstProducts.getDescrip());
-        values.put(KEY_INITQUAN, mstProducts.getIntial_quantity());
+        values.put(KEY_BRAND, mstProducts.getPbrand());
+        values.put(KEY_CATEGORY, mstProducts.getPcategory());
         values.put(KEY_QUANTITY, mstProducts.getQuantity());
+        values.put(KEY_STOCKALERT, mstProducts.getStockAlert());
 
         // updating row
         return db.update(TABLE_PRODUCTS, values, KEY_ID + " = ?",
@@ -440,8 +461,9 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         ContentValues values = new ContentValues();
         values.put(KEY_BRNAME, mstBranches.getbName());
         values.put(KEY_BRADD, mstBranches.getBrAdd());
-        values.put(KEY_BREMAIL, mstBranches.getBrEmail());
-        values.put(KEY_BRCNTCT, mstBranches.getBrContact());
+        values.put(KEY_BRCPNAME, mstBranches.getBrCPName());
+        values.put(KEY_BRCPEMAIL, mstBranches.getBrCPEmail());
+        values.put(KEY_BRCPCNTCT, mstBranches.getBrCPMob());
         values.put(KEY_ACTIVE, mstBranches.getActive());
 
         // updating row
@@ -492,8 +514,37 @@ public class DatabaseHandler extends SQLiteOpenHelper{
             cursor.moveToFirst();
 
         MstUsers userDetail = new MstUsers(Integer.parseInt(cursor.getString(0)), cursor.getString(1),cursor.getString(2),cursor.getString(3),
-                cursor.getString(4),cursor.getString(5), Integer.parseInt(cursor.getString(6)));
+                Integer.parseInt(cursor.getString(4)),cursor.getString(5), Integer.parseInt(cursor.getString(6)));
         // return contact
         return userDetail;
+    }
+
+    public void deleteAllUser()
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        db.execSQL("delete from "+ TABLE_USERS);
+        Log.w(TAG, "deleteAllUser: deleted table");
+        db.close();
+    }
+
+
+    public int getLastInsertedID(){
+        SQLiteDatabase db = this.getReadableDatabase();
+
+     /*   Cursor cursor = db.query(TABLE_SALONS, null,
+                KEY_ID + "=?",new String[] { String.valueOf(id) }, null, null, null, null);
+        if (cursor != null)
+            cursor.moveToFirst();*/
+
+        String selectQuery = "SELECT  * FROM " + TABLE_SALONS;
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        cursor.moveToLast();
+
+      /*  MstSalons salonDetail = new MstSalons(Integer.parseInt(cursor.getString(0)), cursor.getString(1),cursor.getString(2),cursor.getString(3),
+                Integer.parseInt(cursor.getString(4)));*/
+
+        return Integer.parseInt(cursor.getString(0));
+
     }
 }

@@ -13,7 +13,11 @@ import android.widget.Toast;
 
 import com.example.beautycentre.DatabaseClass.DatabaseHandler;
 import com.example.beautycentre.DatabaseTables.MstProducts;
+import com.example.beautycentre.DatabaseTables.MstSalons;
 import com.example.beautycentre.DatabaseTables.MstUsers;
+
+import java.util.HashMap;
+import java.util.List;
 
 import static com.example.beautycentre.Dashboard.Email;
 import static com.example.beautycentre.Dashboard.MyPREFERENCES;
@@ -53,20 +57,40 @@ public class LoginActivity  extends AppCompatActivity {
 
         sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
 
-        mstUser = new MstUsers("Anam Ansari", "anam.ansary36@gmail.com","anam123", "AnamAnsary","9168567787", 1);
-        db.addUser(mstUser);
-        mstUser = new MstUsers("Zain Ansari", "anam.ansari36@yahoo.in","anamyahoo", "ZainAnsary","0123456789", 1);
-        db.addUser(mstUser);
-        mstUser = new MstUsers("Aariz Ansari", "anamansary.developer@gmail.com","anamgmail", "AarizAnsary","9876543210", 1);
-        db.addUser(mstUser);
+        List<MstUsers> users = db.getAllUsers();
+        for (MstUsers ur : users) {
+            String log = "Id: " +ur.getId() + " ,Name: " + ur.getFullname() + " ,Email: " +ur.getEmail();
+            Log.w(TAG, "user is : " +log);
 
-        mstProducts = new MstProducts("Garnier Shampoo","Shampoo for long hair",10, 15,1);
+        }
+
+        if(users.size() == 0)
+        {
+            Log.w(TAG, "onCreate: User table empty");
+
+            mstUser = new MstUsers("Anam Ansari", "anam.ansary36@gmail.com","anam123", 0, "9168567787", 1);
+            db.addUser(mstUser);
+            mstUser = new MstUsers("Zain Ansari", "anam.ansari36@yahoo.in","anamyahoo", 1, "0123456789", 1);
+            db.addUser(mstUser);
+            mstUser = new MstUsers("Aariz Ansari", "anamansary.developer@gmail.com","anamgmail", 1, "9876543210", 1);
+            db.addUser(mstUser);
+
+        }
+
+      /*  List<MstUsers> users2 = db.getAllUsers();
+        for (MstUsers ur : users2) {
+            String log = "Id: " +ur.getId() + " ,Name: " + ur.getFullname() + " ,Email: " +ur.getEmail();
+            Log.w(TAG, "user2 is : " +log);
+
+        }*/
+
+       /* mstProducts = new MstProducts("Garnier Shampoo","Shampoo for long hair",10, 15,1);
         db.addProduct(mstProducts);
         mstProducts = new MstProducts("XYZ Hair Straightener","Hair Straightener",4, 12,1);
         db.addProduct(mstProducts);
         mstProducts = new MstProducts("Lotus Bleach Cream","Bleach Cream",8, 8,1);
         db.addProduct(mstProducts);
-
+*/
 
         login.setOnClickListener(new View.OnClickListener() {
             @Override

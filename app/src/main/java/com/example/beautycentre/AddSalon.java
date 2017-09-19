@@ -49,23 +49,24 @@ public class AddSalon extends AppCompatActivity {
                 if(sname.length() != 0 && descriptn.length() != 0 && owname.length() != 0)
                 {
 
-                    MstSalons mstSalons = new MstSalons(slname,descriptn,owname,1);
+
+                    Intent i = new Intent(AddSalon.this,AddBranchofSalon.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("SalonName", slname);
+                    bundle.putString("Descriptn",descriptn);
+                    bundle.putString("Owner",owname);
+                    i.putExtras(bundle);
+                    startActivity(i);
+
+                  /*  MstSalons mstSalons = new MstSalons(slname,descriptn,owname,1);
                     db.addSalon(mstSalons);
 
                     Intent i = new Intent(AddSalon.this,Dashboard.class);
-                  /*  Bundle b = new Bundle();
-                    b.putString("frgToLoad", "nav_salon");*/
                     i.putExtra("frgToLoad", FRAGMENT_S);
                     startActivity(i);
-                    finish();//finishing activity
-
-                   /* Fragment fr = new Salon();
-                    FragmentManager fm = getSupportFragmentManager();
-                    FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                    //FragmentTransaction fragmentTransaction = fm.beginTransaction();
-                    fragmentTransaction.replace(R.id.content_frame, fr);
-                    fragmentTransaction.commit();
+                    finish();
 */
+
                 }
                 else
                     Toast.makeText(AddSalon.this, "Please fill each fields", Toast.LENGTH_LONG).show();

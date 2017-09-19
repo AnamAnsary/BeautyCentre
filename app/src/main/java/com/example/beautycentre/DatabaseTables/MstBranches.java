@@ -7,30 +7,44 @@ package com.example.beautycentre.DatabaseTables;
 public class MstBranches {
 
     int bid;
+    int salonId;
     String bName;
     String brAdd;
-    String brContact;
-    String brEmail;
+    String brCPName;
+    String brCPEmail;
+    String brCPMob;
     int active;
 
-    public MstBranches() {
-    }
-
-    public MstBranches(String bName, String brAdd, String brContact, String brEmail, int active) {
+    public MstBranches(int salonId, String bName, String brAdd, String brCPName, String brCPEmail, String brCPMob, int active) {
         this.bName = bName;
         this.brAdd = brAdd;
-        this.brContact = brContact;
-        this.brEmail = brEmail;
+        this.brCPName = brCPName;
+        this.brCPEmail = brCPEmail;
+        this.brCPMob = brCPMob;
         this.active = active;
     }
 
-    public MstBranches(int bid, String bName, String brAdd, String brContact, String brEmail, int active) {
+    public int getSalonId() {
+        return salonId;
+    }
+
+    public void setSalonId(int salonId) {
+        this.salonId = salonId;
+    }
+
+    public MstBranches(int bid, int salonId, String bName, String brAdd, String brCPName, String brCPEmail, String brCPMob, int active) {
+
         this.bid = bid;
+
         this.bName = bName;
         this.brAdd = brAdd;
-        this.brContact = brContact;
-        this.brEmail = brEmail;
+        this.brCPName = brCPName;
+        this.brCPEmail = brCPEmail;
+        this.brCPMob = brCPMob;
         this.active = active;
+    }
+
+    public MstBranches() {
     }
 
     public int getBid() {
@@ -57,20 +71,28 @@ public class MstBranches {
         this.brAdd = brAdd;
     }
 
-    public String getBrContact() {
-        return brContact;
+    public String getBrCPName() {
+        return brCPName;
     }
 
-    public void setBrContact(String brContact) {
-        this.brContact = brContact;
+    public void setBrCPName(String brCPName) {
+        this.brCPName = brCPName;
     }
 
-    public String getBrEmail() {
-        return brEmail;
+    public String getBrCPEmail() {
+        return brCPEmail;
     }
 
-    public void setBrEmail(String brEmail) {
-        this.brEmail = brEmail;
+    public void setBrCPEmail(String brCPEmail) {
+        this.brCPEmail = brCPEmail;
+    }
+
+    public String getBrCPMob() {
+        return brCPMob;
+    }
+
+    public void setBrCPMob(String brCPMob) {
+        this.brCPMob = brCPMob;
     }
 
     public int getActive() {

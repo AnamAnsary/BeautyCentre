@@ -21,8 +21,10 @@ import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.beautycentre.DatabaseClass.DatabaseHandler;
 import com.example.beautycentre.DatabaseTables.MstUsers;
 
+import static com.example.beautycentre.AddBranch.FRAGMENT_B;
 import static com.example.beautycentre.AddProduct.FRAGMENT_P;
 import static com.example.beautycentre.AddSalon.FRAGMENT_S;
 
@@ -52,6 +54,8 @@ public class Dashboard extends AppCompatActivity
         setContentView(R.layout.activity_dashboard);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        final DatabaseHandler db = new DatabaseHandler(this);
 
         sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         String name = sharedpreferences.getString(Name,null);
@@ -97,7 +101,9 @@ public class Dashboard extends AppCompatActivity
                         //Snackbar.make(view, "Salon", Snackbar.LENGTH_LONG).show();
                         break;
                     case "Branch":
-                        Snackbar.make(view, "Branch", Snackbar.LENGTH_LONG).show();
+                        Intent  i3 = new Intent(Dashboard.this,AddBranch.class);
+                        startActivity(i3);
+                        finish();
                         break;
                     case "Inventory":
                         Snackbar.make(view, "Inventory", Snackbar.LENGTH_LONG).show();
@@ -131,29 +137,49 @@ public class Dashboard extends AppCompatActivity
         welcome.setText("Welcome " +name);
         user_email.setText(email1);
 
+        //Bundle extras = this.getIntent().getExtras();
+
         if(getIntent().getExtras() != null) {
             intentFragment = getIntent().getExtras().getString("frgToLoad");
             Log.w(TAG, "onCreate: intentfragment is "+intentFragment);
             Fragment fragment = null;
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            switch (intentFragment) {
-                case FRAGMENT_P:
-                    fragment = new Product();
-                    Log.w(TAG, "onCreate: Product to add" );
-                    ft.replace(R.id.content_frame, fragment, "Product");
-                    break;
-                case FRAGMENT_S:
-                    // Load corresponding fragment
-                    fragment = new Salon();
-                    Log.w(TAG, "onCreate: Salon to add" );
-                    ft.replace(R.id.content_frame, fragment, "Salon");
-                    break;
+            if(intentFragment != null) {
+                switch (intentFragment) {
+                    case FRAGMENT_P:
+                        fragment = new Product();
+                        Log.w(TAG, "onCreate: Product frag to add");
+                        ft.replace(R.id.content_frame, fragment, "Product");
+                        break;
+                    case FRAGMENT_S:
+                        // Load corresponding fragment
+                        fragment = new Salon();
+                        Log.w(TAG, "onCreate: Salon frag to add");
+                        ft.replace(R.id.content_frame, fragment, "Salon");
+                        break;
+                    case FRAGMENT_B:
+                        // Load corresponding fragment
+                        fragment = new Branch();
+                        Log.w(TAG, "onCreate: Branch frag to add");
+                        ft.replace(R.id.content_frame, fragment, "Branch");
+                        break;
            /* case FRAGMENT_C:
                 // Load corresponding fragment
                 break;*/
+                    default:
+                        fragment = new Product();
+                        Log.w(TAG, "onCreate: Product frag to add");
+                        ft.replace(R.id.content_frame, fragment, "Product");
+                        break;
+                }
+               /* getIntent().getExtras().remove("frgToLoad");
+                Log.w(TAG, "After just remove value is "+getIntent().getExtras().getString("frgToLoad") );*/
+                getIntent().removeExtra("frgToLoad");
+               //  Log.w(TAG, "After remove extra value is "+getIntent().getExtras().getString("frgToLoad") );
+                ft.commit();
             }
-            getIntent().removeExtra("frgToLoad");
-            ft.commit();
+
+
         }
         else
             //add this line to display menu1 when the activity is loaded

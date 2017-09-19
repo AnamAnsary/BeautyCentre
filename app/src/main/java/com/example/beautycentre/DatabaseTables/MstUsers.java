@@ -10,29 +10,28 @@ public class MstUsers {
     static String fullname;
     static String email;
     String password;
-    String username;
     String contactno;
-    String usertype;
+    int gender;
     int active;
 
     public MstUsers() {
     }
 
-    public MstUsers(int id, String fullname, String email, String password, String username, String contactno, int active) {
+    public MstUsers(int id, String fullname, String email, String password, int gender, String contactno, int active) {
         this.id = id;
         this.fullname = fullname;
         this.email = email;
         this.password = password;
-        this.username = username;
+        this.gender = gender;
         this.contactno = contactno;
         this.active = active;
     }
 
-    public MstUsers(String fullname, String email, String password, String username, String contactno, int active) {
+    public MstUsers(String fullname, String email, String password,int gender, String contactno, int active) {
         this.fullname = fullname;
         this.email = email;
         this.password = password;
-        this.username = username;
+        this.gender = gender;
         this.contactno = contactno;
         this.active = active;
     }
@@ -65,17 +64,18 @@ public class MstUsers {
         return password;
     }
 
+    public int getGender() {
+        return gender;
+    }
+
+    public void setGender(int gender) {
+        this.gender = gender;
+    }
+
     public void setPassword(String password) {
         this.password = password;
     }
 
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
 
     public String getContactno() {
         return contactno;

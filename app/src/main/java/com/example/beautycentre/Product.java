@@ -36,18 +36,10 @@ public class Product extends Fragment {
     TableLayout tl;
     TableRow tr;
     TextView companyTV,valueTV;
-    /*Button del;
 
-    String companies[] = {"Google","Windows","iPhone","Nokia","Samsung",
-            "Google","Windows","iPhone","Nokia","Samsung",
-            "Google","Windows","iPhone","Nokia","Samsung"};
-    String os[]       =  {"Android","Mango","iOS","Symbian","Bada",
-            "Android","Mango","iOS","Symbian","Bada",
-            "Android","Mango","iOS","Symbian","Bada"};*/
     private ArrayList<String> Pnamelist;
     private ArrayList<Integer> PIdlist;
     private ArrayList<Integer> Pquantlist;
-
 
     @Nullable
     @Override

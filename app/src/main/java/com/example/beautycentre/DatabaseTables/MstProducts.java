@@ -8,28 +8,37 @@ public class MstProducts  {
     int pid;
     String pname;
     String descrip;
-    int intial_quantity;
+    String pbrand;
+    String pcategory;
     int quantity;
+    int stockAlert;
     int active;
 
-    public MstProducts() {
-    }
+    public MstProducts(int pid, String pname, String descrip, String pbrand, String pcategory, int quantity, int stockAlert, int active) {
 
-    public MstProducts(String pname, String descrip, int intial_quantity, int quantity, int active) {
-        this.pname = pname;
-        this.descrip = descrip;
-        this.intial_quantity = intial_quantity;
-        this.quantity = quantity;
-        this.active = active;
-    }
-
-    public MstProducts(int pid, String pname, String descrip, int intial_quantity, int quantity, int active) {
         this.pid = pid;
         this.pname = pname;
         this.descrip = descrip;
-        this.intial_quantity = intial_quantity;
+        this.pbrand = pbrand;
+        this.pcategory = pcategory;
         this.quantity = quantity;
+        this.stockAlert = stockAlert;
         this.active = active;
+    }
+
+    public MstProducts(String pname, String descrip, String pbrand, String pcategory, int quantity, int stockAlert, int active) {
+
+        this.pname = pname;
+        this.descrip = descrip;
+        this.pbrand = pbrand;
+        this.pcategory = pcategory;
+        this.quantity = quantity;
+        this.stockAlert = stockAlert;
+        this.active = active;
+    }
+
+    public MstProducts() {
+
     }
 
     public int getPid() {
@@ -56,20 +65,36 @@ public class MstProducts  {
         this.descrip = descrip;
     }
 
-    public int getIntial_quantity() {
-        return intial_quantity;
-    }
-
-    public void setIntial_quantity(int intial_quantity) {
-        this.intial_quantity = intial_quantity;
-    }
-
     public int getQuantity() {
         return quantity;
     }
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
+
+    public String getPbrand() {
+        return pbrand;
+    }
+
+    public void setPbrand(String pbrand) {
+        this.pbrand = pbrand;
+    }
+
+    public String getPcategory() {
+        return pcategory;
+    }
+
+    public void setPcategory(String pcategory) {
+        this.pcategory = pcategory;
+    }
+
+    public int getStockAlert() {
+        return stockAlert;
+    }
+
+    public void setStockAlert(int stockAlert) {
+        this.stockAlert = stockAlert;
     }
 
     public int getActive() {

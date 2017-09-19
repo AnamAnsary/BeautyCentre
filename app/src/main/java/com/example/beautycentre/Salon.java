@@ -64,7 +64,6 @@ public class Salon extends ListFragment {
         SimpleAdapter adapter = new SimpleAdapter(getActivity().getBaseContext(), aList, R.layout.salon_customlist, from, to);
         setListAdapter(adapter);*/
 
-
         Log.d("Reading: ", "Reading all contacts..");
         List<MstSalons> salons = db.getAllSalons();
 
@@ -78,9 +77,8 @@ public class Salon extends ListFragment {
             hm.put("desc", sal.getDescrip());
             hm.put("owner", sal.getOwner_name());
             aList.add(hm);
-
-
         }
+
         for(int i=0;i<aList.size();i++)
             Log.w(TAG, "onCreateView: "+aList.get(i) );
         // Keys used in Hashmap
@@ -93,7 +91,6 @@ public class Salon extends ListFragment {
         // R.layout.listview_layout defines the layout of each item
         SimpleAdapter adapter = new SimpleAdapter(getActivity().getBaseContext(), aList, R.layout.salon_customlist, from, to);
         setListAdapter(adapter);
-
 
         return super.onCreateView(inflater, container, savedInstanceState);
     }
