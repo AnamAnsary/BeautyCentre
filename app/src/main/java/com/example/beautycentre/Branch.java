@@ -5,6 +5,7 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,11 +27,13 @@ import java.util.List;
 public class Branch extends Fragment {
 
 
+    private static final String TAG = "Branch";
     View rootView;
     TableLayout tl;
     TableRow tr;
     TextView tvSn,tvBid,tvBrN,tvBrAd,tvPrN,tvPrE,tvPrM;
 
+    private ArrayList<Integer> SIdlist;
     private ArrayList<String> Bnamelist;
     private ArrayList<Integer> BIdlist;
     private ArrayList<String> BAddlist;
@@ -48,6 +51,7 @@ public class Branch extends Fragment {
         rootView = inflater.inflate(R.layout.frag_branches, container, false);
 
         final DatabaseHandler db = new DatabaseHandler(getActivity());
+        SIdlist = new ArrayList<Integer>();
         Bnamelist = new ArrayList<String>();
         BIdlist = new ArrayList<Integer>();
         BAddlist = new ArrayList<String>();
@@ -59,12 +63,17 @@ public class Branch extends Fragment {
         for (MstBranches i : totalBranList){
             //String log = "Id : " + hodU.getId() +" , Name : " + hodU.getFullname();
             //Log.w(TAG, "Name : " + log );
+            Log.w(TAG, "MstBranch Salon id is : "+i.getSalonId());
+
+            SIdlist.add(i.getSalonId());
             BIdlist.add(i.getBid());
             Bnamelist.add(i.getbName());
             BAddlist.add(i.getBrAdd());
             CPNamelist.add(i.getBrCPName());
             CPEmaillist.add(i.getBrCPEmail());
             CPMoblist.add(i.getBrCPMob());
+
+            Log.w(TAG, "Salon id  " +i.getSalonId() );
 
         }
 
@@ -192,7 +201,7 @@ public class Branch extends Fragment {
                     TableRow.LayoutParams.WRAP_CONTENT));
 
             tvSn = new TextView(getActivity());
-            tvSn.setText("");
+            tvSn.setText(String.valueOf(BIdlist.get(i)));
             tvSn.setTextColor(Color.BLACK);
             //companyTV.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
             tvSn.setPadding(20, 20, 5, 20);
@@ -201,7 +210,7 @@ public class Branch extends Fragment {
 
             /** Creating a TextView to add to the row **/
             tvBid = new TextView(getActivity());
-            tvBid.setText(String.valueOf(BIdlist.get(i)));
+            tvBid.setText(String.valueOf(SIdlist.get(i)));
             tvBid.setTextColor(Color.BLACK);
             //companyTV.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
             tvBid.setPadding(20, 20, 5, 20);

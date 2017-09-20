@@ -108,15 +108,16 @@ public class DatabaseHandler extends SQLiteOpenHelper{
 
         String CREATE_BRANCHES_TABLE = "CREATE TABLE " + TABLE_BRANCHES + "("
                 + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + KEY_SALONID + " INTEGER,"
                 + KEY_BRNAME + " TEXT,"
                 + KEY_BRADD + " TEXT,"
                 + KEY_BRCPNAME + " TEXT,"
                 + KEY_BRCPEMAIL + " TEXT,"
                 + KEY_BRCPCNTCT + " TEXT,"
                 + KEY_ACTIVE + " INTEGER"
-                + " FOREIGN KEY ("+KEY_ID+") REFERENCES "+TABLE_SALONS+"("+KEY_ID+")" +
-                ");";
-                //+ ")";
+             /*   + " FOREIGN KEY ("+KEY_ID+") REFERENCES "+TABLE_SALONS+"("+KEY_ID+")" +
+                ");";*/
+                + ")";
 
         db.execSQL(CREATE_USERS_TABLE);
         db.execSQL(CREATE_PRODUCTS_TABLE);
@@ -196,7 +197,6 @@ public class DatabaseHandler extends SQLiteOpenHelper{
 
         ContentValues values = new ContentValues();
         values.put(KEY_SALONID, mstBranches.getSalonId());
-        values.put(KEY_BRNAME, mstBranches.getbName());
         values.put(KEY_BRNAME, mstBranches.getbName());
         values.put(KEY_BRADD, mstBranches.getBrAdd());
         values.put(KEY_BRCPNAME, mstBranches.getBrCPName());
@@ -368,11 +368,12 @@ public class DatabaseHandler extends SQLiteOpenHelper{
             do {
                 MstBranches branch = new MstBranches();
                 branch.setBid(Integer.parseInt(cursor.getString(0)));
-                branch.setbName(cursor.getString(1));
-                branch.setBrAdd(cursor.getString(2));
-                branch.setBrCPName(cursor.getString(3));
-                branch.setBrCPEmail(cursor.getString(4));
-                branch.setBrCPMob(cursor.getString(5));
+                branch.setSalonId(Integer.parseInt(cursor.getString(1)));
+                branch.setbName(cursor.getString(2));
+                branch.setBrAdd(cursor.getString(3));
+                branch.setBrCPName(cursor.getString(4));
+                branch.setBrCPEmail(cursor.getString(5));
+                branch.setBrCPMob(cursor.getString(6));
                 // Adding contact to list
                 branchList.add(branch);
             } while (cursor.moveToNext());
@@ -531,20 +532,55 @@ public class DatabaseHandler extends SQLiteOpenHelper{
 
     public int getLastInsertedID(){
         SQLiteDatabase db = this.getReadableDatabase();
+     /*   Cursor cursor = db.query(TABLE_SALONS, null,
+                KEY_ID + "=?",new String[] { String.valueOf(id) }, null, null, null, null);
+        if (cursor != null)
+            cursor.moveToFirst();*/
+        String selectQuery = "SELECT  * FROM " + TABLE_SALONS;
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        cursor.moveToLast();
+      /*  MstSalons salonDetail = new MstSalons(Integer.parseInt(cursor.getString(0)), cursor.getString(1),cursor.getString(2),cursor.getString(3),
+                Integer.parseInt(cursor.getString(4)));*/
+
+        return Integer.parseInt(cursor.getString(0));
+
+    }
+
+    public String getSalonName(int id){
+        SQLiteDatabase db = this.getReadableDatabase();
 
      /*   Cursor cursor = db.query(TABLE_SALONS, null,
                 KEY_ID + "=?",new String[] { String.valueOf(id) }, null, null, null, null);
         if (cursor != null)
             cursor.moveToFirst();*/
 
-        String selectQuery = "SELECT  * FROM " + TABLE_SALONS;
+        String selectQuery = "SELECT " +KEY_SNAME+ " FROM " + TABLE_SALONS+ "WHERE "+KEY_SALONID+ " = " +id;
         Cursor cursor = db.rawQuery(selectQuery, null);
-        cursor.moveToLast();
 
+        if (cursor != null)
+            cursor.moveToFirst();
+        Log.w(TAG, "getSalonName: " +cursor.getString(1));
       /*  MstSalons salonDetail = new MstSalons(Integer.parseInt(cursor.getString(0)), cursor.getString(1),cursor.getString(2),cursor.getString(3),
                 Integer.parseInt(cursor.getString(4)));*/
+        return cursor.getString(1);
+    }
+
+    public int getSIDfromSalon(String sname) {
+       /* SQLiteDatabase db = this.getReadableDatabase();
+        String selectQuery = "SELECT *  FROM " + TABLE_SALONS + " WHERE "+ KEY_SNAME + " = " +sname;
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        if (cursor != null)
+            cursor.moveToFirst();
+        Log.w(TAG, "getSalonName: " +cursor.getString(1));
+        return cursor.getInt(0);*/
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query(
+                TABLE_SALONS, new String[]{" "+KEY_SALONID},  KEY_SNAME + "=? ", new String[] { sname }, null, null, null);
+        if (cursor != null)
+            cursor.moveToFirst();
 
         return Integer.parseInt(cursor.getString(0));
-
     }
 }

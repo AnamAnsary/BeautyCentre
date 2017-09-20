@@ -110,7 +110,7 @@ public class Dashboard extends AppCompatActivity
                         break;
                     default:
                         Log.e(TAG, "Unhandled FAB fragment tag " + tag);
-                        Snackbar.make(view, "Not sure what to do...my bad", Snackbar.LENGTH_SHORT).show();
+                        Snackbar.make(view, "Not sure what to do...", Snackbar.LENGTH_SHORT).show();
                         break;
                 }
             }
@@ -176,6 +176,8 @@ public class Dashboard extends AppCompatActivity
                 Log.w(TAG, "After just remove value is "+getIntent().getExtras().getString("frgToLoad") );*/
                 getIntent().removeExtra("frgToLoad");
                //  Log.w(TAG, "After remove extra value is "+getIntent().getExtras().getString("frgToLoad") );
+                //ft.addToBackStack();
+                ft.addToBackStack(null);
                 ft.commit();
             }
 
@@ -304,6 +306,7 @@ public class Dashboard extends AppCompatActivity
 
         //replacing the fragment
         if (fragment != null) {
+            ft.addToBackStack(null);
             ft.commit();
         }
 

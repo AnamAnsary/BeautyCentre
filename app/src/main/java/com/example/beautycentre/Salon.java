@@ -79,8 +79,6 @@ public class Salon extends ListFragment {
             aList.add(hm);
         }
 
-        for(int i=0;i<aList.size();i++)
-            Log.w(TAG, "onCreateView: "+aList.get(i) );
         // Keys used in Hashmap
         String[] from = { "id","name","desc", "owner" };
 

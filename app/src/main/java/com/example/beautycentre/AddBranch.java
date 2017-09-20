@@ -29,12 +29,15 @@ import java.util.List;
 public class AddBranch extends AppCompatActivity {
 
     public static final String FRAGMENT_B = "Fragment_Branch" ;
+    private static final String TAG = "AddBranch";
     EditText bname,adrs,cPname,cPemail,cPmob;
     AutoCompleteTextView actv;
     Button btnAdd;
     String salname,brname,bAdd,CPname,CPemail,CPmob;
     private ArrayList<String> Snamelist;
+    private ArrayList<Integer> SIdlist;
     List< String> salonNames = new ArrayList< String>();
+    private int sid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,9 +58,11 @@ public class AddBranch extends AppCompatActivity {
         final DatabaseHandler db = new DatabaseHandler(this);
 
         Snamelist = new ArrayList<String>();
+        SIdlist = new ArrayList<Integer>();
         List<MstSalons> salon = db.getAllSalons();
         for (MstSalons sl : salon) {
             Snamelist.add(sl.getSname());
+            SIdlist.add(sl.getSid());
         }
 
         //Creating the instance of ArrayAdapter containing list of language names
@@ -83,7 +88,10 @@ public class AddBranch extends AppCompatActivity {
                 if(salname.length() !=0 && brname.length() !=0 && bAdd.length() !=0 && CPname.length() !=0 && CPemail.length() !=0 && CPmob.length() != 0 )
                 {
                    // MstProducts mstProducts = new MstProducts(pname,descriptn,quantity,quantity,1);
-                    MstBranches mstBranches = new MstBranches(brname,bAdd,CPname,CPemail,CPmob,1);
+
+                    sid = db.getSIDfromSalon(salname);
+                    Log.w(TAG, "onClick: sid is "+sid );
+                    MstBranches mstBranches = new MstBranches(sid,brname,bAdd,CPname,CPemail,CPmob,1);
                     db.addBranch(mstBranches);
                     Intent i = new Intent(AddBranch.this,Dashboard.class);
                     i.putExtra("frgToLoad", FRAGMENT_B);

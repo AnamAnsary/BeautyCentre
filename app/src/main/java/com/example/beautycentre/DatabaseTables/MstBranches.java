@@ -16,6 +16,7 @@ public class MstBranches {
     int active;
 
     public MstBranches(int salonId, String bName, String brAdd, String brCPName, String brCPEmail, String brCPMob, int active) {
+        this.salonId = salonId;
         this.bName = bName;
         this.brAdd = brAdd;
         this.brCPName = brCPName;
@@ -24,22 +25,17 @@ public class MstBranches {
         this.active = active;
     }
 
-    public int getSalonId() {
-        return salonId;
-    }
 
-    public void setSalonId(int salonId) {
-        this.salonId = salonId;
-    }
 
     public MstBranches(int bid, int salonId, String bName, String brAdd, String brCPName, String brCPEmail, String brCPMob, int active) {
 
         this.bid = bid;
-
+        this.salonId = salonId;
         this.bName = bName;
         this.brAdd = brAdd;
         this.brCPName = brCPName;
         this.brCPEmail = brCPEmail;
+
         this.brCPMob = brCPMob;
         this.active = active;
     }
@@ -53,6 +49,14 @@ public class MstBranches {
 
     public void setBid(int bid) {
         this.bid = bid;
+    }
+
+    public int getSalonId() {
+        return salonId;
+    }
+
+    public void setSalonId(int salonId) {
+        this.salonId = salonId;
     }
 
     public String getbName() {
