@@ -25,7 +25,7 @@ public class AddProduct  extends AppCompatActivity implements AdapterView.OnItem
     private static final String TAG = "AddProduct";
     EditText name,descr,qt,stAlert;
     Spinner bSpin,cSpin;
-    Button btAdd;
+    Button btAdd,btBack;
     String pname,descriptn,pbrand,pcategory;
 
     int quantity = 0, stAlQu = 0;
@@ -42,7 +42,7 @@ public class AddProduct  extends AppCompatActivity implements AdapterView.OnItem
         qt = (EditText) findViewById(R.id.qt);
         stAlert = (EditText) findViewById(R.id.stAlert);
         btAdd = (Button) findViewById(R.id.btAdd);
-
+        btBack = (Button) findViewById(R.id.btBack);
 
         final DatabaseHandler db = new DatabaseHandler(this);
 
@@ -71,23 +71,37 @@ public class AddProduct  extends AppCompatActivity implements AdapterView.OnItem
 
                 pname = name.getText().toString();
                 descriptn = descr.getText().toString();
-                quantity = Integer.parseInt(qt.getText().toString());
-                stAlQu  = Integer.parseInt(stAlert.getText().toString());
-
+                try {
+                    quantity = Integer.parseInt(qt.getText().toString());
+                    stAlQu = Integer.parseInt(stAlert.getText().toString());
+                }catch (NumberFormatException e){
+                    Toast.makeText(AddProduct.this, "Enter Valid Number", Toast.LENGTH_SHORT).show();
+                }
                 if(pname.length() !=0 && descriptn.length() !=0 && pbrand.length() !=0 && pcategory.length() !=0 )
                 {
                     MstProducts mstProducts = new MstProducts(pname,descriptn,pbrand, pcategory, quantity, stAlQu, 1);
                     db.addProduct(mstProducts);
-                    Intent i = new Intent(AddProduct.this,Dashboard.class);
-                    i.putExtra("frgToLoad", FRAGMENT_P);
-                    startActivity(i);
-                    finish();//finishing activity
+                    callToFragment();
 
                 }
                 else
                 Toast.makeText(AddProduct.this, "Please fill each fields", Toast.LENGTH_LONG).show();
             }
         });
+
+        btBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+               callToFragment();
+            }
+        });
+    }
+
+    private void callToFragment() {
+        Intent i = new Intent(AddProduct.this,Dashboard.class);
+        i.putExtra("frgToLoad", FRAGMENT_P);
+        startActivity(i);
+        finish();//finishing activity
     }
 
     @Override
@@ -113,5 +127,14 @@ public class AddProduct  extends AppCompatActivity implements AdapterView.OnItem
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+                Intent i = new Intent(AddProduct.this,Dashboard.class);
+                i.putExtra("frgToLoad", FRAGMENT_P);
+                startActivity(i);
+                finish();//finishing activity
     }
 }

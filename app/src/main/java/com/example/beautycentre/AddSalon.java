@@ -27,7 +27,7 @@ public class AddSalon extends AppCompatActivity {
     public static final String FRAGMENT_S = "Fragment_Salon" ;
     private static final String TAG = "AddSalon";
     EditText sname,desc,oname,bname,adrs,cPname,cPemail,cPmob;
-    Button btnAdd;
+    Button btnAdd,btBack;
     String slname,descriptn,owname,brname,bAdd,CPname,CPemail,CPmob;;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +44,7 @@ public class AddSalon extends AppCompatActivity {
         cPemail = (EditText) findViewById(R.id.cntctPEmail);
         cPmob = (EditText) findViewById(R.id.cntctPMob);
         btnAdd = (Button) findViewById(R.id.btnAdd);
+        btBack = (Button) findViewById(R.id.btBack);
 
 
         final DatabaseHandler db = new DatabaseHandler(this);
@@ -98,5 +99,23 @@ public class AddSalon extends AppCompatActivity {
 
             }
         });
+
+        btBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(AddSalon.this,Dashboard.class);
+                i.putExtra("frgToLoad", FRAGMENT_S);
+                startActivity(i);
+                finish();//finishing activity
+            }
+        });
+    }
+
+    public void onBackPressed() {
+        //super.onBackPressed();
+        Intent i = new Intent(AddSalon.this,Dashboard.class);
+        i.putExtra("frgToLoad", FRAGMENT_S);
+        startActivity(i);
+        finish();//finishing activity
     }
 }

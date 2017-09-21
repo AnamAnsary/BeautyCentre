@@ -1,24 +1,17 @@
 package com.example.beautycentre;
 
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.TableRow.LayoutParams;
-import android.widget.Toast;
 
 import com.example.beautycentre.DatabaseClass.DatabaseHandler;
 import com.example.beautycentre.DatabaseTables.MstProducts;
@@ -35,11 +28,16 @@ public class Product extends Fragment {
     View rootView;
     TableLayout tl;
     TableRow tr;
-    TextView companyTV,valueTV;
+    TextView pid,pname,pdesc,pbrand,pcateg,pqt,pst;
 
-    private ArrayList<String> Pnamelist;
+
     private ArrayList<Integer> PIdlist;
+    private ArrayList<String> Pnamelist;
+    private ArrayList<String> Pdesclist;
+    private ArrayList<String> Pbrandlist;
+    private ArrayList<String> Pcategorylist;
     private ArrayList<Integer> Pquantlist;
+    private ArrayList<Integer> PstAlertlist;
 
     @Nullable
     @Override
@@ -47,25 +45,28 @@ public class Product extends Fragment {
         //returning our layout file
         //change R.layout.yourlayoutfilename for each of your fragments
 
-        rootView = inflater.inflate(R.layout.frag_products, container, false);
-
-        /*FloatingActionButton fab_bt = (FloatingActionButton) getActivity().findViewById(R.id.fab);
-        fab_bt.setVisibility(View.INVISIBLE);
-*/
-        //btn = (Button) rootView.findViewById(R.id.order_btn);
-
+        rootView = inflater.inflate(R.layout.frag_table, container, false);
         final DatabaseHandler db = new DatabaseHandler(getActivity());
-        Pnamelist = new ArrayList<String>();
+
         PIdlist = new ArrayList<Integer>();
+        Pnamelist = new ArrayList<String>();
+        Pdesclist = new ArrayList<String>();
+        Pbrandlist = new ArrayList<String>();
+        Pcategorylist = new ArrayList<String>();
         Pquantlist = new ArrayList<Integer>();
+        PstAlertlist = new ArrayList<Integer>();
 
         List<MstProducts> totalProList = db.getAllProducts();
         for (MstProducts i : totalProList){
             //String log = "Id : " + hodU.getId() +" , Name : " + hodU.getFullname();
             //Log.w(TAG, "Name : " + log );
-            Pnamelist.add(i.getPname());
             PIdlist.add(i.getPid());
+            Pnamelist.add(i.getPname());
+            Pdesclist.add(i.getDescrip());
+            Pbrandlist.add(i.getPbrand());
+            Pcategorylist.add(i.getPcategory());
             Pquantlist.add(i.getQuantity());
+            PstAlertlist.add(i.getStockAlert());
 
         }
 
@@ -109,22 +110,68 @@ public class Product extends Fragment {
                 LayoutParams.WRAP_CONTENT));
 
         /** Creating a TextView to add to the row **/
-        TextView companyTV = new TextView(getActivity());
-        companyTV.setText("Product Names");
-        companyTV.setTextColor(Color.GRAY);
-        companyTV.setTextSize(18);
-        companyTV.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
-        companyTV.setPadding(20, 20, 5, 20);
-        tr.addView(companyTV);  // Adding textView to tablerow.
+        TextView id = new TextView(getActivity());
+        id.setText("ID");
+        id.setTextColor(Color.parseColor("#009688"));
+        id.setTextSize(18);
+        id.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
+        id.setPadding(20, 20, 5, 20);
+        tr.addView(id);  // Adding textView to tablerow.
+
+
+        /** Creating a TextView to add to the row **/
+        TextView nameTV = new TextView(getActivity());
+        nameTV.setText("Product Names");
+        nameTV.setTextColor(Color.parseColor("#009688"));
+        nameTV.setTextSize(18);
+        nameTV.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
+        nameTV.setPadding(20, 20, 5, 20);
+        tr.addView(nameTV);  // Adding textView to tablerow.
+
+        /** Creating a TextView to add to the row **/
+        TextView descTV = new TextView(getActivity());
+        descTV.setText("Description");
+        descTV.setTextColor(Color.parseColor("#009688"));
+        descTV.setTextSize(18);
+        descTV.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
+        descTV.setPadding(20, 20, 5, 20);
+        tr.addView(descTV);  // Adding textView to tablerow.
+
+        /** Creating a TextView to add to the row **/
+        TextView brTV = new TextView(getActivity());
+        brTV.setText("Product Brand");
+        brTV.setTextColor(Color.parseColor("#009688"));
+        brTV.setTextSize(18);
+        brTV.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
+        brTV.setPadding(20, 20, 5, 20);
+        tr.addView(brTV);  // Adding textView to tablerow.
+
+        TextView ctTV = new TextView(getActivity());
+        ctTV.setText("Product Category");
+        ctTV.setTextColor(Color.parseColor("#009688"));
+        ctTV.setTextSize(18);
+        ctTV.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
+        ctTV.setPadding(20, 20, 5, 20);
+        tr.addView(ctTV);  // Adding textView to tablerow.
+
 
         /** Creating another textview **/
-        TextView valueTV = new TextView(getActivity());
-        valueTV.setText("Quantity");
-        valueTV.setTextColor(Color.GRAY);
-        valueTV.setTextSize(18);
-        valueTV.setPadding(20, 20, 5, 20);
-        valueTV.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
-        tr.addView(valueTV); // Adding textView to tablerow.
+        TextView qtTV = new TextView(getActivity());
+        qtTV.setText("Quantity");
+        qtTV.setTextColor(Color.parseColor("#009688"));
+        qtTV.setTextSize(18);
+        qtTV.setPadding(20, 20, 5, 20);
+        qtTV.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
+        tr.addView(qtTV); // Adding textView to tablerow.
+
+        /** Creating another textview **/
+        TextView stTV = new TextView(getActivity());
+        stTV.setText("Stock Alert");
+        stTV.setTextColor(Color.parseColor("#009688"));
+        stTV.setTextSize(18);
+        stTV.setPadding(20, 20, 5, 20);
+        stTV.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
+        tr.addView(stTV); // Adding textView to tablerow.
 
         // Add the TableRow to the TableLayout
         tl.addView(tr, new TableLayout.LayoutParams(
@@ -173,20 +220,54 @@ public class Product extends Fragment {
                     LayoutParams.WRAP_CONTENT));
 
             /** Creating a TextView to add to the row **/
-            companyTV = new TextView(getActivity());
-            companyTV.setText(Pnamelist.get(i));
-            companyTV.setTextColor(Color.BLACK);
-            //companyTV.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
-            companyTV.setPadding(20, 10, 5, 10);
-            tr.addView(companyTV);  // Adding textView to tablerow.
+            pid = new TextView(getActivity());
+            pid.setText(String.valueOf(PIdlist.get(i)));
+            pid.setTextColor(Color.BLACK);
+            pid.setPadding(20, 10, 5, 10);
+            tr.addView(pid);  // Adding textView to tablerow.
+
+            /** Creating a TextView to add to the row **/
+            pname = new TextView(getActivity());
+            pname.setText(String.valueOf(Pnamelist.get(i)));
+            pname.setTextColor(Color.BLACK);
+            pname.setPadding(20, 10, 5, 10);
+            tr.addView(pname);  // Adding textView to tablerow.
+
+            /** Creating a TextView to add to the row **/
+            pdesc = new TextView(getActivity());
+            pdesc.setText(String.valueOf(Pdesclist.get(i)));
+            pdesc.setTextColor(Color.BLACK);
+            pdesc.setPadding(20, 10, 5, 10);
+            tr.addView(pdesc);  // Adding textView to tablerow.
+
+            /** Creating a TextView to add to the row **/
+            pbrand = new TextView(getActivity());
+            pbrand.setText(String.valueOf(Pbrandlist.get(i)));
+            pbrand.setTextColor(Color.BLACK);
+            pbrand.setPadding(20, 10, 5, 10);
+            tr.addView(pbrand);  // Adding textView to tablerow.
+
+            /** Creating a TextView to add to the row **/
+            pcateg = new TextView(getActivity());
+            pcateg.setText(String.valueOf(Pcategorylist.get(i)));
+            pcateg.setTextColor(Color.BLACK);
+            pcateg.setPadding(20, 10, 5, 10);
+            tr.addView(pcateg);  // Adding textView to tablerow.
 
             /** Creating another textview **/
-            valueTV = new TextView(getActivity());
-            valueTV.setText(String.valueOf(Pquantlist.get(i)));
-            valueTV.setTextColor(Color.BLACK);
-            valueTV.setPadding(20, 10, 5, 10);
+            pqt = new TextView(getActivity());
+            pqt.setText(String.valueOf(Pquantlist.get(i)));
+            pqt.setTextColor(Color.BLACK);
+            pqt.setPadding(20, 10, 5, 10);
             //valueTV.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
-            tr.addView(valueTV); // Adding textView to tablerow.
+            tr.addView(pqt); // Adding textView to tablerow.
+
+            /** Creating a TextView to add to the row **/
+            pst = new TextView(getActivity());
+            pst.setText(String.valueOf(PstAlertlist.get(i)));
+            pst.setTextColor(Color.BLACK);
+            pst.setPadding(20, 10, 5, 10);
+            tr.addView(pst);  // Adding textView to tablerow.
 
             // Add the TableRow to the TableLayout
             tl.addView(tr, new TableLayout.LayoutParams(

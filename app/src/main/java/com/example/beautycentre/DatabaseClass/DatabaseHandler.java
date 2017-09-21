@@ -119,6 +119,8 @@ public class DatabaseHandler extends SQLiteOpenHelper{
                 ");";*/
                 + ")";
 
+        Log.w(TAG, "The query is: " + CREATE_BRANCHES_TABLE);
+
         db.execSQL(CREATE_USERS_TABLE);
         db.execSQL(CREATE_PRODUCTS_TABLE);
         db.execSQL(CREATE_SALONS_TABLE);
@@ -549,20 +551,12 @@ public class DatabaseHandler extends SQLiteOpenHelper{
     public String getSalonName(int id){
         SQLiteDatabase db = this.getReadableDatabase();
 
-     /*   Cursor cursor = db.query(TABLE_SALONS, null,
-                KEY_ID + "=?",new String[] { String.valueOf(id) }, null, null, null, null);
-        if (cursor != null)
-            cursor.moveToFirst();*/
-
-        String selectQuery = "SELECT " +KEY_SNAME+ " FROM " + TABLE_SALONS+ "WHERE "+KEY_SALONID+ " = " +id;
+        String selectQuery = "SELECT " +KEY_SNAME+ " FROM " + TABLE_SALONS+ " WHERE "+KEY_ID+ " = " +id;
         Cursor cursor = db.rawQuery(selectQuery, null);
-
         if (cursor != null)
             cursor.moveToFirst();
-        Log.w(TAG, "getSalonName: " +cursor.getString(1));
-      /*  MstSalons salonDetail = new MstSalons(Integer.parseInt(cursor.getString(0)), cursor.getString(1),cursor.getString(2),cursor.getString(3),
-                Integer.parseInt(cursor.getString(4)));*/
-        return cursor.getString(1);
+        Log.w(TAG, "getSalonName: " +cursor.getString(0));
+        return cursor.getString(0);
     }
 
     public int getSIDfromSalon(String sname) {
@@ -577,10 +571,19 @@ public class DatabaseHandler extends SQLiteOpenHelper{
 
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(
-                TABLE_SALONS, new String[]{" "+KEY_SALONID},  KEY_SNAME + "=? ", new String[] { sname }, null, null, null);
+                TABLE_SALONS, new String[]{" "+KEY_ID},  KEY_SNAME + "=? ", new String[] { "'"+sname+"'" }, null, null, null);
         if (cursor != null)
             cursor.moveToFirst();
 
         return Integer.parseInt(cursor.getString(0));
     }
+
+    /*public void updatePassword() {
+        String selectQuery = "SELECT " +KEY_SNAME+ " FROM " + TABLE_SALONS+ " WHERE "+KEY_ID+ " = " +id;
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        if (cursor != null)
+            cursor.moveToFirst();
+        Log.w(TAG, "getSalonName: " +cursor.getString(0));
+        return cursor.getString(0);
+    }*/
 }

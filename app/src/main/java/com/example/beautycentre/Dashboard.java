@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -39,6 +40,7 @@ public class Dashboard extends AppCompatActivity
     public static final String Phone = "phoneKey";
     public static final String Email = "emailKey";
     public static final String Pwd = "pwdKey";
+    public static final String Gender = "genderKey";
     SharedPreferences sharedpreferences;
 
     //MstUsers mstUsers;
@@ -46,7 +48,8 @@ public class Dashboard extends AppCompatActivity
     DrawerLayout drawer;
     TextView welcome,user_email;
     FloatingActionButton fab;
-    private String intentFragment;
+    String intentFragment;
+    boolean doubleBackToExitPressedOnce = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,8 +57,6 @@ public class Dashboard extends AppCompatActivity
         setContentView(R.layout.activity_dashboard);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        final DatabaseHandler db = new DatabaseHandler(this);
 
         sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         String name = sharedpreferences.getString(Name,null);
@@ -91,17 +92,20 @@ public class Dashboard extends AppCompatActivity
                     case "Product":
                         //Snackbar.make(view, "Product", Snackbar.LENGTH_LONG).show();
                         Intent  i = new Intent(Dashboard.this,AddProduct.class);
+                        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(i);
                         finish();
                         break;
                     case "Salon":
                         Intent  i2 = new Intent(Dashboard.this,AddSalon.class);
+                        i2.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(i2);
                         finish();
                         //Snackbar.make(view, "Salon", Snackbar.LENGTH_LONG).show();
                         break;
                     case "Branch":
                         Intent  i3 = new Intent(Dashboard.this,AddBranch.class);
+                        i3.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(i3);
                         finish();
                         break;
@@ -176,11 +180,12 @@ public class Dashboard extends AppCompatActivity
                 Log.w(TAG, "After just remove value is "+getIntent().getExtras().getString("frgToLoad") );*/
                 getIntent().removeExtra("frgToLoad");
                //  Log.w(TAG, "After remove extra value is "+getIntent().getExtras().getString("frgToLoad") );
-                //ft.addToBackStack();
-                ft.addToBackStack(null);
+               // ft.addToBackStack(null);
                 ft.commit();
             }
-
+            else
+                //add this line to display menu1 when the activity is loaded
+                displaySelectedScreen(R.id.nav_product);
 
         }
         else
@@ -194,7 +199,25 @@ public class Dashboard extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
+          /*  Toast.makeText(Dashboard.this,"Press again to exit",Toast.LENGTH_LONG).show();
             super.onBackPressed();
+        }
+*/
+            if (doubleBackToExitPressedOnce) {
+                super.onBackPressed();
+                return;
+            }
+
+            this.doubleBackToExitPressedOnce = true;
+            Toast.makeText(this, "Please press again to exit", Toast.LENGTH_SHORT).show();
+
+            new Handler().postDelayed(new Runnable() {
+
+                @Override
+                public void run() {
+                    doubleBackToExitPressedOnce = false;
+                }
+            }, 4000);
         }
     }
 
@@ -253,7 +276,7 @@ public class Dashboard extends AppCompatActivity
     private void displaySelectedScreen(int itemId) {
 
       /*  intentFragment = getIntent().getExtras();
-        Log.w(TAG, "onCreate: intentfragment is "+intentFragment);
+        Log.w(TAG, "onCreate: intentfragment is "+intentFragmen
 
         if (intentFragment != null) {
             itemId = Integer.parseInt(intentFragment.getString("frgToLoad"));
@@ -282,7 +305,7 @@ public class Dashboard extends AppCompatActivity
                 ft.replace(R.id.content_frame, fragment,"Inventory");
                 break;
             case R.id.nav_changepwd:
-                Intent  i = new Intent(Dashboard.this,CreateTable.class);
+                Intent  i = new Intent(Dashboard.this,ChangePassword.class);
                 startActivity(i);
                 break;
             case R.id.nav_logout:
@@ -306,7 +329,7 @@ public class Dashboard extends AppCompatActivity
 
         //replacing the fragment
         if (fragment != null) {
-            ft.addToBackStack(null);
+            //ft.addToBackStack(null);
             ft.commit();
         }
 

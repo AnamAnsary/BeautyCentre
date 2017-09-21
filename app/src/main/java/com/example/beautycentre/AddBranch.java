@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -32,12 +33,13 @@ public class AddBranch extends AppCompatActivity {
     private static final String TAG = "AddBranch";
     EditText bname,adrs,cPname,cPemail,cPmob;
     AutoCompleteTextView actv;
-    Button btnAdd;
+    Button btnAdd,btBack;
     String salname,brname,bAdd,CPname,CPemail,CPmob;
     private ArrayList<String> Snamelist;
     private ArrayList<Integer> SIdlist;
     List< String> salonNames = new ArrayList< String>();
     private int sid;
+    private int pos2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +54,7 @@ public class AddBranch extends AppCompatActivity {
         cPmob = (EditText) findViewById(R.id.cntctPMob);
         actv= (AutoCompleteTextView)findViewById(R.id.autoCompleteTVSalon);
         btnAdd = (Button) findViewById(R.id.btnAdd);
+        btBack = (Button) findViewById(R.id.btBack);
 
 
 
@@ -89,9 +92,9 @@ public class AddBranch extends AppCompatActivity {
                 {
                    // MstProducts mstProducts = new MstProducts(pname,descriptn,quantity,quantity,1);
 
-                    sid = db.getSIDfromSalon(salname);
-                    Log.w(TAG, "onClick: sid is "+sid );
-                    MstBranches mstBranches = new MstBranches(sid,brname,bAdd,CPname,CPemail,CPmob,1);
+                   // sid = db.getSIDfromSalon(salname);
+                    //Log.w(TAG, "onClick: sid is "+sid );
+                    MstBranches mstBranches = new MstBranches(pos2,brname,bAdd,CPname,CPemail,CPmob,1);
                     db.addBranch(mstBranches);
                     Intent i = new Intent(AddBranch.this,Dashboard.class);
                     i.putExtra("frgToLoad", FRAGMENT_B);
@@ -104,5 +107,39 @@ public class AddBranch extends AppCompatActivity {
 
             }
         });
+
+        actv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View arg1, int pos, long id) {
+                String selection = (String) parent.getItemAtPosition(pos);
+                pos2 = -1;
+                Log.w(TAG, "onItemClick: selection is "+selection );
+                for (int i = 0; i < Snamelist.size(); i++) {
+                    if (Snamelist.get(i).equals(selection)) {
+                        pos2 = i+1;
+                        Log.w(TAG, "onItemClick: pos2 is "+pos2 );
+                        break;
+                    }
+                }
+            }
+        });
+
+        btBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(AddBranch.this,Dashboard.class);
+                i.putExtra("frgToLoad", FRAGMENT_B);
+                startActivity(i);
+                finish();//finishing activity
+            }
+        });
+    }
+
+    public void onBackPressed() {
+        //super.onBackPressed();
+        Intent i = new Intent(AddBranch.this,Dashboard.class);
+        i.putExtra("frgToLoad", FRAGMENT_B);
+        startActivity(i);
+        finish();//finishing activity
     }
 }

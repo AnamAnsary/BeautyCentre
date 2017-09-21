@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import static com.example.beautycentre.Dashboard.Email;
+import static com.example.beautycentre.Dashboard.Gender;
 import static com.example.beautycentre.Dashboard.MyPREFERENCES;
 import static com.example.beautycentre.Dashboard.Name;
 import static com.example.beautycentre.Dashboard.Phone;
@@ -32,7 +33,6 @@ import static com.example.beautycentre.Dashboard.Pwd;
 public class LoginActivity  extends AppCompatActivity {
 
     MstUsers mstUser;
-    MstProducts mstProducts;
     EditText password;
     EditText email;
     Button login;
@@ -108,6 +108,7 @@ public class LoginActivity  extends AppCompatActivity {
 
                         editor.putString(Name,  mstUser.getFullname());
                         editor.putString(Phone, mstUser.getContactno());
+                        editor.putInt(String.valueOf(Gender), mstUser.getGender());
                         editor.putString(Email, Lemail);
                         editor.putString(Pwd, Lpass);
                         editor.commit();
