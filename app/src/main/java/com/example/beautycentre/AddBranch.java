@@ -37,8 +37,6 @@ public class AddBranch extends AppCompatActivity {
     String salname,brname,bAdd,CPname,CPemail,CPmob;
     private ArrayList<String> Snamelist;
     private ArrayList<Integer> SIdlist;
-    List< String> salonNames = new ArrayList< String>();
-    private int sid;
     private int pos2;
 
     @Override

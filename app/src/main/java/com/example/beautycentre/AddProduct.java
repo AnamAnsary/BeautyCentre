@@ -1,6 +1,7 @@
 package com.example.beautycentre;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -13,7 +14,14 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.beautycentre.DatabaseClass.DatabaseHandler;
+import com.example.beautycentre.DatabaseTables.MstBranches;
 import com.example.beautycentre.DatabaseTables.MstProducts;
+import com.example.beautycentre.DatabaseTables.MstTransaction;
+
+import java.util.List;
+
+import static com.example.beautycentre.Dashboard.MyPREFERENCES;
+import static com.example.beautycentre.Dashboard.Name;
 
 /**
  * Created by vmplapp on 13/9/17.
@@ -81,6 +89,22 @@ public class AddProduct  extends AppCompatActivity implements AdapterView.OnItem
                 {
                     MstProducts mstProducts = new MstProducts(pname,descriptn,pbrand, pcategory, quantity, stAlQu, 1);
                     db.addProduct(mstProducts);
+
+                    int proId = db.getLastInsertedIDFromProduct();
+
+                    SharedPreferences shared = getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
+                    String username = shared.getString(Name,"");
+
+                    MstTransaction mstTransaction = new MstTransaction(proId,username,"Purchase",quantity,1,1);
+                    db.addTransaction(mstTransaction);
+
+                    List<MstTransaction> totalTransList = db.getAllTransactions();
+                    for (MstTransaction i : totalTransList) {
+                        String log = "Id : " + i.getTid() +" , Name : " + i.getConcernedPname()+"PID : "+i.getPid()+
+                                "Type : "+i.getTtype()+"date : "+i.getTransDate()+ "isparent : "+i.getIsparent()+"quantity : "+i.getTransQuantity();
+                        Log.w(TAG, "Transaction info " + log );
+
+                    }
                     callToFragment();
 
                 }

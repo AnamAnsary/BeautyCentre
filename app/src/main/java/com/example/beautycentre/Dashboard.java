@@ -28,6 +28,7 @@ import com.example.beautycentre.DatabaseTables.MstUsers;
 import static com.example.beautycentre.AddBranch.FRAGMENT_B;
 import static com.example.beautycentre.AddProduct.FRAGMENT_P;
 import static com.example.beautycentre.AddSalon.FRAGMENT_S;
+import static com.example.beautycentre.AddTransaction.FRAGMENT_I;
 
 
 public class Dashboard extends AppCompatActivity
@@ -110,7 +111,10 @@ public class Dashboard extends AppCompatActivity
                         finish();
                         break;
                     case "Inventory":
-                        Snackbar.make(view, "Inventory", Snackbar.LENGTH_LONG).show();
+                        Intent  i4 = new Intent(Dashboard.this,AddTransaction.class);
+                        i4.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(i4);
+                        finish();
                         break;
                     default:
                         Log.e(TAG, "Unhandled FAB fragment tag " + tag);
@@ -166,6 +170,12 @@ public class Dashboard extends AppCompatActivity
                         fragment = new Branch();
                         Log.w(TAG, "onCreate: Branch frag to add");
                         ft.replace(R.id.content_frame, fragment, "Branch");
+                        break;
+                    case FRAGMENT_I:
+                        // Load corresponding fragment
+                        fragment = new Inventory();
+                        Log.w(TAG, "onCreate: Inventory frag to add");
+                        ft.replace(R.id.content_frame, fragment, "Inventory");
                         break;
            /* case FRAGMENT_C:
                 // Load corresponding fragment

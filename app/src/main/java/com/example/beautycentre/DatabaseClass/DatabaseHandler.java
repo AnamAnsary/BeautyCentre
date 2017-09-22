@@ -10,6 +10,7 @@ import android.util.Log;
 import com.example.beautycentre.DatabaseTables.MstBranches;
 import com.example.beautycentre.DatabaseTables.MstProducts;
 import com.example.beautycentre.DatabaseTables.MstSalons;
+import com.example.beautycentre.DatabaseTables.MstTransaction;
 import com.example.beautycentre.DatabaseTables.MstUsers;
 
 import java.util.ArrayList;
@@ -35,6 +36,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
     private static final String TABLE_PRODUCTS = "products";
     private static final String TABLE_SALONS = "salons";
     private static final String TABLE_BRANCHES = "branches";
+    private static final String TABLE_TRANSACTION = "transaction";
 
     //Common columns
     private static final String KEY_ID = "id";
@@ -69,6 +71,16 @@ public class DatabaseHandler extends SQLiteOpenHelper{
     private static final String KEY_BRCPNAME= "contactPName";
     private static final String KEY_BRCPEMAIL= "contactPEmail";
     private static final String KEY_BRCPCNTCT= "contactPMob";
+
+    //MstTransaction Table column names
+    private static final String KEY_PRODUCTID= "productID";
+    private static final String KEY_CONCERNEDPERSON= "concernedPersonName";
+    private static final String KEY_TTYPE= "transactionType";
+    private static final String KEY_STATUS= "paymentStatus";
+    private static final String KEY_TRANSDATE= "transactionDate";
+    private static final String KEY_EXPDATE= "expectedDate";
+    private static final String KEY_TRANSQUANTITY= "transQuantity";
+    private static final String KEY_ISPARENT= "isParent";
 
     public DatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -118,13 +130,28 @@ public class DatabaseHandler extends SQLiteOpenHelper{
              /*   + " FOREIGN KEY ("+KEY_ID+") REFERENCES "+TABLE_SALONS+"("+KEY_ID+")" +
                 ");";*/
                 + ")";
-
         Log.w(TAG, "The query is: " + CREATE_BRANCHES_TABLE);
+
+        String CREATE_TRANSACTION_TABLE = "CREATE TABLE " + TABLE_TRANSACTION + " ("
+                + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + KEY_PRODUCTID + " INTEGER,"
+                + KEY_CONCERNEDPERSON + " TEXT,"
+                + KEY_TTYPE + " TEXT,"
+                + KEY_STATUS + " TEXT,"
+                + KEY_TRANSDATE + " TEXT,"
+                + KEY_EXPDATE + " TEXT,"
+                + KEY_TRANSQUANTITY + " INTEGER,"
+                + KEY_ISPARENT + " INTEGER,"
+                + KEY_ACTIVE + " INTEGER"
+                + ")";
+
+        Log.w(TAG, "The query is: " + CREATE_TRANSACTION_TABLE);
 
         db.execSQL(CREATE_USERS_TABLE);
         db.execSQL(CREATE_PRODUCTS_TABLE);
         db.execSQL(CREATE_SALONS_TABLE);
         db.execSQL(CREATE_BRANCHES_TABLE);
+        db.execSQL(CREATE_TRANSACTION_TABLE);
         Log.w(TAG, "onCreate: Database created");
     }
 
@@ -135,6 +162,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_PRODUCTS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_SALONS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_BRANCHES);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_TRANSACTION);
         Log.w(TAG, "onUpgrade: Database upgrade" );
         // Create tables again
         onCreate(db);
@@ -213,6 +241,27 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         db.close(); // Closing database connection
     }
 
+    public void addTransaction(MstTransaction mstTransaction) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_PRODUCTID, mstTransaction.getPid());
+        values.put(KEY_CONCERNEDPERSON, mstTransaction.getConcernedPname());
+        values.put(KEY_TTYPE, mstTransaction.getTtype());
+        values.put(KEY_STATUS, mstTransaction.getStatus());
+        values.put(KEY_TRANSDATE, mstTransaction.getTransDate());
+        values.put(KEY_EXPDATE, mstTransaction.getExpDate());
+        values.put(KEY_TRANSQUANTITY, mstTransaction.getTransQuantity());
+        values.put(KEY_ISPARENT, mstTransaction.getIsparent());
+        values.put(KEY_ACTIVE, mstTransaction.getActive());
+
+        // Inserting Row
+        db.insert(TABLE_TRANSACTION, null, values);
+        Log.w(TAG, "addTransaction: added transaction" );
+        //Toast.makeText(context, "User Added", Toast.LENGTH_LONG).show();
+        db.close(); // Closing database connection
+    }
+
     // Getting single contact
     MstUsers getSingleUser(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
@@ -277,6 +326,20 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         return branchDetail;
     }
 
+    MstTransaction getSingleTransaction(int id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(TABLE_TRANSACTION, null,
+                KEY_ID + "=?",new String[] { String.valueOf(id) }, null, null, null, null);
+
+        if (cursor != null)
+            cursor.moveToFirst();
+        MstTransaction transaction = new MstTransaction(Integer.parseInt(cursor.getString(0)), Integer.parseInt(cursor.getString(1)),
+                cursor.getString(2),cursor.getString(3), cursor.getString(4),cursor.getString(5),cursor.getString(6),
+                Integer.parseInt(cursor.getString(7)), Integer.parseInt(cursor.getString(8)), Integer.parseInt(cursor.getString(9)));
+
+        return transaction;
+    }
 
 
     public List<MstUsers> getAllUsers() {
@@ -284,7 +347,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         // Select All Query
         String selectQuery = "SELECT  * FROM " + TABLE_USERS;
 
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(selectQuery,null);
 
         // looping through all rows and adding to list
@@ -298,6 +361,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
                 userList.add(user);
             } while (cursor.moveToNext());
         }
+        db.close();
 
         // return contact list
         return userList;
@@ -309,7 +373,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         // Select All Query
         String selectQuery = "SELECT  * FROM " + TABLE_PRODUCTS;
 
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(selectQuery,null);
 
         // looping through all rows and adding to list
@@ -336,7 +400,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         // Select All Query
         String selectQuery = "SELECT  * FROM " + TABLE_SALONS;
 
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(selectQuery,null);
 
         // looping through all rows and adding to list
@@ -362,7 +426,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         // Select All Query
         String selectQuery = "SELECT  * FROM " + TABLE_BRANCHES;
 
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(selectQuery,null);
 
         // looping through all rows and adding to list
@@ -383,6 +447,38 @@ public class DatabaseHandler extends SQLiteOpenHelper{
 
         // return contact list
         return branchList;
+
+    }
+
+    public List<MstTransaction> getAllTransactions() {
+        List<MstTransaction> transactionList = new ArrayList<MstTransaction>();
+        // Select All Query
+        String selectQuery = "SELECT  * FROM " + TABLE_TRANSACTION;
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery,null);
+
+        // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+                MstTransaction trans = new MstTransaction();
+                trans.setTid(Integer.parseInt(cursor.getString(0)));
+                trans.setPid(Integer.parseInt(cursor.getString(1)));
+                trans.setConcernedPname(cursor.getString(2));
+                trans.setTtype(cursor.getString(3));
+                trans.setStatus(cursor.getString(4));
+                trans.setTransDate(cursor.getString(5));
+                trans.setExpDate(cursor.getString(6));
+                trans.setTransQuantity(Integer.parseInt(cursor.getString(7)));
+                trans.setIsparent(Integer.parseInt(cursor.getString(8)));
+                trans.setActive(Integer.parseInt(cursor.getString(9)));
+                // Adding contact to list
+                transactionList.add(trans);
+            } while (cursor.moveToNext());
+        }
+
+        // return contact list
+        return transactionList;
 
     }
 
@@ -544,6 +640,15 @@ public class DatabaseHandler extends SQLiteOpenHelper{
       /*  MstSalons salonDetail = new MstSalons(Integer.parseInt(cursor.getString(0)), cursor.getString(1),cursor.getString(2),cursor.getString(3),
                 Integer.parseInt(cursor.getString(4)));*/
 
+        return Integer.parseInt(cursor.getString(0));
+
+    }
+
+    public int getLastInsertedIDFromProduct(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        String selectQuery = "SELECT  * FROM " + TABLE_PRODUCTS;
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        cursor.moveToLast();
         return Integer.parseInt(cursor.getString(0));
 
     }
