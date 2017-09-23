@@ -14,11 +14,17 @@ public class MstProducts  {
     int stockAlert;
     int active;
 
+    public MstProducts(int pid, String pname) {
+        this.pid = pid;
+        this.pname = pname;
+    }
+
     public MstProducts(int pid, String pname, String descrip, String pbrand, String pcategory, int quantity, int stockAlert, int active) {
 
         this.pid = pid;
         this.pname = pname;
         this.descrip = descrip;
+
         this.pbrand = pbrand;
         this.pcategory = pcategory;
         this.quantity = quantity;

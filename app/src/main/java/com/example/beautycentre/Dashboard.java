@@ -19,11 +19,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.beautycentre.DatabaseClass.DatabaseHandler;
 import com.example.beautycentre.DatabaseTables.MstUsers;
+
+import java.util.List;
 
 import static com.example.beautycentre.AddBranch.FRAGMENT_B;
 import static com.example.beautycentre.AddProduct.FRAGMENT_P;
@@ -37,15 +40,18 @@ public class Dashboard extends AppCompatActivity
     private static final String TAG = "Dashboard";
 
     public static final String MyPREFERENCES = "MyPrefs" ;
+    public static final String ID = "idKey";
     public static final String Name = "nameKey";
     public static final String Phone = "phoneKey";
     public static final String Email = "emailKey";
     public static final String Pwd = "pwdKey";
     public static final String Gender = "genderKey";
     SharedPreferences sharedpreferences;
+    boolean flag = true;
 
     //MstUsers mstUsers;
     NavigationView navigationView;
+    FrameLayout fragDash;
     DrawerLayout drawer;
     TextView welcome,user_email;
     FloatingActionButton fab;
@@ -80,7 +86,23 @@ public class Dashboard extends AppCompatActivity
         nav_user.setText(user);
         */
 
+       /* View hdView =  navigationView.getChildAt(0);
+        fragDash = (FrameLayout) hdView.findViewById(R.id.content_frame);
+        DashboardFragment battlistfragment = new DashboardFragment();
+        transaction.add(R.id.content_frame,battlistfragment);
+        transaction.addToBackStack(null);
+        transaction.commit();*/
+
+        Fragment fragmentMain = new HomePage();
+        FragmentTransaction mainft = getSupportFragmentManager().beginTransaction();
+        Log.w(TAG, "onCreate: Main frag to add");
+        mainft.add(R.id.content_frame, fragmentMain,"Dashboard_Frag");
+        //mainft.addToBackStack(null);
+        mainft.commit();
+
+
         fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setVisibility(View.INVISIBLE);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -191,16 +213,18 @@ public class Dashboard extends AppCompatActivity
                 getIntent().removeExtra("frgToLoad");
                //  Log.w(TAG, "After remove extra value is "+getIntent().getExtras().getString("frgToLoad") );
                // ft.addToBackStack(null);
+                fab.setVisibility(View.VISIBLE);
+                flag = false;
                 ft.commit();
             }
-            else
+           /* else
                 //add this line to display menu1 when the activity is loaded
-                displaySelectedScreen(R.id.nav_product);
+                displaySelectedScreen(R.id.nav_product);*/
 
         }
-        else
+       /* else
             //add this line to display menu1 when the activity is loaded
-            displaySelectedScreen(R.id.nav_product);
+            displaySelectedScreen(R.id.nav_product);*/
     }
 
     @Override
@@ -208,7 +232,7 @@ public class Dashboard extends AppCompatActivity
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else {
+        } else if (flag==true){
           /*  Toast.makeText(Dashboard.this,"Press again to exit",Toast.LENGTH_LONG).show();
             super.onBackPressed();
         }
@@ -229,6 +253,11 @@ public class Dashboard extends AppCompatActivity
                 }
             }, 4000);
         }
+        else if (flag == false) {
+            finish();
+            startActivity(getIntent());
+        }
+
     }
 
     @Override
@@ -340,11 +369,14 @@ public class Dashboard extends AppCompatActivity
         //replacing the fragment
         if (fragment != null) {
             //ft.addToBackStack(null);
+            fab.setVisibility(View.VISIBLE);
+            flag = false;
             ft.commit();
         }
 
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
     }
+
 
 }

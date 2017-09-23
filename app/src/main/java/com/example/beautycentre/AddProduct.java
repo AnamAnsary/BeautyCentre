@@ -156,9 +156,10 @@ public class AddProduct  extends AppCompatActivity implements AdapterView.OnItem
     @Override
     public void onBackPressed() {
         //super.onBackPressed();
-                Intent i = new Intent(AddProduct.this,Dashboard.class);
+               /* Intent i = new Intent(AddProduct.this,Dashboard.class);
                 i.putExtra("frgToLoad", FRAGMENT_P);
                 startActivity(i);
-                finish();//finishing activity
+                finish();//finishing activity*/
+               callToFragment();
     }
 }

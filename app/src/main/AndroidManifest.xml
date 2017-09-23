@@ -34,7 +34,6 @@
         <activity android:name=".AddProduct"></activity>
         <activity android:name=".AddSalon"></activity>
         <activity android:name=".AddBranch"></activity>
-        <activity android:name=".AddBranchofSalon"></activity>
         <activity android:name=".ChangePassword"></activity>
     </application>
 

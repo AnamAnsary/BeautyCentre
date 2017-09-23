@@ -36,7 +36,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
     private static final String TABLE_PRODUCTS = "products";
     private static final String TABLE_SALONS = "salons";
     private static final String TABLE_BRANCHES = "branches";
-    private static final String TABLE_TRANSACTION = "transaction";
+    private static final String TABLE_TRANSACTION = "transactions";
 
     //Common columns
     private static final String KEY_ID = "id";
@@ -275,6 +275,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         MstUsers userDetail = new MstUsers(Integer.parseInt(cursor.getString(0)), cursor.getString(1),cursor.getString(2),cursor.getString(3),
                 Integer.parseInt(cursor.getString(4)),cursor.getString(5), Integer.parseInt(cursor.getString(8)));
         // return contact
+        cursor.close();
         return userDetail;
     }
 
@@ -291,6 +292,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
 
         MstProducts prodDetail = new MstProducts(Integer.parseInt(cursor.getString(0)), cursor.getString(1),cursor.getString(2),cursor.getString(3),
               cursor.getString(4), Integer.parseInt(cursor.getString(5)),  Integer.parseInt(cursor.getString(6)),  Integer.parseInt(cursor.getString(7)));
+        cursor.close();
         // return contact
         return prodDetail;
     }
@@ -306,6 +308,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
 
         MstSalons salonDetail = new MstSalons(Integer.parseInt(cursor.getString(0)), cursor.getString(1),cursor.getString(2),cursor.getString(3),
                Integer.parseInt(cursor.getString(4)));
+        cursor.close();
         // return contact
         return salonDetail;
     }
@@ -322,6 +325,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         MstBranches branchDetail = new MstBranches (Integer.parseInt(cursor.getString(0)),Integer.parseInt(cursor.getString(1)),
                 cursor.getString(1),cursor.getString(2),cursor.getString(3),
               cursor.getString(4),cursor.getString(5), Integer.parseInt(cursor.getString(6)));
+        cursor.close();
         // return contact
         return branchDetail;
     }
@@ -338,6 +342,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
                 cursor.getString(2),cursor.getString(3), cursor.getString(4),cursor.getString(5),cursor.getString(6),
                 Integer.parseInt(cursor.getString(7)), Integer.parseInt(cursor.getString(8)), Integer.parseInt(cursor.getString(9)));
 
+        cursor.close();
         return transaction;
     }
 
@@ -355,12 +360,16 @@ public class DatabaseHandler extends SQLiteOpenHelper{
             do {
                 MstUsers user = new MstUsers();
                 user.setId(Integer.parseInt(cursor.getString(0)));
-                user.setFullname(cursor.getString(3));
+                user.setFullname(cursor.getString(1));
+                user.setEmail(cursor.getString(2));
+                user.setPassword(cursor.getString(3));
                 user.setGender(Integer.parseInt(cursor.getString(4)));
+                user.setContactno(cursor.getString(5));
                 // Adding contact to list
                 userList.add(user);
             } while (cursor.moveToNext());
         }
+        cursor.close();
         db.close();
 
         // return contact list
@@ -391,6 +400,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
                 prodList.add(prod);
             } while (cursor.moveToNext());
         }
+        cursor.close();
         // return contact list
         return prodList;
     }
@@ -415,7 +425,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
                 salonList.add(salon);
             } while (cursor.moveToNext());
         }
-
+        cursor.close();
         // return contact list
         return salonList;
 
@@ -444,7 +454,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
                 branchList.add(branch);
             } while (cursor.moveToNext());
         }
-
+        cursor.close();
         // return contact list
         return branchList;
 
@@ -476,7 +486,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
                 transactionList.add(trans);
             } while (cursor.moveToNext());
         }
-
+        cursor.close();
         // return contact list
         return transactionList;
 
@@ -614,6 +624,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
 
         MstUsers userDetail = new MstUsers(Integer.parseInt(cursor.getString(0)), cursor.getString(1),cursor.getString(2),cursor.getString(3),
                 Integer.parseInt(cursor.getString(4)),cursor.getString(5), Integer.parseInt(cursor.getString(6)));
+        cursor.close();
         // return contact
         return userDetail;
     }
@@ -639,7 +650,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         cursor.moveToLast();
       /*  MstSalons salonDetail = new MstSalons(Integer.parseInt(cursor.getString(0)), cursor.getString(1),cursor.getString(2),cursor.getString(3),
                 Integer.parseInt(cursor.getString(4)));*/
-
+        cursor.close();
         return Integer.parseInt(cursor.getString(0));
 
     }
@@ -649,6 +660,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         String selectQuery = "SELECT  * FROM " + TABLE_PRODUCTS;
         Cursor cursor = db.rawQuery(selectQuery, null);
         cursor.moveToLast();
+        cursor.close();
         return Integer.parseInt(cursor.getString(0));
 
     }
@@ -679,16 +691,21 @@ public class DatabaseHandler extends SQLiteOpenHelper{
                 TABLE_SALONS, new String[]{" "+KEY_ID},  KEY_SNAME + "=? ", new String[] { "'"+sname+"'" }, null, null, null);
         if (cursor != null)
             cursor.moveToFirst();
-
+        cursor.close();
         return Integer.parseInt(cursor.getString(0));
     }
 
-    /*public void updatePassword() {
-        String selectQuery = "SELECT " +KEY_SNAME+ " FROM " + TABLE_SALONS+ " WHERE "+KEY_ID+ " = " +id;
+    public void updatePassword(int id, String newpwd) {
+       /* SQLiteDatabase db = this.getWritableDatabase();
+        String selectQuery = "UPDATE " +KEY_PASSWORD+ " FROM " + TABLE_USERS+ " WHERE "+KEY_ID+ " = " +id;
         Cursor cursor = db.rawQuery(selectQuery, null);
         if (cursor != null)
-            cursor.moveToFirst();
-        Log.w(TAG, "getSalonName: " +cursor.getString(0));
-        return cursor.getString(0);
-    }*/
+            cursor.moveToFirst();*/
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("UPDATE " + TABLE_USERS + " SET " + KEY_PASSWORD + " = '" +newpwd+"' WHERE "+ KEY_ID + " = " +id);
+        //sqlite> UPDATE COMPANY SET ADDRESS = 'Texas' WHERE ID = 6;
+        Log.w(TAG, "updated password");
+        db.close();
+    }
 }

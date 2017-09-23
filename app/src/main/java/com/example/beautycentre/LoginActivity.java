@@ -21,6 +21,7 @@ import java.util.List;
 
 import static com.example.beautycentre.Dashboard.Email;
 import static com.example.beautycentre.Dashboard.Gender;
+import static com.example.beautycentre.Dashboard.ID;
 import static com.example.beautycentre.Dashboard.MyPREFERENCES;
 import static com.example.beautycentre.Dashboard.Name;
 import static com.example.beautycentre.Dashboard.Phone;
@@ -106,13 +107,13 @@ public class LoginActivity  extends AppCompatActivity {
 
                         SharedPreferences.Editor editor = sharedpreferences.edit();
 
-                        editor.putString(Name,  mstUser.getFullname());
+                        editor.putInt(ID, mstUser.getId());
+                        editor.putString(Name, mstUser.getFullname());
                         editor.putString(Phone, mstUser.getContactno());
                         editor.putInt(String.valueOf(Gender), mstUser.getGender());
                         editor.putString(Email, Lemail);
                         editor.putString(Pwd, Lpass);
                         editor.commit();
-
 
                         Intent intent = new Intent(LoginActivity.this,Dashboard.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

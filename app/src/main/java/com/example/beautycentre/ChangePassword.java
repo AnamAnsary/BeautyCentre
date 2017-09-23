@@ -1,6 +1,7 @@
 package com.example.beautycentre;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -18,6 +19,7 @@ import java.util.List;
 
 import static com.example.beautycentre.Dashboard.Email;
 import static com.example.beautycentre.Dashboard.Gender;
+import static com.example.beautycentre.Dashboard.ID;
 import static com.example.beautycentre.Dashboard.MyPREFERENCES;
 import static com.example.beautycentre.Dashboard.Name;
 import static com.example.beautycentre.Dashboard.Phone;
@@ -61,6 +63,7 @@ public class ChangePassword extends AppCompatActivity {
                 if(oldpwd.length() != 0 && newpwd.length() != 0 && cnpwd.length() != 0)
                 {
                     SharedPreferences shared = getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
+                    int id = shared.getInt(ID,0);
                     String name = shared.getString(Name,"");
                     String email = shared.getString(Email,"");
                     String phone = shared.getString(Phone,"");
@@ -72,22 +75,20 @@ public class ChangePassword extends AppCompatActivity {
                     {
                         if(newpwd.equals(cnpwd)) {
 
-                          //  mstusers = db.getSingleUser
-                            mstUser = new MstUsers(name, email, oldPStored, 0, phone, 1);
-                            Log.w(TAG, "Mst User"+mstUser.getPassword()+" "+mstUser.getFullname()+" "+mstUser.getGender()+" "+mstUser.getId());
-                            int id = db.updateUser(mstUser);
-                            Log.w(TAG, "Id of updated user "+id );
-                            Snackbar.make(view,"Updated Password!",Snackbar.LENGTH_LONG).show();
-
-
-                              List<MstUsers> users2 = db.getAllUsers();
+                            db.updatePassword(id,newpwd);
+                            List<MstUsers> users2 = db.getAllUsers();
                             for (MstUsers ur : users2) {
-                                String log = "Id: " +ur.getId() + " ,Name: " + ur.getFullname() + " ,Email: " +ur.getEmail();
-                                Log.w(TAG, "user2 is : " +log);
-
+                                String log = "Id: " + ur.getId() + " ,Name: " + ur.getFullname() + " ,Email: " + ur.getEmail() + " ,New Password : "+ ur.getPassword();
+                                Log.w(TAG, "user2 is : " + log);
                             }
-                            //int id = db.updateUser(mstusers);
-                            //db.updatePassword();
+
+
+                            Snackbar.make(view,"Updated Password!",Snackbar.LENGTH_LONG).show();
+                            Intent i = new Intent(ChangePassword.this,Dashboard.class);
+                            startActivity(i);
+                            finish();//finishing activity
+
+
                         }
                         else {
                             Snackbar.make(view,"Passwords do not match!",Snackbar.LENGTH_LONG).show();
@@ -95,7 +96,7 @@ public class ChangePassword extends AppCompatActivity {
                     }
                     else
                     {
-                        Snackbar.make(view,"Your Old Password entered is wrong",Snackbar.LENGTH_LONG).show();
+                        Snackbar.make(view,"Your old password entered is wrong!",Snackbar.LENGTH_LONG).show();
                     }
                 }
                 else
