@@ -38,6 +38,7 @@ public class Inventory extends Fragment {
     private ArrayList<String> payStatlist;
     private ArrayList<String> trDatelist;
     private ArrayList<Integer> quantlist;
+    private ArrayList<String> PNamelist;
 
     @Nullable
     @Override
@@ -55,6 +56,7 @@ public class Inventory extends Fragment {
         payStatlist = new ArrayList<String>();
         trDatelist = new ArrayList<String>();
         quantlist = new ArrayList<Integer>();
+        PNamelist = new ArrayList<String>();
 
         List<MstTransaction> totalTransList = db.getAllTransactions();
         for (MstTransaction i : totalTransList){
@@ -64,10 +66,24 @@ public class Inventory extends Fragment {
             PIdlist.add(i.getPid());
             trnamelist.add(i.getConcernedPname());
             trTypelist.add(i.getTtype());
-            payStatlist.add(i.getStatus());
-            trDatelist.add(i.getTransDate());
             quantlist.add(i.getTransQuantity());
 
+            if(i.getStatus() == null)
+                payStatlist.add("--");
+            else
+                payStatlist.add(i.getStatus());
+
+            if(i.getTransDate() == null)
+                trDatelist.add("--");
+            else
+                trDatelist.add(i.getTransDate());
+
+        }
+
+        for(int i = 0; i < PIdlist.size(); i++)
+        {
+            MstProducts mstProducts = db.getSingleProduct(PIdlist.get(i));
+            PNamelist.add(mstProducts.getPname());
 
         }
 
@@ -100,7 +116,7 @@ public class Inventory extends Fragment {
 
         /** Creating a TextView to add to the row **/
         TextView nameTV = new TextView(getActivity());
-        nameTV.setText("Product ID");
+        nameTV.setText("Product Name");
         nameTV.setTextColor(Color.parseColor("#009688"));
         nameTV.setTextSize(18);
         nameTV.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
@@ -207,7 +223,7 @@ public class Inventory extends Fragment {
 
             /** Creating a TextView to add to the row **/
             pname = new TextView(getActivity());
-            pname.setText(String.valueOf(PIdlist.get(i)));
+            pname.setText(String.valueOf(PNamelist.get(i)));
             pname.setTextColor(Color.BLACK);
             pname.setPadding(20, 10, 5, 10);
             tr.addView(pname);  // Adding textView to tablerow.

@@ -113,6 +113,11 @@ public class AddTransaction extends AppCompatActivity implements View.OnClickLis
             PIdlist.add(pr.getPid());
         }
 
+        if(Pnamelist.size() == 0){
+            Toast.makeText(AddTransaction.this, "There are no products available! Please add Products first", Toast.LENGTH_SHORT).show();
+        }
+
+        else {
        /* ArrayAdapter<MstProducts> proadapter = new ArrayAdapter<MstProducts>
                 (this,android.R.layout.select_dialog_item, (List<MstProducts>) PId_nameList.get(0));
         spProduct.setAdapter(proadapter);
@@ -133,48 +138,45 @@ public class AddTransaction extends AppCompatActivity implements View.OnClickLis
                 @Override
                 public void onClick(View view) {
 
-                    if(Pnamelist.size() == 0)
-                        Toast.makeText(AddTransaction.this, "There are no products available! Please add Products first", Toast.LENGTH_SHORT).show();
-                    else {
+                    tDate = etTransDate.getText().toString();
+                    eDate = etExpDate.getText().toString();
+                    tRemark = remarks.getText().toString();
 
-                        tDate = etTransDate.getText().toString();
-                        eDate = etExpDate.getText().toString();
-                        tRemark = remarks.getText().toString();
+                    try {
+                        tQnty = Integer.parseInt(qty.getText().toString());
+                    } catch (NumberFormatException ne) {
+                        Toast.makeText(AddTransaction.this, "Enter Valid Number", Toast.LENGTH_SHORT).show();
+                    }
 
-                        try {
-                            tQnty = Integer.parseInt(qty.getText().toString());
-                        } catch (NumberFormatException ne) {
-                            Toast.makeText(AddTransaction.this, "Enter Valid Number", Toast.LENGTH_SHORT).show();
+                    if (pos2 != -1 && trans_type != null && storeOrVendor_selected != null && tDate != null && eDate != null && tQnty != 0) {
+                        Log.w(TAG, "onClick: Add to transactions table!");
+
+                        if (trans_type == "Sales")
+                            Payment_status = "Booked";
+                        else if (trans_type == "Purchase")
+                            Payment_status = "Cleared";
+
+                        SharedPreferences shared = getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
+                        String username = shared.getString(Name, "");
+
+                        MstTransaction mstTransaction = new MstTransaction(pos2, username, trans_type, Payment_status, tDate, eDate, tQnty, 0, 1);
+                        db.addTransaction(mstTransaction);
+
+                        List<MstTransaction> totalTransList = db.getAllTransactions();
+                        for (MstTransaction i : totalTransList) {
+                            String log = "Id : " + i.getTid() + " , Name : " + i.getConcernedPname() + "PID : " + i.getPid() +
+                                    "Type : " + i.getTtype() + "date : " + i.getTransDate() + "isparent : " + i.getIsparent() + "quantity : " + i.getTransQuantity();
+                            Log.w(TAG, "Transaction info " + log);
                         }
 
-                        if (pos2 != -1 && trans_type != null && storeOrVendor_selected != null && tDate != null && eDate != null && tQnty != 0) {
-                            Log.w(TAG, "onClick: Add to transactions table!");
+                        callToFragment();
+                    } else
+                        Toast.makeText(AddTransaction.this, "You have missed something! Please provide missing data.", Toast.LENGTH_SHORT).show();
 
-                            if (trans_type == "Sales")
-                                Payment_status = "Booked";
-                            else if (trans_type == "Purchase")
-                                Payment_status = "Cleared";
-
-                            SharedPreferences shared = getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
-                            String username = shared.getString(Name, "");
-
-                            MstTransaction mstTransaction = new MstTransaction(pos2, username, trans_type, Payment_status, tDate, eDate, tQnty, 0, 1);
-                            db.addTransaction(mstTransaction);
-
-                            List<MstTransaction> totalTransList = db.getAllTransactions();
-                            for (MstTransaction i : totalTransList) {
-                                String log = "Id : " + i.getTid() + " , Name : " + i.getConcernedPname() + "PID : " + i.getPid() +
-                                        "Type : " + i.getTtype() + "date : " + i.getTransDate() + "isparent : " + i.getIsparent() + "quantity : " + i.getTransQuantity();
-                                Log.w(TAG, "Transaction info " + log);
-                            }
-
-                            callToFragment();
-                        } else
-                            Toast.makeText(AddTransaction.this, "You have missed something! Please provide missing data.", Toast.LENGTH_SHORT).show();
-                    }
 
                 }
             });
+        }
 
             btBack.setOnClickListener(new View.OnClickListener() {
                 @Override

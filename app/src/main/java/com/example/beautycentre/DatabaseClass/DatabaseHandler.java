@@ -263,7 +263,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
     }
 
     // Getting single contact
-    MstUsers getSingleUser(int id) {
+    public MstUsers getSingleUser(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.query(TABLE_USERS, null,
@@ -281,7 +281,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
 
 
     // Getting single contact
-    MstProducts getSingleProduct(int id) {
+    public MstProducts getSingleProduct(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.query(TABLE_PRODUCTS, null,
@@ -297,7 +297,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         return prodDetail;
     }
 
-    MstSalons getSingleSalon(int id) {
+    public MstSalons getSingleSalon(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.query(TABLE_SALONS, null,
@@ -313,7 +313,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         return salonDetail;
     }
 
-    MstBranches getSingleBranch (int id) {
+    public MstBranches getSingleBranch (int id) {
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.query(TABLE_BRANCHES, null,
@@ -330,7 +330,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         return branchDetail;
     }
 
-    MstTransaction getSingleTransaction(int id) {
+    public MstTransaction getSingleTransaction(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.query(TABLE_TRANSACTION, null,
@@ -498,7 +498,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         String countQuery = "SELECT  * FROM " + TABLE_USERS;
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(countQuery, null);
-        cursor.close();
+
 
         // return count
         return cursor.getCount();
@@ -509,7 +509,6 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         String countQuery = "SELECT  * FROM " + TABLE_PRODUCTS;
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(countQuery, null);
-        cursor.close();
 
         // return count
         return cursor.getCount();
@@ -650,7 +649,6 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         cursor.moveToLast();
       /*  MstSalons salonDetail = new MstSalons(Integer.parseInt(cursor.getString(0)), cursor.getString(1),cursor.getString(2),cursor.getString(3),
                 Integer.parseInt(cursor.getString(4)));*/
-        cursor.close();
         return Integer.parseInt(cursor.getString(0));
 
     }
@@ -660,7 +658,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         String selectQuery = "SELECT  * FROM " + TABLE_PRODUCTS;
         Cursor cursor = db.rawQuery(selectQuery, null);
         cursor.moveToLast();
-        cursor.close();
+
         return Integer.parseInt(cursor.getString(0));
 
     }
@@ -691,7 +689,6 @@ public class DatabaseHandler extends SQLiteOpenHelper{
                 TABLE_SALONS, new String[]{" "+KEY_ID},  KEY_SNAME + "=? ", new String[] { "'"+sname+"'" }, null, null, null);
         if (cursor != null)
             cursor.moveToFirst();
-        cursor.close();
         return Integer.parseInt(cursor.getString(0));
     }
 
@@ -707,5 +704,27 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         //sqlite> UPDATE COMPANY SET ADDRESS = 'Texas' WHERE ID = 6;
         Log.w(TAG, "updated password");
         db.close();
+    }
+
+    public int getFinalQuantityValue(int id)
+    {
+        int FinalTotal = 0;
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String selectQuery = "SELECT sum(\n" +
+                        "   case when " + KEY_TTYPE + " = 'Purchase' then "+ KEY_TRANSQUANTITY +
+                        "  when " + KEY_TTYPE +" = 'Sales' then -(" + KEY_TRANSQUANTITY + ")" +
+                        "  end) as FinalTotal2 from " + TABLE_TRANSACTION +
+                        " WHERE "+ KEY_PRODUCTID + " = " +id;
+               // " LIKE '%" +id+"%'";
+
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        if (cursor.moveToFirst()) {
+            FinalTotal = cursor.getInt(cursor.getColumnIndex("FinalTotal2"));// get final total
+        }
+        Log.w(TAG, "final quantity : " +FinalTotal);
+        //return cursor.getInt(0);
+        return FinalTotal;
     }
 }
