@@ -30,12 +30,11 @@
 
         </activity>
 
-        <activity android:name=".AddTransaction"></activity>
-        <activity android:name=".AddProduct"></activity>
-        <activity android:name=".AddSalon"></activity>
-        <activity android:name=".AddBranch"></activity>
-        <activity android:name=".ChangePassword"></activity>
-
+        <activity android:name="com.example.beautycentre.AddTransaction"></activity>
+        <activity android:name="com.example.beautycentre.AddProduct"></activity>
+        <activity android:name="com.example.beautycentre.AddSalon"></activity>
+        <activity android:name="com.example.beautycentre.AddBranch"></activity>
+        <activity android:name="com.example.beautycentre.ChangePassword"></activity>
 
     </application>
 

@@ -454,7 +454,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
                 branchList.add(branch);
             } while (cursor.moveToNext());
         }
-        cursor.close();
+        //cursor.close();
         // return contact list
         return branchList;
 

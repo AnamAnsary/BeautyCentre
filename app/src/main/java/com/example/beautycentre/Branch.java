@@ -9,9 +9,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.beautycentre.DatabaseClass.DatabaseHandler;
 import com.example.beautycentre.DatabaseTables.MstBranches;
@@ -31,6 +34,7 @@ public class Branch extends Fragment {
     TableLayout tl;
     TableRow tr;
     TextView tvSn,tvBid,tvBrN,tvBrAd,tvPrN,tvPrE,tvPrM;
+    ImageButton btnV, btnE, btnD;
 
     private ArrayList<Integer> SIdlist;
     private ArrayList<String> SNamelist;
@@ -61,11 +65,16 @@ public class Branch extends Fragment {
         CPMoblist = new ArrayList<String>();
 
         List<MstBranches> totalBranList = db.getAllBranches();
+        for (MstBranches ur : totalBranList) {
+            String log = "Id: " +ur.getSalonId() + " ,Name: " + ur.getbName();
+            Log.w(TAG, "user2 is : " +log);
+
+        }
+
         for (MstBranches i : totalBranList){
             //String log = "Id : " + hodU.getId() +" , Name : " + hodU.getFullname();
             //Log.w(TAG, "Name : " + log );
             Log.w(TAG, "MstBranch Salon id is : "+i.getSalonId());
-
 
             SIdlist.add(i.getSalonId());
             BIdlist.add(i.getBid());
@@ -75,10 +84,11 @@ public class Branch extends Fragment {
             CPEmaillist.add(i.getBrCPEmail());
             CPMoblist.add(i.getBrCPMob());
 
+            Log.w(TAG, "Salon id  " +i.getSalonId() );
             String sname = db.getSalonName(i.getSalonId());
             SNamelist.add(sname);
 
-            Log.w(TAG, "Salon id  " +i.getSalonId() );
+
 
         }
 
@@ -159,6 +169,14 @@ public class Branch extends Fragment {
         brCPMobTV.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
         tr.addView(brCPMobTV); // Adding textView to tablerow.
 
+        /*Button btnview = new Button(getActivity());
+        btnview.setText("View");
+        btnview.setTextColor(Color.parseColor("#009688"));
+        btnview.setTextSize(18);
+        btnview.setPadding(20, 20, 5, 20);
+        btnview.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
+        tr.addView(btnview); // Adding textView to tablerow.
+*/
         // Add the TableRow to the TableLayout
         tl.addView(tr, new TableLayout.LayoutParams(
                 TableRow.LayoutParams.MATCH_PARENT,
@@ -199,6 +217,7 @@ public class Branch extends Fragment {
 
         for (int i = 0; i < BIdlist.size(); i++)
         {
+            int IdClicked = i+1;
             /** Create a TableRow dynamically **/
             tr = new TableRow(getActivity());
             tr.setLayoutParams(new TableRow.LayoutParams(
@@ -263,7 +282,65 @@ public class Branch extends Fragment {
             //valueTV.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
             tr.addView(tvPrM); // Adding textView to tablerow.
 
+         /*   btnV = new Button(getActivity());
+            TableLayout.LayoutParams params = new TableLayout.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT);
+            btnV.setBackgroundResource(R.drawable.view_eye48);
+            btnV.setPadding(20, 20, 5, 20);
+            btnV.setLayoutParams(params);
+            //valueTV.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
+            tr.addView(btnV); // Adding textView to tablerow.
+*/
 
+            final int finalI = i;
+            // Creation  button
+            btnV = new ImageButton(getActivity());
+            btnV.setImageResource(R.drawable.iconseye24);
+            btnV.setBackgroundColor(Color.TRANSPARENT);
+            btnV.setPadding(20, 20, 5, 20);
+            //button.setText("Delete");
+            btnV.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT));
+            btnV.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                   /* final TableRow parent = (TableRow) v.getParent();
+                    tl.removeView(parent);*/
+                    Toast.makeText(getActivity(), "Id is "+ finalI, Toast.LENGTH_LONG).show();
+                }
+            });
+            tr.addView(btnV);
+
+            btnE = new ImageButton(getActivity());
+            btnE.setImageResource(R.drawable.iconsedit24);
+            btnE.setBackgroundColor(Color.TRANSPARENT);
+            btnE.setPadding(20, 20, 5, 20);
+            //button.setText("Delete");
+            btnE.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT));
+            btnE.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    Toast.makeText(getActivity(), "Id is "+ finalI, Toast.LENGTH_LONG).show();
+                   /* final TableRow parent = (TableRow) v.getParent();
+                    tl.removeView(parent);*/
+                }
+            });
+            tr.addView(btnE);
+
+            btnD = new ImageButton(getActivity());
+            btnD.setImageResource(R.drawable.iconsdelete24);
+            btnD.setBackgroundColor(Color.TRANSPARENT);
+            btnD.setPadding(20, 20, 5, 20);
+            //button.setText("Delete");
+            btnD.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT));
+            btnD.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                   /* final TableRow parent = (TableRow) v.getParent();
+                    tl.removeView(parent);*/
+                    Toast.makeText(getActivity(), "Id is "+ finalI, Toast.LENGTH_LONG).show();
+                }
+            });
+            tr.addView(btnD);
             // Add the TableRow to the TableLayout
             tl.addView(tr, new TableLayout.LayoutParams(
                     TableRow.LayoutParams.MATCH_PARENT,
