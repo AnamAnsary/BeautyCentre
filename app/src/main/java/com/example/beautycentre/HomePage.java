@@ -21,6 +21,8 @@ import com.example.beautycentre.DatabaseTables.MstProducts;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.graphics.Color.BLACK;
+
 /**
  * Created by vmplapp on 23/9/17.
  */
@@ -78,6 +80,8 @@ public class HomePage extends Fragment {
                 proDetails.setTextSize(15);
                 proDetails.setTextColor(Color.parseColor("#009688"));
                 proDetails.setPadding(25, 20, 25, 20);
+                proDetails.setTextColor(BLACK);
+                proDetails.setTextSize(18);
                 proDetails.setText("Product ID : " + mstProducts.getPid() + "\nProduct Name : "+ mstProducts.getPname() + "\nDescription : "+ mstProducts.getDescrip() +
                 "\nBrand : " + mstProducts.getPbrand() +"\nCategory : " +mstProducts.getPcategory() + "\nQuantity in Stock: "+ finalQty);
 
@@ -107,5 +111,13 @@ public class HomePage extends Fragment {
         });
         return rootView;
         //return inflater.inflate(R.layout.frag_main, container, false);
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        //you can set the title for your toolbar here for different fragments different titles
+        getActivity().setTitle("Dashboard");
+
     }
 }

@@ -1,6 +1,7 @@
 package com.example.beautycentre;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -93,16 +95,16 @@ public class Dashboard extends AppCompatActivity
         transaction.addToBackStack(null);
         transaction.commit();*/
 
+       /*//Code finally added
         Fragment fragmentMain = new HomePage();
         FragmentTransaction mainft = getSupportFragmentManager().beginTransaction();
         Log.w(TAG, "onCreate: Main frag to add");
         mainft.add(R.id.content_frame, fragmentMain,"Dashboard_Frag");
         //mainft.addToBackStack(null);
-        mainft.commit();
+        mainft.commit();*/
 
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setVisibility(View.INVISIBLE);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -216,15 +218,16 @@ public class Dashboard extends AppCompatActivity
                 fab.setVisibility(View.VISIBLE);
                 flag = false;
                 ft.commit();
+
             }
-           /* else
+            else
                 //add this line to display menu1 when the activity is loaded
-                displaySelectedScreen(R.id.nav_product);*/
+                displaySelectedScreen(R.id.nav_dashboard);
 
         }
-       /* else
+        else
             //add this line to display menu1 when the activity is loaded
-            displaySelectedScreen(R.id.nav_product);*/
+            displaySelectedScreen(R.id.nav_dashboard);
     }
 
     @Override
@@ -233,15 +236,49 @@ public class Dashboard extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else if (flag==true){
-          /*  Toast.makeText(Dashboard.this,"Press again to exit",Toast.LENGTH_LONG).show();
-            super.onBackPressed();
-        }
-*/
-            if (doubleBackToExitPressedOnce) {
+            // setup the alert builder
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Exit");
+            builder.setCancelable(false);
+            builder.setMessage("Do you really want to exit?");
+
+            // add the buttons
+            builder.setPositiveButton("Exit", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    finish();
+                }
+            });
+
+            builder.setNegativeButton("Cancel",  new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
+
+            builder.setNeutralButton("Log out and Exit",new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                    SharedPreferences sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedpreferences.edit();
+                    editor.clear();
+                    editor.commit();
+                    dialog.dismiss();
+                    finish();
+                    //Toast.makeText(Dashboard.this,"You clicked logout n exit",Toast.LENGTH_LONG).show();
+                }
+            });
+
+            // create and show the alert dialog
+            AlertDialog dialog = builder.create();
+            dialog.show();
+            /*if (doubleBackToExitPressedOnce) {
                 super.onBackPressed();
                 return;
             }
-
             this.doubleBackToExitPressedOnce = true;
             Toast.makeText(this, "Please press again to exit", Toast.LENGTH_SHORT).show();
 
@@ -251,7 +288,9 @@ public class Dashboard extends AppCompatActivity
                 public void run() {
                     doubleBackToExitPressedOnce = false;
                 }
-            }, 4000);
+            }, 4000);*/
+            //showAlertDialogButtonClicked(navigationView);
+
         }
         else if (flag == false) {
             finish();
@@ -259,6 +298,29 @@ public class Dashboard extends AppCompatActivity
         }
 
     }
+
+   /* public void showAlertDialogButtonClicked(View view) {
+
+        // setup the alert builder
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Exit");
+        builder.setMessage("Do you really want to exit?");
+
+        // add the buttons
+        builder.setPositiveButton("Exit", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                super.onBackPressed();
+
+            }
+        });
+        builder.setNeutralButton("Log out and Exit", null);
+        builder.setNegativeButton("Cancel", null);
+
+        // create and show the alert dialog
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }*/
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -327,6 +389,11 @@ public class Dashboard extends AppCompatActivity
 
         //initializing the fragment object which is selected
         switch (itemId) {
+            case R.id.nav_dashboard:
+                fab.setVisibility(View.INVISIBLE);
+                fragment = new HomePage();
+                ft.replace(R.id.content_frame, fragment,"Dashboard_Frag");
+                break;
             case R.id.nav_product:
                 fragment = new Product();
                 ft.replace(R.id.content_frame, fragment,"Product");
@@ -361,16 +428,21 @@ public class Dashboard extends AppCompatActivity
                 finish();
                 break;
             default:
-                fragment = new Product();
-                ft.replace(R.id.content_frame, fragment,"Product");
+                fragment = new HomePage();
+                ft.replace(R.id.content_frame, fragment,"Dashboard_Frag");
                 break;
         }
 
         //replacing the fragment
         if (fragment != null) {
-            //ft.addToBackStack(null);
-            fab.setVisibility(View.VISIBLE);
-            flag = false;
+            if(fragment.getTag() == "Dashboard_Frag") {
+                fab.setVisibility(View.INVISIBLE);
+                flag = true;
+            }
+            else {
+                fab.setVisibility(View.VISIBLE);
+                flag = false;
+            }
             ft.commit();
         }
 

@@ -35,6 +35,8 @@
         <activity android:name=".AddSalon"></activity>
         <activity android:name=".AddBranch"></activity>
         <activity android:name=".ChangePassword"></activity>
+
+
     </application>
 
 </manifest>

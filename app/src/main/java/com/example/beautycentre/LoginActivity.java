@@ -103,7 +103,7 @@ public class LoginActivity  extends AppCompatActivity {
                 {
                     try {
                         mstUser = db.checkUser(Lemail, Lpass);
-                        Toast.makeText(LoginActivity.this, "FullName, contact no and usertype is " + mstUser.getFullname() + " " + mstUser.getContactno(), Toast.LENGTH_LONG).show();
+                        //Toast.makeText(LoginActivity.this, "FullName, contact no and usertype is " + mstUser.getFullname() + " " + mstUser.getContactno(), Toast.LENGTH_LONG).show();
 
                         SharedPreferences.Editor editor = sharedpreferences.edit();
 
