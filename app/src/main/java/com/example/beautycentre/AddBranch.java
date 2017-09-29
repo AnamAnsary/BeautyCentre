@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.beautycentre.DatabaseClass.DatabaseHandler;
@@ -32,9 +33,9 @@ public class AddBranch extends AppCompatActivity {
     public static final String FRAGMENT_B = "Fragment_Branch" ;
     private static final String TAG = "AddBranch";
     EditText bname,adrs,cPname,cPemail,cPmob;
-    AutoCompleteTextView actv;
+    Spinner spSalon;
     Button btnAdd,btBack;
-    String salname,brname,bAdd,CPname,CPemail,CPmob;
+    String brname,bAdd,CPname,CPemail,CPmob;
     private ArrayList<String> Snamelist;
     private ArrayList<Integer> SIdlist;
     private int pos2;
@@ -50,10 +51,9 @@ public class AddBranch extends AppCompatActivity {
         cPname = (EditText) findViewById(R.id.cntctPname);
         cPemail = (EditText) findViewById(R.id.cntctPEmail);
         cPmob = (EditText) findViewById(R.id.cntctPMob);
-        actv= (AutoCompleteTextView)findViewById(R.id.autoCompleteTVSalon);
+        spSalon = (Spinner) findViewById(R.id.spSalon);
         btnAdd = (Button) findViewById(R.id.btnAdd);
         btBack = (Button) findViewById(R.id.btBack);
-
 
 
         final DatabaseHandler db = new DatabaseHandler(this);
@@ -68,25 +68,26 @@ public class AddBranch extends AppCompatActivity {
 
         //Creating the instance of ArrayAdapter containing list of language names
         ArrayAdapter<String> adapter = new ArrayAdapter<String>
-                (this,android.R.layout.select_dialog_item,Snamelist);
+                (this,android.R.layout.simple_spinner_dropdown_item,Snamelist);
         //Getting the instance of AutoCompleteTextView
+        spSalon.setAdapter(adapter);
 
-        actv.setThreshold(1);//will start working from first character
+      /*  actv.setThreshold(1);//will start working from first character
         actv.setAdapter(adapter);//setting the adapter data into the AutoCompleteTextView
-        actv.setTextColor(Color.BLACK);
+        actv.setTextColor(Color.BLACK);*/
 
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                salname = actv.getText().toString();
+                //salname = actv.getText().toString();
                 brname = bname.getText().toString();
                 bAdd = adrs.getText().toString();
                 CPname = cPname.getText().toString();
                 CPemail= cPemail.getText().toString();
                 CPmob = cPmob.getText().toString();
 
-                if(salname.length() !=0 && brname.length() !=0 && bAdd.length() !=0 && CPname.length() !=0 && CPemail.length() !=0 && CPmob.length() != 0 )
+                if(pos2 != -1&& brname.length() !=0 && bAdd.length() !=0 && CPname.length() !=0 && CPemail.length() !=0 && CPmob.length() != 0 )
                 {
                    // MstProducts mstProducts = new MstProducts(pname,descriptn,quantity,quantity,1);
 
@@ -106,7 +107,7 @@ public class AddBranch extends AppCompatActivity {
             }
         });
 
-        actv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+       /* actv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View arg1, int pos, long id) {
                 String selection = (String) parent.getItemAtPosition(pos);
@@ -119,6 +120,27 @@ public class AddBranch extends AppCompatActivity {
                         break;
                     }
                 }
+            }
+        });
+*/
+        spSalon.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long l) {
+                String selection = (String) adapterView.getItemAtPosition(pos);
+                pos2 = -1;
+                Log.w(TAG, "onItemClick: selection is " + selection);
+                for (int i = 0; i < Snamelist.size(); i++) {
+                    if (Snamelist.get(i).equals(selection)) {
+                        pos2 = i + 1;
+                        Log.w(TAG, "onItemClick: pos2 is " + pos2);
+                        break;
+                    }
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
             }
         });
 

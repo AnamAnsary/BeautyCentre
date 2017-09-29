@@ -1,10 +1,12 @@
 package com.example.beautycentre;
 
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -82,7 +84,7 @@ public class Branch extends Fragment {
             BAddlist.add(i.getBrAdd());
             CPNamelist.add(i.getBrCPName());
             CPEmaillist.add(i.getBrCPEmail());
-            CPMoblist.add(i.getBrCPMob());
+            CPMoblist.add(String.valueOf(i.getBrCPMob()));
 
             Log.w(TAG, "Salon id  " +i.getSalonId() );
             String sname = db.getSalonName(i.getSalonId());
@@ -297,14 +299,45 @@ public class Branch extends Fragment {
             btnV.setImageResource(R.drawable.iconseye24);
             btnV.setBackgroundColor(Color.TRANSPARENT);
             btnV.setPadding(20, 20, 5, 20);
-            //button.setText("Delete");
             btnV.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT));
             btnV.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v) {
+                public void onClick(final View v) {
                    /* final TableRow parent = (TableRow) v.getParent();
                     tl.removeView(parent);*/
-                    Toast.makeText(getActivity(), "Id is "+ finalI, Toast.LENGTH_LONG).show();
+
+                    DatabaseHandler db = new DatabaseHandler(getActivity());
+                    MstBranches mstBranches = db.getSingleBranch(BIdlist.get(finalI));
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setMessage( "Salon Name : " +SNamelist.get(finalI) + "\n" +
+                                        "Branch Name : " + mstBranches.getbName() + "\n" +
+                                        "Branch Address : " + mstBranches.getBrAdd() + "\n" +
+                                        "Contact Person : " + mstBranches.getBrCPName() + "\n" +
+                                        "Email : " + mstBranches.getBrCPEmail()+ "\n" +
+                                        "Contact Number : " + mstBranches.getBrCPMob() );
+
+                    // add the buttons
+                    builder.setPositiveButton("Edit", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            //finish();
+                        }
+                    });
+
+                    builder.setNegativeButton("Delete",  new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            deleteBranch(BIdlist.get(finalI));
+                            TableRow parent = (TableRow) v.getParent();
+                            tl.removeView(parent);
+                        }
+                    });
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                    //Toast.makeText(getActivity(), "Id is "+ BIdlist.get(finalI), Toast.LENGTH_LONG).show();
+
                 }
             });
             tr.addView(btnV);
@@ -313,13 +346,13 @@ public class Branch extends Fragment {
             btnE.setImageResource(R.drawable.iconsedit24);
             btnE.setBackgroundColor(Color.TRANSPARENT);
             btnE.setPadding(20, 20, 5, 20);
-            //button.setText("Delete");
             btnE.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT));
             btnE.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
-                    Toast.makeText(getActivity(), "Id is "+ finalI, Toast.LENGTH_LONG).show();
+
+                    Toast.makeText(getActivity(), "Id is "+ BIdlist.get(finalI), Toast.LENGTH_LONG).show();
                    /* final TableRow parent = (TableRow) v.getParent();
                     tl.removeView(parent);*/
                 }
@@ -330,14 +363,18 @@ public class Branch extends Fragment {
             btnD.setImageResource(R.drawable.iconsdelete24);
             btnD.setBackgroundColor(Color.TRANSPARENT);
             btnD.setPadding(20, 20, 5, 20);
-            //button.setText("Delete");
             btnD.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT));
             btnD.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                    /* final TableRow parent = (TableRow) v.getParent();
                     tl.removeView(parent);*/
-                    Toast.makeText(getActivity(), "Id is "+ finalI, Toast.LENGTH_LONG).show();
+                    Log.w(TAG, "Id is "+ BIdlist.get(finalI) );
+                    deleteBranch(BIdlist.get(finalI));
+                    TableRow parent = (TableRow) v.getParent();
+                    tl.removeView(parent);
+
+                    //Toast.makeText(getActivity(), "Id is "+ finalI, Toast.LENGTH_LONG).show();
                 }
             });
             tr.addView(btnD);
@@ -347,10 +384,26 @@ public class Branch extends Fragment {
                     TableRow.LayoutParams.WRAP_CONTENT));
         }
     }
+
+
+    private void deleteBranch(Integer bid) {
+        DatabaseHandler db = new DatabaseHandler(getActivity());
+        MstBranches mstBranches = db.getSingleBranch(bid);
+        db.deleteBranch(mstBranches);
+        Log.w(TAG, "Deleted branch" );
+
+        List<MstBranches> users2 = db.getAllBranches();
+        for (MstBranches ur : users2) {
+            String log = "BId: " +ur.getBid() + " ,Name: " + ur.getbName() + " ,Sid: " +ur.getSalonId();
+            Log.w(TAG, "user2 is : " +log);
+        }
+    }
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         //you can set the title for your toolbar here for different fragments different titles
         getActivity().setTitle("Branches");
     }
+
 }

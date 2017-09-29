@@ -323,8 +323,11 @@ public class DatabaseHandler extends SQLiteOpenHelper{
             cursor.moveToFirst();
 
         MstBranches branchDetail = new MstBranches (Integer.parseInt(cursor.getString(0)),Integer.parseInt(cursor.getString(1)),
-                cursor.getString(1),cursor.getString(2),cursor.getString(3),
-              cursor.getString(4),cursor.getString(5), Integer.parseInt(cursor.getString(6)));
+                cursor.getString(2),cursor.getString(3),cursor.getString(4),
+              cursor.getString(5),cursor.getString(6), Integer.parseInt(cursor.getString(7)));
+
+        //(int salonId, String bName, String brAdd, String brCPName, String brCPEmail, int brCPMob, int active)
+        //(int bid, int salonId, String bName, String brAdd, String brCPName, String brCPEmail, int brCPMob, int active)
         cursor.close();
         // return contact
         return branchDetail;
@@ -608,6 +611,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_BRANCHES, KEY_ID + " = ?",
                 new String[] { String.valueOf(mstBranches.getBid()) });
+        Log.w(TAG, "Deleting branch" );
         db.close();
     }
 
