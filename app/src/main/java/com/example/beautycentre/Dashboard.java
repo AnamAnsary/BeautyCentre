@@ -337,8 +337,19 @@ public class Dashboard extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if (id == R.id.action_logout) {
+            Intent  i2 = new Intent(Dashboard.this,LoginActivity.class);
+
+            SharedPreferences sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedpreferences.edit();
+            editor.clear();
+            editor.commit();
+
+            i2.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            i2.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(i2);
+            finish();
+            //return true;
         }
 
         return super.onOptionsItemSelected(item);

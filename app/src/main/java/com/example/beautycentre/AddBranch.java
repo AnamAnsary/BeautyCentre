@@ -13,6 +13,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.beautycentre.DatabaseClass.DatabaseHandler;
@@ -32,6 +33,7 @@ public class AddBranch extends AppCompatActivity {
 
     public static final String FRAGMENT_B = "Fragment_Branch" ;
     private static final String TAG = "AddBranch";
+    TextView tvSalon;
     EditText bname,adrs,cPname,cPemail,cPmob;
     Spinner spSalon;
     Button btnAdd,btBack;
@@ -45,7 +47,7 @@ public class AddBranch extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_branch);
 
-       // sname = (EditText) findViewById(R.id.autoCompleteTVSalon);
+        tvSalon = (TextView) findViewById(R.id.tvSalon);
         bname = (EditText) findViewById(R.id.bname);
         adrs = (EditText) findViewById(R.id.baddrs);
         cPname = (EditText) findViewById(R.id.cntctPname);
@@ -54,7 +56,6 @@ public class AddBranch extends AppCompatActivity {
         spSalon = (Spinner) findViewById(R.id.spSalon);
         btnAdd = (Button) findViewById(R.id.btnAdd);
         btBack = (Button) findViewById(R.id.btBack);
-
 
         final DatabaseHandler db = new DatabaseHandler(this);
 
@@ -68,45 +69,98 @@ public class AddBranch extends AppCompatActivity {
 
         //Creating the instance of ArrayAdapter containing list of language names
         ArrayAdapter<String> adapter = new ArrayAdapter<String>
-                (this,android.R.layout.simple_spinner_dropdown_item,Snamelist);
-        //Getting the instance of AutoCompleteTextView
+                (this, android.R.layout.simple_spinner_dropdown_item, Snamelist);
         spSalon.setAdapter(adapter);
 
       /*  actv.setThreshold(1);//will start working from first character
         actv.setAdapter(adapter);//setting the adapter data into the AutoCompleteTextView
         actv.setTextColor(Color.BLACK);*/
 
-        btnAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        if (getIntent().getExtras() != null) {
+            int bid = getIntent().getExtras().getInt("BranchId");
+            MstBranches mstBranches = db.getSingleBranch(bid);
+            final int branchid = mstBranches.getSalonId();
+            Log.w(TAG, "onCreate: Branch id to update " +bid );
+            String salName = db.getSalonName(mstBranches.getSalonId());
+            spSalon.setVisibility(View.INVISIBLE);
+            tvSalon.setText("Selected Salon : "+ salName);
+            bname.setText(mstBranches.getbName());
+            adrs.setText(mstBranches.getBrAdd());
+            cPname.setText(mstBranches.getBrCPName());
+            cPemail.setText(mstBranches.getBrCPEmail());
+            cPmob.setText(mstBranches.getBrCPMob());
+            btnAdd.setText("Update");
 
-                //salname = actv.getText().toString();
-                brname = bname.getText().toString();
-                bAdd = adrs.getText().toString();
-                CPname = cPname.getText().toString();
-                CPemail= cPemail.getText().toString();
-                CPmob = cPmob.getText().toString();
+            btnAdd.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
 
-                if(pos2 != -1&& brname.length() !=0 && bAdd.length() !=0 && CPname.length() !=0 && CPemail.length() !=0 && CPmob.length() != 0 )
-                {
-                   // MstProducts mstProducts = new MstProducts(pname,descriptn,quantity,quantity,1);
+                    //salname = actv.getText().toString();
+                    brname = bname.getText().toString();
+                    bAdd = adrs.getText().toString();
+                    CPname = cPname.getText().toString();
+                    CPemail = cPemail.getText().toString();
+                    CPmob = cPmob.getText().toString();
 
-                   // sid = db.getSIDfromSalon(salname);
-                    //Log.w(TAG, "onClick: sid is "+sid );
-                    MstBranches mstBranches = new MstBranches(pos2,brname,bAdd,CPname,CPemail,CPmob,1);
-                    db.addBranch(mstBranches);
-                    Intent i = new Intent(AddBranch.this,Dashboard.class);
-                    i.putExtra("frgToLoad", FRAGMENT_B);
-                    startActivity(i);
-                    finish();//finishing activity
+                    if (brname.length() != 0 && bAdd.length() != 0 && CPname.length() != 0 && CPemail.length() != 0 && CPmob.length() != 0) {
+                        // MstProducts mstProducts = new MstProducts(pname,descriptn,quantity,quantity,1);
+
+                        // sid = db.getSIDfromSalon(salname);
+                        //Log.w(TAG, "onClick: sid is "+sid );
+                        MstBranches mstBranches = new MstBranches(branchid, brname, bAdd, CPname, CPemail, CPmob, 1);
+                        //MstBranches mstBranches2 = db.getSingleBranch(branchid);
+                        //Log.w(TAG, "Branch id current " + mstBranches2.getBid());
+                        db.updateBranch(mstBranches);
+                        List<MstBranches> users2 = db.getAllBranches();
+                        for (MstBranches ur : users2) {
+                            String log = "Id: " +ur.getBid() + " ,Name: " + ur.getbName() + " ,Contact P: " +ur.getBrCPName();
+                            Log.w(TAG, "user2 is : " +log);
+
+                        }
+                        Intent i = new Intent(AddBranch.this, Dashboard.class);
+                        i.putExtra("frgToLoad", FRAGMENT_B);
+                        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(i);
+                        finish();//finishing activity
+
+                    } else
+                        Toast.makeText(AddBranch.this, "Please fill each fields", Toast.LENGTH_LONG).show();
 
                 }
-                else
-                    Toast.makeText(AddBranch.this, "Please fill each fields", Toast.LENGTH_LONG).show();
+            });
 
-            }
-        });
+        } else{
+            btnAdd.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
 
+                    //salname = actv.getText().toString();
+                    brname = bname.getText().toString();
+                    bAdd = adrs.getText().toString();
+                    CPname = cPname.getText().toString();
+                    CPemail = cPemail.getText().toString();
+                    CPmob = cPmob.getText().toString();
+
+                    if (pos2 != -1 && brname.length() != 0 && bAdd.length() != 0 && CPname.length() != 0 && CPemail.length() != 0 && CPmob.length() != 0) {
+                        // MstProducts mstProducts = new MstProducts(pname,descriptn,quantity,quantity,1);
+
+                        // sid = db.getSIDfromSalon(salname);
+                        //Log.w(TAG, "onClick: sid is "+sid );
+                        MstBranches mstBranches = new MstBranches(pos2, brname, bAdd, CPname, CPemail, CPmob, 1);
+                        db.addBranch(mstBranches);
+                        Intent i = new Intent(AddBranch.this, Dashboard.class);
+                        i.putExtra("frgToLoad", FRAGMENT_B);
+                        startActivity(i);
+                        finish();//finishing activity
+
+                    } else
+                        Toast.makeText(AddBranch.this, "Please fill each fields", Toast.LENGTH_LONG).show();
+
+                }
+            });
+
+    }
        /* actv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View arg1, int pos, long id) {
@@ -123,37 +177,37 @@ public class AddBranch extends AppCompatActivity {
             }
         });
 */
-        spSalon.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long l) {
-                String selection = (String) adapterView.getItemAtPosition(pos);
-                pos2 = -1;
-                Log.w(TAG, "onItemClick: selection is " + selection);
-                for (int i = 0; i < Snamelist.size(); i++) {
-                    if (Snamelist.get(i).equals(selection)) {
-                        pos2 = i + 1;
-                        Log.w(TAG, "onItemClick: pos2 is " + pos2);
-                        break;
+            spSalon.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long l) {
+                    String selection = (String) adapterView.getItemAtPosition(pos);
+                    pos2 = -1;
+                    Log.w(TAG, "onItemClick: selection is " + selection);
+                    for (int i = 0; i < Snamelist.size(); i++) {
+                        if (Snamelist.get(i).equals(selection)) {
+                            pos2 = i + 1;
+                            Log.w(TAG, "onItemClick: pos2 is " + pos2);
+                            break;
+                        }
                     }
                 }
-            }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
+                @Override
+                public void onNothingSelected(AdapterView<?> adapterView) {
 
-            }
-        });
+                }
+            });
 
-        btBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(AddBranch.this,Dashboard.class);
-                i.putExtra("frgToLoad", FRAGMENT_B);
-                startActivity(i);
-                finish();//finishing activity
-            }
-        });
-    }
+            btBack.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent i = new Intent(AddBranch.this, Dashboard.class);
+                    i.putExtra("frgToLoad", FRAGMENT_B);
+                    startActivity(i);
+                    finish();//finishing activity
+                }
+            });
+        }
 
     public void onBackPressed() {
         //super.onBackPressed();

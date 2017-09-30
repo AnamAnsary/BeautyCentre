@@ -1,6 +1,7 @@
 package com.example.beautycentre;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -321,6 +322,7 @@ public class Branch extends Fragment {
                     builder.setPositiveButton("Edit", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                            editBranch(BIdlist.get(finalI));
                             dialog.dismiss();
                             //finish();
                         }
@@ -351,8 +353,8 @@ public class Branch extends Fragment {
                 @Override
                 public void onClick(View v) {
 
-
-                    Toast.makeText(getActivity(), "Id is "+ BIdlist.get(finalI), Toast.LENGTH_LONG).show();
+                    //Toast.makeText(getActivity(), "Id is "+ BIdlist.get(finalI), Toast.LENGTH_LONG).show();
+                    editBranch(BIdlist.get(finalI));
                    /* final TableRow parent = (TableRow) v.getParent();
                     tl.removeView(parent);*/
                 }
@@ -383,6 +385,17 @@ public class Branch extends Fragment {
                     TableRow.LayoutParams.MATCH_PARENT,
                     TableRow.LayoutParams.WRAP_CONTENT));
         }
+    }
+
+    private void editBranch(Integer bid) {
+        Intent intent = new Intent(getActivity(),AddBranch.class);
+        intent.putExtra("BranchId",bid);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                      /*  intent.putExtra("email",mstUser.getEmail());
+                        intent.putExtra("fullname",mstUser.getFullname());*/
+        startActivity(intent);
+        //finish();
     }
 
 
