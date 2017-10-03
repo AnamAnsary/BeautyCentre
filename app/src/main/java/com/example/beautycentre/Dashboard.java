@@ -237,7 +237,7 @@ public class Dashboard extends AppCompatActivity
             drawer.closeDrawer(GravityCompat.START);
         } else if (flag==true){
             // setup the alert builder
-            AlertDialog.Builder builder = new AlertDialog.Builder(this,R.style.AlertDialogCustom);
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
             //builder.setTitle("Exit");
             //builder.setCancelable(false);
             builder.setMessage("Do you really want to exit?");

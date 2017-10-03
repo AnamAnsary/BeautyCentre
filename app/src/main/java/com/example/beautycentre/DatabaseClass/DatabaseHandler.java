@@ -322,7 +322,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         if (cursor != null)
             cursor.moveToFirst();
 
-        MstBranches branchDetail = new MstBranches (Integer.parseInt(cursor.getString(1)),
+        MstBranches branchDetail = new MstBranches (Integer.parseInt(cursor.getString(0)),Integer.parseInt(cursor.getString(1)),
                 cursor.getString(2),cursor.getString(3),cursor.getString(4),
               cursor.getString(5),cursor.getString(6), Integer.parseInt(cursor.getString(7)));
 

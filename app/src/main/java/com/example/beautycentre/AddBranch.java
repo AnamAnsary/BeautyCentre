@@ -77,11 +77,13 @@ public class AddBranch extends AppCompatActivity {
         actv.setTextColor(Color.BLACK);*/
 
         if (getIntent().getExtras() != null) {
-            int bid = getIntent().getExtras().getInt("BranchId");
+            final int bid = getIntent().getExtras().getInt("BranchId");
+            Log.w(TAG, "Intent received is bid "+bid);
             MstBranches mstBranches = db.getSingleBranch(bid);
-            final int branchid = mstBranches.getSalonId();
-            Log.w(TAG, "onCreate: Branch id to update " +bid );
-            String salName = db.getSalonName(mstBranches.getSalonId());
+            final int Sid = mstBranches.getSalonId();
+            //final int branchid = mstBranches.getSalonId();
+            //Log.w(TAG, "onCreate: Branch id to update " +bid );
+            String salName = db.getSalonName(Sid);
             spSalon.setVisibility(View.INVISIBLE);
             tvSalon.setText("Selected Salon : "+ salName);
             bname.setText(mstBranches.getbName());
@@ -104,17 +106,20 @@ public class AddBranch extends AppCompatActivity {
 
                     if (brname.length() != 0 && bAdd.length() != 0 && CPname.length() != 0 && CPemail.length() != 0 && CPmob.length() != 0) {
                         // MstProducts mstProducts = new MstProducts(pname,descriptn,quantity,quantity,1);
-
                         // sid = db.getSIDfromSalon(salname);
                         //Log.w(TAG, "onClick: sid is "+sid );
-                        MstBranches mstBranches = new MstBranches(branchid, brname, bAdd, CPname, CPemail, CPmob, 1);
+                        //Log.w(TAG, "onClick: bid in if "+bid );
+                        MstBranches mstBranches = new MstBranches(bid, Sid, brname, bAdd, CPname, CPemail, CPmob, 1);
+                        Log.w(TAG, "new updated row should be : id "+mstBranches.getBid()+"name "+mstBranches.getbName()+
+                                "Address "+mstBranches.getBrAdd()+ "Contact person "+mstBranches.getBrCPName()+
+                                "Email "+mstBranches.getBrCPEmail()+" Contact "+mstBranches.getBrCPMob());
                         //MstBranches mstBranches2 = db.getSingleBranch(branchid);
                         //Log.w(TAG, "Branch id current " + mstBranches2.getBid());
                         db.updateBranch(mstBranches);
                         List<MstBranches> users2 = db.getAllBranches();
                         for (MstBranches ur : users2) {
-                            String log = "Id: " +ur.getBid() + " ,Name: " + ur.getbName() + " ,Contact P: " +ur.getBrCPName();
-                            Log.w(TAG, "user2 is : " +log);
+                            String log = "Id: " +ur.getBid() + " ,Name: " + ur.getbName() + ",Contact P: " +ur.getBrCPName();
+                            Log.w(TAG, "branch is : " +log);
 
                         }
                         Intent i = new Intent(AddBranch.this, Dashboard.class);
@@ -126,7 +131,6 @@ public class AddBranch extends AppCompatActivity {
 
                     } else
                         Toast.makeText(AddBranch.this, "Please fill each fields", Toast.LENGTH_LONG).show();
-
                 }
             });
 
@@ -160,7 +164,7 @@ public class AddBranch extends AppCompatActivity {
                 }
             });
 
-    }
+        }
        /* actv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View arg1, int pos, long id) {
@@ -177,37 +181,37 @@ public class AddBranch extends AppCompatActivity {
             }
         });
 */
-            spSalon.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long l) {
-                    String selection = (String) adapterView.getItemAtPosition(pos);
-                    pos2 = -1;
-                    Log.w(TAG, "onItemClick: selection is " + selection);
-                    for (int i = 0; i < Snamelist.size(); i++) {
-                        if (Snamelist.get(i).equals(selection)) {
-                            pos2 = i + 1;
-                            Log.w(TAG, "onItemClick: pos2 is " + pos2);
-                            break;
-                        }
+        spSalon.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long l) {
+                String selection = (String) adapterView.getItemAtPosition(pos);
+                pos2 = -1;
+                Log.w(TAG, "onItemClick: selection is " + selection);
+                for (int i = 0; i < Snamelist.size(); i++) {
+                    if (Snamelist.get(i).equals(selection)) {
+                        pos2 = i + 1;
+                        Log.w(TAG, "onItemClick: pos2 is " + pos2);
+                        break;
                     }
                 }
+            }
 
-                @Override
-                public void onNothingSelected(AdapterView<?> adapterView) {
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
 
-                }
-            });
+            }
+        });
 
-            btBack.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent i = new Intent(AddBranch.this, Dashboard.class);
-                    i.putExtra("frgToLoad", FRAGMENT_B);
-                    startActivity(i);
-                    finish();//finishing activity
-                }
-            });
-        }
+        btBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(AddBranch.this, Dashboard.class);
+                i.putExtra("frgToLoad", FRAGMENT_B);
+                startActivity(i);
+                finish();//finishing activity
+            }
+        });
+    }
 
     public void onBackPressed() {
         //super.onBackPressed();

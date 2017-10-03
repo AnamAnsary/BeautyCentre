@@ -1,7 +1,9 @@
 package com.example.beautycentre;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -9,6 +11,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -112,7 +116,7 @@ public class Branch extends Fragment {
 
         /** Creating a TextView to add to the row **/
         TextView idTV = new TextView(getActivity());
-        idTV.setText("ID");
+        idTV.setText("Sr No");
         idTV.setTextColor(Color.parseColor("#009688"));
         idTV.setTextSize(18);
         idTV.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
@@ -137,7 +141,7 @@ public class Branch extends Fragment {
         brNameTV.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
         tr.addView(brNameTV); // Adding textView to tablerow.
 
-        /** Creating another textview **/
+       /* *//** Creating another textview **//*
         TextView brAddTV = new TextView(getActivity());
         brAddTV.setText("Address");
         brAddTV.setTextColor(Color.parseColor("#009688"));
@@ -155,14 +159,14 @@ public class Branch extends Fragment {
         tr.addView(brCPNameTV); // Adding textView to tablerow.
 
 
-        /** Creating another textview **/
+        *//** Creating another textview **//*
         TextView brCPEmailTV = new TextView(getActivity());
         brCPEmailTV.setText("Email");
         brCPEmailTV.setTextColor(Color.parseColor("#009688"));
         brCPEmailTV.setTextSize(18);
         brCPEmailTV.setPadding(20, 20, 5, 20);
         brCPEmailTV.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
-        tr.addView(brCPEmailTV); // Adding textView to tablerow.
+        tr.addView(brCPEmailTV); // Adding textView to tablerow.*/
 
         TextView brCPMobTV = new TextView(getActivity());
         brCPMobTV.setText("Contact Number");
@@ -228,7 +232,8 @@ public class Branch extends Fragment {
                     TableRow.LayoutParams.WRAP_CONTENT));
 
             tvSn = new TextView(getActivity());
-            tvSn.setText(String.valueOf(BIdlist.get(i)));
+            //tvSn.setText(String.valueOf(BIdlist.get(i)));
+            tvSn.setText(String.valueOf(i+1));
             tvSn.setTextColor(Color.BLACK);
             //companyTV.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
             tvSn.setPadding(20, 20, 5, 20);
@@ -252,7 +257,7 @@ public class Branch extends Fragment {
             tr.addView(tvBrN); // Adding textView to tablerow.
 
 
-            /** Creating another textview **/
+           /* *//** Creating another textview **//*
             tvBrAd = new TextView(getActivity());
             tvBrAd.setText(String.valueOf(BAddlist.get(i)));
             tvBrAd.setTextColor(Color.BLACK);
@@ -261,7 +266,7 @@ public class Branch extends Fragment {
             tr.addView(tvBrAd); // Adding textView to tablerow.
 
 
-            /** Creating another textview **/
+            *//** Creating another textview **//*
             tvPrN = new TextView(getActivity());
             tvPrN.setText(String.valueOf(CPNamelist.get(i)));
             tvPrN.setTextColor(Color.BLACK);
@@ -269,14 +274,14 @@ public class Branch extends Fragment {
             //valueTV.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
             tr.addView(tvPrN); // Adding textView to tablerow.
 
-            /** Creating another textview **/
+            *//** Creating another textview **//*
             tvPrE = new TextView(getActivity());
             tvPrE.setText(String.valueOf(CPEmaillist.get(i)));
             tvPrE.setTextColor(Color.BLACK);
             tvPrE.setPadding(20, 20, 5, 20);
             //valueTV.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
             tr.addView(tvPrE); // Adding textView to tablerow.
-
+*/
             /** Creating another textview **/
             tvPrM = new TextView(getActivity());
             tvPrM.setText(String.valueOf(CPMoblist.get(i)));
@@ -311,12 +316,13 @@ public class Branch extends Fragment {
                     MstBranches mstBranches = db.getSingleBranch(BIdlist.get(finalI));
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
                     builder.setMessage( "Salon Name : " +SNamelist.get(finalI) + "\n" +
-                                        "Branch Name : " + mstBranches.getbName() + "\n" +
-                                        "Branch Address : " + mstBranches.getBrAdd() + "\n" +
-                                        "Contact Person : " + mstBranches.getBrCPName() + "\n" +
-                                        "Email : " + mstBranches.getBrCPEmail()+ "\n" +
-                                        "Contact Number : " + mstBranches.getBrCPMob() );
+                            "Branch Name : " + mstBranches.getbName() + "\n" +
+                            "Branch Address : " + mstBranches.getBrAdd() + "\n" +
+                            "Contact Person : " + mstBranches.getBrCPName() + "\n" +
+                            "Email : " + mstBranches.getBrCPEmail()+ "\n" +
+                            "Contact Number : " + mstBranches.getBrCPMob() );
 
                     // add the buttons
                     builder.setPositiveButton("Edit", new DialogInterface.OnClickListener() {
@@ -331,12 +337,43 @@ public class Branch extends Fragment {
                     builder.setNegativeButton("Delete",  new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            deleteBranch(BIdlist.get(finalI));
+                            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                            builder.setMessage("Are you sure you want to delete this row?");
+                            // add the buttons
+                            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    //Toast.makeText(getActivity(), "BId is "+ BIdlist.get(finalI), Toast.LENGTH_LONG).show();
+                                    deleteBranch(BIdlist.get(finalI));
+                                    TableRow parent = (TableRow) v.getParent();
+                                    tl.removeView(parent);
+                                    dialog.dismiss();
+                                    //finish();
+                                }
+                            });
+
+                            builder.setNegativeButton("No",  new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+                            AlertDialog dialog2 = builder.create();
+                            dialog2.show();
+                            /*deleteBranch(BIdlist.get(finalI));
                             TableRow parent = (TableRow) v.getParent();
-                            tl.removeView(parent);
+                            tl.removeView(parent);*/
+                        }
+                    });
+
+                    builder.setNeutralButton("Cancel",new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
                         }
                     });
                     AlertDialog dialog = builder.create();
+
                     dialog.show();
                     //Toast.makeText(getActivity(), "Id is "+ BIdlist.get(finalI), Toast.LENGTH_LONG).show();
 
@@ -353,7 +390,7 @@ public class Branch extends Fragment {
                 @Override
                 public void onClick(View v) {
 
-                    //Toast.makeText(getActivity(), "Id is "+ BIdlist.get(finalI), Toast.LENGTH_LONG).show();
+                    //Toast.makeText(getActivity(), "BId is "+ BIdlist.get(finalI), Toast.LENGTH_LONG).show();
                     editBranch(BIdlist.get(finalI));
                    /* final TableRow parent = (TableRow) v.getParent();
                     tl.removeView(parent);*/
@@ -368,13 +405,33 @@ public class Branch extends Fragment {
             btnD.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT));
             btnD.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v) {
+                public void onClick(final View v) {
                    /* final TableRow parent = (TableRow) v.getParent();
                     tl.removeView(parent);*/
                     Log.w(TAG, "Id is "+ BIdlist.get(finalI) );
-                    deleteBranch(BIdlist.get(finalI));
-                    TableRow parent = (TableRow) v.getParent();
-                    tl.removeView(parent);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setMessage("Are you sure you want to delete this row?");
+                    // add the buttons
+                    builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            //Toast.makeText(getActivity(), "BId is "+ BIdlist.get(finalI), Toast.LENGTH_LONG).show();
+                            deleteBranch(BIdlist.get(finalI));
+                            TableRow parent = (TableRow) v.getParent();
+                            tl.removeView(parent);
+                            dialog.dismiss();
+                            //finish();
+                        }
+                    });
+
+                    builder.setNegativeButton("No",  new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
 
                     //Toast.makeText(getActivity(), "Id is "+ finalI, Toast.LENGTH_LONG).show();
                 }
@@ -401,8 +458,9 @@ public class Branch extends Fragment {
 
     private void deleteBranch(Integer bid) {
         DatabaseHandler db = new DatabaseHandler(getActivity());
-        MstBranches mstBranches = db.getSingleBranch(bid);
-        db.deleteBranch(mstBranches);
+        MstBranches mstBranch = db.getSingleBranch(bid);
+        Log.w(TAG, "deleteBranch: branch id " +mstBranch.getBid() );
+        db.deleteBranch(mstBranch);
         Log.w(TAG, "Deleted branch" );
 
         List<MstBranches> users2 = db.getAllBranches();
