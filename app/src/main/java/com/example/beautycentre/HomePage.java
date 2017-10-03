@@ -1,8 +1,10 @@
 package com.example.beautycentre;
 
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,7 +13,10 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,8 +36,8 @@ public class HomePage extends Fragment {
 
     private static final String TAG = "HomePage";
     View rootView;
+
     Button btnsearch;
-    TextView proDetails;
     Spinner spPro;
 
     private int pos2;
@@ -44,8 +49,6 @@ public class HomePage extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         rootView = inflater.inflate(R.layout.frag_main, container, false);
-
-        proDetails = (TextView) rootView.findViewById(R.id.tvProDetails);
         spPro = (Spinner) rootView.findViewById(R.id.spProduct);
         btnsearch = (Button) rootView.findViewById(R.id.btnsearch);
 
@@ -77,14 +80,71 @@ public class HomePage extends Fragment {
                 int finalQty = db.getFinalQuantityValue(mstProducts.getPid());
                 Log.w(TAG, "onClick: Db returns " +finalQty );
 
-                proDetails.setTextSize(15);
+                ConstraintLayout proDetails = (ConstraintLayout) rootView.findViewById(R.id.tvProDetails);
+                View hdView = proDetails.getRootView();
+                //TableLayout maintable = (TableLayout) hdView.findViewById(R.id.maintable);
+
+             /*   TableRow tr = new TableRow(getActivity());
+                tr.setLayoutParams(new TableRow.LayoutParams(
+                        TableRow.LayoutParams.MATCH_PARENT,
+                        TableRow.LayoutParams.WRAP_CONTENT));
+*/
+                TableLayout tableLayout = (TableLayout)hdView.findViewById(R.id.maintable);
+                ArrayList<String> FRowList = new ArrayList<String>();
+                ArrayList<String> SRowList = new ArrayList<String>();
+
+                FRowList.add("Product ID : ");
+                FRowList.add("Product Name : ");
+                FRowList.add("Description : ");
+                FRowList.add("Brand : ");
+                FRowList.add("Category : ");
+                FRowList.add("Quantity in Stock: ");
+
+                SRowList.add(String.valueOf(mstProducts.getPid()));
+                SRowList.add(mstProducts.getPname());
+                SRowList.add(mstProducts.getDescrip());
+                SRowList.add(mstProducts.getPbrand());
+                SRowList.add(mstProducts.getPcategory());
+                SRowList.add(String.valueOf(finalQty));
+
+                //TransactionDetails transactionDetails = new TransactionDetails();
+                for(int j=0; j < FRowList.size(); j++ ){
+
+                    TableRow tableRow = new TableRow(getActivity());
+                    tableRow.setLayoutParams(new TableLayout.LayoutParams
+                            (TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT));
+
+                    TextView textView1 = new TextView(getActivity());
+                    textView1.setText(FRowList.get(j));
+                    textView1.setTextColor(Color.parseColor("#4db6ac"));
+                    textView1.setTextSize(15);
+                    textView1.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
+                    textView1.setPadding(20, 15, 5, 15);
+                    tableRow.addView(textView1);
+
+                    TextView textView2 = new TextView(getActivity());
+                    textView2.setText(SRowList.get(j));
+                    textView2.setTextColor(Color.parseColor("#000000"));
+                    textView2.setTextSize(15);
+                    //textView2.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
+                    textView2.setPadding(20, 15, 5, 15);
+                    tableRow.addView(textView2);
+
+                    tableLayout.addView(tableRow);
+                }
+                //Log.w(TAG, "onClick: frow and srow "+FRowList.size()+" "+SRowList.size());
+
+               /* proDetails.setTextSize(15);
                 proDetails.setTextColor(Color.parseColor("#009688"));
                 proDetails.setPadding(25, 20, 25, 20);
                 proDetails.setTextColor(BLACK);
                 proDetails.setTextSize(18);
                 proDetails.setText("Product ID : " + mstProducts.getPid() + "\nProduct Name : "+ mstProducts.getPname() + "\nDescription : "+ mstProducts.getDescrip() +
                 "\nBrand : " + mstProducts.getPbrand() +"\nCategory : " +mstProducts.getPcategory() + "\nQuantity in Stock: "+ finalQty);
-
+*/
+                FRowList.clear();
+                SRowList.clear();
+                //Log.w(TAG, "onClick: frow and srow "+FRowList.size()+" "+SRowList.size());
             }
         });
 

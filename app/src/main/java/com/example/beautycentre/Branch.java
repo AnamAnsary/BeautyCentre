@@ -11,17 +11,17 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.view.LayoutInflater;
 
 import com.example.beautycentre.DatabaseClass.DatabaseHandler;
 import com.example.beautycentre.DatabaseTables.MstBranches;
@@ -315,14 +315,96 @@ public class Branch extends Fragment {
                     DatabaseHandler db = new DatabaseHandler(getActivity());
                     MstBranches mstBranches = db.getSingleBranch(BIdlist.get(finalI));
 
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
-                    builder.setMessage( "Salon Name : " +SNamelist.get(finalI) + "\n" +
+                    /*LayoutInflater inflater = getActivity().getLayoutInflater();
+                    View alertLayout = inflater.inflate(R.layout.dialog_viewlayout, null);
+                    final TextView sname = (TextView) alertLayout.findViewById(R.id.sname);
+                    final TextView bname = (TextView) alertLayout.findViewById(R.id.bname);
+                    final TextView badd = (TextView) alertLayout.findViewById(R.id.badd);
+                    final TextView cpname = (TextView) alertLayout.findViewById(R.id.cpname);
+                    final TextView cpemail = (TextView) alertLayout.findViewById(R.id.cpemail);
+                    final TextView cpnumber = (TextView) alertLayout.findViewById(R.id.cpnumber);
+                    sname.setTextSize(18);
+                    bname.setTextSize(18);
+                    badd.setTextSize(18);
+                    cpname.setTextSize(18);
+                    cpemail.setTextSize(18);
+                    cpnumber.setTextSize(18);
+
+                    sname.setTextColor(Color.parseColor("#EF5350"));
+                    bname.setTextColor(Color.parseColor("#EF5350"));
+                    badd.setTextColor(Color.parseColor("#EF5350"));
+                    cpemail.setTextColor(Color.parseColor("#EF5350"));
+                    cpname.setTextColor(Color.parseColor("#EF5350"));
+                    cpnumber.setTextColor(Color.parseColor("#EF5350"));
+
+                    sname.setText(SNamelist.get(finalI));
+                    bname.setText(mstBranches.getbName());
+                    badd.setText(mstBranches.getBrAdd());
+                    cpname.setText(mstBranches.getBrCPName());
+                    cpemail.setText(mstBranches.getBrCPEmail());
+                    cpnumber.setText(mstBranches.getBrCPMob());
+*/
+
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    //builder.setView(alertLayout);
+                   /* builder.setMessage( "Salon Name : " +SNamelist.get(finalI) + "\n" +
                             "Branch Name : " + mstBranches.getbName() + "\n" +
                             "Branch Address : " + mstBranches.getBrAdd() + "\n" +
                             "Contact Person : " + mstBranches.getBrCPName() + "\n" +
                             "Email : " + mstBranches.getBrCPEmail()+ "\n" +
-                            "Contact Number : " + mstBranches.getBrCPMob() );
+                            "Contact Number : " + mstBranches.getBrCPMob() );*/
+
+
+                    Context dialogContext = builder.getContext();
+                    LayoutInflater inflater = LayoutInflater.from(dialogContext);
+                    View alertView = inflater.inflate(R.layout.frag_table, null);
+                    builder.setView(alertView);
+                    TableLayout tableLayout = (TableLayout)alertView.findViewById(R.id.maintable);
+                    ArrayList<String> FRowList = new ArrayList<String>();
+                    ArrayList<String> SRowList = new ArrayList<String>();
+
+                    FRowList.add("Salon Name : ");
+                    FRowList.add("Branch Name : ");
+                    FRowList.add("Branch Address : ");
+                    FRowList.add("Contact Person : ");
+                    FRowList.add("Email : ");
+                    FRowList.add("Contact Number : ");
+
+                    SRowList.add(SNamelist.get(finalI));
+                    SRowList.add(mstBranches.getbName());
+                    SRowList.add(mstBranches.getBrAdd());
+                    SRowList.add(mstBranches.getBrCPName());
+                    SRowList.add(mstBranches.getBrCPEmail());
+                    SRowList.add(mstBranches.getBrCPMob());
+
+                    //TransactionDetails transactionDetails = new TransactionDetails();
+                    for(int j=0; j < FRowList.size(); j++ ){
+
+                        TableRow tableRow = new TableRow(dialogContext);
+                        tableRow.setLayoutParams(new LinearLayout.LayoutParams
+                                (LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+
+                        TextView textView1 = new TextView(dialogContext);
+                        textView1.setText(FRowList.get(j));
+                        textView1.setTextColor(Color.parseColor("#607D8B"));
+                        textView1.setTextSize(15);
+                        textView1.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
+                        textView1.setPadding(20, 15, 5, 15);
+                        tableRow.addView(textView1);
+
+                        TextView textView2 = new TextView(dialogContext);
+                        textView2.setText(SRowList.get(j));
+                        textView2.setTextColor(Color.parseColor("#000000"));
+                        textView2.setTextSize(15);
+                        //textView2.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
+                        textView2.setPadding(20, 15, 5, 15);
+                        tableRow.addView(textView2);
+
+                        tableLayout.addView(tableRow);
+                    }
+
 
                     // add the buttons
                     builder.setPositiveButton("Edit", new DialogInterface.OnClickListener() {
@@ -372,8 +454,8 @@ public class Branch extends Fragment {
                             dialog.dismiss();
                         }
                     });
-                    AlertDialog dialog = builder.create();
 
+                    AlertDialog dialog = builder.create();
                     dialog.show();
                     //Toast.makeText(getActivity(), "Id is "+ BIdlist.get(finalI), Toast.LENGTH_LONG).show();
 
