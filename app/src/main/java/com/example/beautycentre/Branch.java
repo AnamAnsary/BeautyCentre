@@ -118,7 +118,7 @@ public class Branch extends Fragment {
         TextView idTV = new TextView(getActivity());
         idTV.setText("Sr No");
         idTV.setTextColor(Color.parseColor("#009688"));
-        idTV.setTextSize(18);
+        idTV.setTextSize(15);
         idTV.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
         idTV.setPadding(20, 20, 5, 20);
         tr.addView(idTV);  // Adding textView to tablerow.
@@ -126,7 +126,7 @@ public class Branch extends Fragment {
         TextView slNameTV = new TextView(getActivity());
         slNameTV.setText("Salon Name");
         slNameTV.setTextColor(Color.parseColor("#009688"));
-        slNameTV.setTextSize(18);
+        slNameTV.setTextSize(15);
         slNameTV.setPadding(20, 20, 5, 20);
         slNameTV.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
         tr.addView(slNameTV); // Adding textView to tablerow.
@@ -136,7 +136,7 @@ public class Branch extends Fragment {
         TextView brNameTV = new TextView(getActivity());
         brNameTV.setText("Branch Name");
         brNameTV.setTextColor(Color.parseColor("#009688"));
-        brNameTV.setTextSize(18);
+        brNameTV.setTextSize(15);
         brNameTV.setPadding(20, 20, 5, 20);
         brNameTV.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
         tr.addView(brNameTV); // Adding textView to tablerow.
@@ -171,7 +171,7 @@ public class Branch extends Fragment {
         TextView brCPMobTV = new TextView(getActivity());
         brCPMobTV.setText("Contact Number");
         brCPMobTV.setTextColor(Color.parseColor("#009688"));
-        brCPMobTV.setTextSize(18);
+        brCPMobTV.setTextSize(15);
         brCPMobTV.setPadding(20, 20, 5, 20);
         brCPMobTV.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
         tr.addView(brCPMobTV); // Adding textView to tablerow.
@@ -347,8 +347,9 @@ public class Branch extends Fragment {
 */
 
 
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.CustomAlertDialog);
                     builder.setTitle("Branch Detail");
+
                     //builder.setView(alertLayout);
                    /* builder.setMessage( "Salon Name : " +SNamelist.get(finalI) + "\n" +
                             "Branch Name : " + mstBranches.getbName() + "\n" +
@@ -389,7 +390,7 @@ public class Branch extends Fragment {
 
                         TextView textView1 = new TextView(dialogContext);
                         textView1.setText(FRowList.get(j));
-                        textView1.setTextColor(Color.parseColor("#607D8B"));
+                        textView1.setTextColor(Color.parseColor("#757575"));
                         textView1.setTextSize(15);
                         textView1.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
                         textView1.setPadding(20, 15, 5, 15);
