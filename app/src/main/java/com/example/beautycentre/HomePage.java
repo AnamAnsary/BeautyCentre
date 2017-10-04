@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,6 +45,11 @@ public class HomePage extends Fragment {
     private ArrayList<String> Pnamelist;
     private ArrayList<Integer> PIdlist;
 
+    ConstraintLayout proDetails;
+    TableLayout tableLayout;
+    View hdView;
+
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -70,9 +76,11 @@ public class HomePage extends Fragment {
         ArrayAdapter proadapter = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_dropdown_item, Pnamelist);
         spPro.setAdapter(proadapter);
 
+
         btnsearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 MstProducts mstProducts = db.getSingleProduct(pos2);
                 if(mstProducts.equals(null))
                     Toast.makeText(getActivity(), "There are no products available! Please add Products first", Toast.LENGTH_SHORT).show();
@@ -80,16 +88,10 @@ public class HomePage extends Fragment {
                 int finalQty = db.getFinalQuantityValue(mstProducts.getPid());
                 Log.w(TAG, "onClick: Db returns " +finalQty );
 
-                ConstraintLayout proDetails = (ConstraintLayout) rootView.findViewById(R.id.tvProDetails);
-                View hdView = proDetails.getRootView();
-                //TableLayout maintable = (TableLayout) hdView.findViewById(R.id.maintable);
+                proDetails = (ConstraintLayout) rootView.findViewById(R.id.tvProDetails);
+                hdView = proDetails.getRootView();
+                tableLayout = (TableLayout)hdView.findViewById(R.id.maintable);
 
-             /*   TableRow tr = new TableRow(getActivity());
-                tr.setLayoutParams(new TableRow.LayoutParams(
-                        TableRow.LayoutParams.MATCH_PARENT,
-                        TableRow.LayoutParams.WRAP_CONTENT));
-*/
-                TableLayout tableLayout = (TableLayout)hdView.findViewById(R.id.maintable);
                 ArrayList<String> FRowList = new ArrayList<String>();
                 ArrayList<String> SRowList = new ArrayList<String>();
 
@@ -107,7 +109,9 @@ public class HomePage extends Fragment {
                 SRowList.add(mstProducts.getPcategory());
                 SRowList.add(String.valueOf(finalQty));
 
-                //TransactionDetails transactionDetails = new TransactionDetails();
+                if(tableLayout != null){
+                    tableLayout.removeAllViews();
+                }
                 for(int j=0; j < FRowList.size(); j++ ){
 
                     TableRow tableRow = new TableRow(getActivity());
@@ -120,6 +124,7 @@ public class HomePage extends Fragment {
                     textView1.setTextSize(15);
                     textView1.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
                     textView1.setPadding(20, 15, 5, 15);
+                    textView1.setGravity(Gravity.RIGHT);
                     tableRow.addView(textView1);
 
                     TextView textView2 = new TextView(getActivity());

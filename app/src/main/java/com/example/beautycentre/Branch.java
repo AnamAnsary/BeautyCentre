@@ -348,6 +348,7 @@ public class Branch extends Fragment {
 
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setTitle("Branch Detail");
                     //builder.setView(alertLayout);
                    /* builder.setMessage( "Salon Name : " +SNamelist.get(finalI) + "\n" +
                             "Branch Name : " + mstBranches.getbName() + "\n" +
@@ -392,6 +393,7 @@ public class Branch extends Fragment {
                         textView1.setTextSize(15);
                         textView1.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
                         textView1.setPadding(20, 15, 5, 15);
+                        textView1.setGravity(Gravity.RIGHT);
                         tableRow.addView(textView1);
 
                         TextView textView2 = new TextView(dialogContext);

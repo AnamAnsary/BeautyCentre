@@ -4,12 +4,14 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+
+import android.support.constraint.ConstraintLayout;
+import android.support.constraint.ConstraintSet;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -33,6 +35,7 @@ public class AddBranch extends AppCompatActivity {
 
     public static final String FRAGMENT_B = "Fragment_Branch" ;
     private static final String TAG = "AddBranch";
+    ConstraintLayout mConstraintLayout;
     TextView tvSalon;
     EditText bname,adrs,cPname,cPemail,cPmob;
     Spinner spSalon;
@@ -47,6 +50,7 @@ public class AddBranch extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_branch);
 
+        mConstraintLayout = (ConstraintLayout) findViewById(R.id.conslayout);
         tvSalon = (TextView) findViewById(R.id.tvSalon);
         bname = (EditText) findViewById(R.id.bname);
         adrs = (EditText) findViewById(R.id.baddrs);
@@ -92,6 +96,24 @@ public class AddBranch extends AppCompatActivity {
             cPemail.setText(mstBranches.getBrCPEmail());
             cPmob.setText(mstBranches.getBrCPMob());
             btnAdd.setText("Update");
+
+            //spSalon.setPadding(0,0,0,0);
+
+           /* ConstraintLayout.LayoutParams params = new ConstraintLayout.LayoutParams(
+                    ConstraintLayout.LayoutParams.WRAP_CONTENT,
+                    ConstraintLayout.LayoutParams.WRAP_CONTENT
+            );
+            params.setMargins(0, 0, 0, 0);
+            spSalon.setLayoutParams(params);
+            params.setMargins(24, 0, 24, 0);
+            adrs.setLayoutParams(params);*/
+
+            ConstraintSet set = new ConstraintSet();
+            set.clone(mConstraintLayout);
+
+            set.connect(R.id.textInputLayout9, ConstraintSet.TOP, R.id.tvSalon, ConstraintSet.BOTTOM, 16);
+            //set.clear(spSalon.getId(), ConstraintSet.GONE);
+            set.applyTo(mConstraintLayout);
 
             btnAdd.setOnClickListener(new View.OnClickListener() {
                 @Override
