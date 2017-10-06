@@ -1,18 +1,26 @@
 package com.example.beautycentre;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.example.beautycentre.DatabaseClass.DatabaseHandler;
+import com.example.beautycentre.DatabaseTables.MstBranches;
 import com.example.beautycentre.DatabaseTables.MstSalons;
 
 import java.util.ArrayList;
@@ -34,6 +42,9 @@ public class Salon extends Fragment {
     private ArrayList<String> SNamelist;
     private ArrayList<String> Sdesclist;
     private ArrayList<String> SOwner;
+    private ImageButton btnV;
+    private ImageButton btnE;
+    private ImageButton btnD;
 
 
     @Nullable
@@ -105,19 +116,21 @@ public class Salon extends Fragment {
 
         /** Creating a TextView to add to the row **/
         TextView idTV = new TextView(getActivity());
-        idTV.setText("ID");
+        idTV.setText("Sr No");
         idTV.setTextColor(Color.parseColor("#009688"));
-        idTV.setTextSize(18);
-        idTV.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
-        idTV.setPadding(20, 20, 5, 20);
+        idTV.setTextSize(15);
+        idTV.setBackgroundResource(R.drawable.cell_shape);
+        //idTV.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
+        idTV.setPadding(10, 20, 10, 20);
         tr.addView(idTV);  // Adding textView to tablerow.
 
         TextView slNameTV = new TextView(getActivity());
         slNameTV.setText("Salon Name");
         slNameTV.setTextColor(Color.parseColor("#009688"));
-        slNameTV.setTextSize(18);
-        slNameTV.setPadding(20, 20, 5, 20);
-        slNameTV.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
+        slNameTV.setTextSize(15);
+        slNameTV.setPadding(10, 20, 10, 20);
+        slNameTV.setBackgroundResource(R.drawable.cell_shape);
+        //slNameTV.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
         tr.addView(slNameTV); // Adding textView to tablerow.
 
 
@@ -125,12 +138,13 @@ public class Salon extends Fragment {
         TextView owNameTV = new TextView(getActivity());
         owNameTV.setText("Owner Name");
         owNameTV.setTextColor(Color.parseColor("#009688"));
-        owNameTV.setTextSize(18);
-        owNameTV.setPadding(20, 20, 5, 20);
-        owNameTV.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
+        owNameTV.setTextSize(15);
+        owNameTV.setPadding(10, 20, 10, 20);
+        owNameTV.setBackgroundResource(R.drawable.cell_shape);
+        //owNameTV.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
         tr.addView(owNameTV); // Adding textView to tablerow.
 
-        /** Creating another textview **/
+      /*  *//** Creating another textview **//*
         TextView descTV = new TextView(getActivity());
         descTV.setText("Description");
         descTV.setTextColor(Color.parseColor("#009688"));
@@ -138,7 +152,21 @@ public class Salon extends Fragment {
         descTV.setPadding(20, 20, 5, 20);
         descTV.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
         tr.addView(descTV); // Adding textView to tablerow.
+*/
 
+        TextView act = new TextView(getActivity());
+        act.setText("Actions");
+        act.setTextColor(Color.parseColor("#009688"));
+        act.setBackgroundResource(R.drawable.cell_shape);
+        act.setTextSize(15);
+        act.setPadding(10, 20, 10, 20);
+        act.setGravity(Gravity.CENTER);
+        //act.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
+        tr.addView(act); // Adding textView to tablerow.
+        //theChild in this case is the child of TableRow
+        TableRow.LayoutParams params = (TableRow.LayoutParams) act.getLayoutParams();
+        params.span = 3; //amount of columns you will span
+        act.setLayoutParams(params);
         // Add the TableRow to the TableLayout
         tl.addView(tr, new TableLayout.LayoutParams(
                 TableRow.LayoutParams.MATCH_PARENT,
@@ -156,10 +184,12 @@ public class Salon extends Fragment {
                     TableRow.LayoutParams.WRAP_CONTENT));
 
             tvSid = new TextView(getActivity());
-            tvSid.setText(String.valueOf(SIdlist.get(i)));
+            tvSid.setText(String.valueOf(i+1));
             tvSid.setTextColor(Color.BLACK);
+            tvSid.setBackgroundResource(R.drawable.cell_shape);
             //companyTV.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
-            tvSid.setPadding(20, 20, 5, 20);
+            tvSid.setPadding(10, 20, 10, 20);
+            tvSid.setGravity(Gravity.CENTER);
             tr.addView(tvSid);  // Adding textView to tablerow.
 
 
@@ -167,31 +197,201 @@ public class Salon extends Fragment {
             tvsN = new TextView(getActivity());
             tvsN.setText(String.valueOf(SNamelist.get(i)));
             tvsN.setTextColor(Color.BLACK);
+            tvsN.setBackgroundResource(R.drawable.cell_shape);
+            tvsN.setGravity(Gravity.CENTER);
             //companyTV.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
-            tvsN.setPadding(20, 20, 5, 20);
+            tvsN.setPadding(10, 20, 10, 20);
             tr.addView(tvsN);  // Adding textView to tablerow.
 
             /** Creating another textview **/
             tvsOwn = new TextView(getActivity());
             tvsOwn.setText(String.valueOf(SOwner.get(i)));
             tvsOwn.setTextColor(Color.BLACK);
-            tvsOwn.setPadding(20, 20, 5, 20);
+            tvsOwn.setPadding(10, 20, 10, 20);
+            tvsOwn.setBackgroundResource(R.drawable.cell_shape);
+            tvsOwn.setGravity(Gravity.CENTER);
             //valueTV.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
             tr.addView(tvsOwn); // Adding textView to tablerow.
 
 
-            /** Creating another textview **/
+          /*  *//** Creating another textview **//*
             tvsDes = new TextView(getActivity());
             tvsDes.setText(String.valueOf(Sdesclist.get(i)));
             tvsDes.setTextColor(Color.BLACK);
             tvsDes.setPadding(20, 20, 5, 20);
             //valueTV.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
             tr.addView(tvsDes); // Adding textView to tablerow.
+*/
+
+            final int finalI = i;
+            btnV = new ImageButton(getActivity());
+            btnV.setImageResource(R.drawable.iconseye24);
+            btnV.setBackgroundColor(Color.TRANSPARENT);
+            btnV.setBackgroundResource(R.drawable.cell_shape);
+            btnV.setPadding(20, 20, 20, 20);
+            btnV.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT));
+            btnV.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(final View v) {
+                    DatabaseHandler db = new DatabaseHandler(getActivity());
+                    MstSalons mstSalons = db.getSingleSalon(SIdlist.get(finalI));
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder( getActivity(),R.style.CustomAlertDialog );
+                    Context dialogContext = builder.getContext();
+                    LayoutInflater inflater = LayoutInflater.from(dialogContext);
+
+                    View alertHead = inflater.inflate(R.layout.alert_header,null);
+                    //builder.setView(alertHead);
+                    TextView tv = (TextView) alertHead.findViewById(R.id.tvAlertHeader);
+                    tv.setText("Salon Detail");
+                    builder.setCustomTitle(alertHead);
+                    //dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+                    View alertView = inflater.inflate(R.layout.frag_table, null);
+                    builder.setView(alertView);
+                    TableLayout tableLayout = (TableLayout)alertView.findViewById(R.id.maintable);
+                    ArrayList<String> FRowList = new ArrayList<String>();
+                    ArrayList<String> SRowList = new ArrayList<String>();
+
+                    FRowList.add("Salon Name : ");
+                    FRowList.add("Owner Name : ");
+                    FRowList.add("Description : ");
+
+                    SRowList.add(mstSalons.getSname());
+                    SRowList.add(mstSalons.getOwner_name());
+                    SRowList.add(mstSalons.getDescrip());
+
+
+                    //TransactionDetails transactionDetails = new TransactionDetails();
+                    for(int j=0; j < FRowList.size(); j++ ){
+
+                        TableRow tableRow = new TableRow(dialogContext);
+                        tableRow.setLayoutParams(new LinearLayout.LayoutParams
+                                (LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+
+                        TextView textView1 = new TextView(dialogContext);
+                        textView1.setText(FRowList.get(j));
+                        textView1.setTextColor(Color.parseColor("#757575"));
+                        textView1.setTextSize(15);
+                        textView1.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
+                        textView1.setPadding(20, 15, 5, 15);
+                        textView1.setGravity(Gravity.RIGHT);
+                        tableRow.addView(textView1);
+
+                        TextView textView2 = new TextView(dialogContext);
+                        textView2.setText(SRowList.get(j));
+                        textView2.setTextColor(Color.parseColor("#000000"));
+                        textView2.setTextSize(15);
+                        //textView2.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
+                        textView2.setPadding(20, 15, 5, 15);
+                        tableRow.addView(textView2);
+
+                        tableLayout.addView(tableRow);
+                    }
+
+
+                    // add the buttons
+                    builder.setPositiveButton("Edit", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            //editBranch(BIdlist.get(finalI));
+                            dialog.dismiss();
+                            //finish();
+                        }
+                    });
+
+                    builder.setNegativeButton("Delete",  new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            final AlertDialog.Builder builder1 = new AlertDialog.Builder(getActivity());
+                            builder1.setMessage("Are you sure you want to delete this row?");
+                            // add the buttons
+                            AlertDialog dialog2 = builder1.create();;
+
+                            //builder1.show();
+                            final AlertDialog finalDialog = dialog2;
+                            builder1.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    //Toast.makeText(getActivity(), "BId is "+ BIdlist.get(finalI), Toast.LENGTH_LONG).show();
+                                    deleteSalon(SIdlist.get(finalI));
+                                    TableRow parent = (TableRow) v.getParent();
+                                    tl.removeView(parent);
+
+                                    finalDialog.dismiss();
+                                    //finish();
+                                }
+                            });
+
+                            final AlertDialog finalDialog1 = dialog2;
+                            builder1.setNegativeButton("No",  new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    finalDialog1.dismiss();
+
+                                }
+                            });
+
+                            dialog2 = builder1.create();
+                            dialog2.show();
+                            /*deleteBranch(BIdlist.get(finalI));
+                            TableRow parent = (TableRow) v.getParent();
+                            tl.removeView(parent);*/
+                        }
+                    });
+
+                    builder.setNeutralButton("Cancel",new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                    //Toast.makeText(getActivity(), "Id is "+ BIdlist.get(finalI), Toast.LENGTH_LONG).show();
+
+                }
+            });
+            tr.addView(btnV);
+
+
+            btnE = new ImageButton(getActivity());
+            btnE.setImageResource(R.drawable.iconsedit24);
+            btnE.setBackgroundColor(Color.TRANSPARENT);
+            btnE.setBackgroundResource(R.drawable.cell_shape);
+            btnE.setPadding(20, 20, 20, 20);
+            btnE.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT));
+            tr.addView(btnE);
+
+            btnD = new ImageButton(getActivity());
+            btnD.setImageResource(R.drawable.iconsdelete24);
+            btnD.setBackgroundColor(Color.TRANSPARENT);
+            btnD.setPadding(20, 20, 20, 20);
+            btnD.setBackgroundResource(R.drawable.cell_shape);
+            btnD.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT));
+            tr.addView(btnD);
 
             // Add the TableRow to the TableLayout
             tl.addView(tr, new TableLayout.LayoutParams(
                     TableRow.LayoutParams.MATCH_PARENT,
                     TableRow.LayoutParams.WRAP_CONTENT));
+        }
+    }
+
+    private void deleteSalon(Integer sid) {
+        DatabaseHandler db = new DatabaseHandler(getActivity());
+        MstSalons mstSalon = db.getSingleSalon(sid);
+        Log.w(TAG, "deleteSalon: salon id " +mstSalon.getSid() );
+        db.deleteSalon(mstSalon);
+        SIdlist.remove(sid);
+
+        Log.w(TAG, "Deleted salon" );
+
+        List<MstSalons> users2 = db.getAllSalons();
+        for (MstSalons ur : users2) {
+            String log = "SId: " +ur.getSid() + " ,Name: " + ur.getSname() + " ,Owner: " +ur.getOwner_name();
+            Log.w(TAG, "salon is : " +log);
         }
     }
 

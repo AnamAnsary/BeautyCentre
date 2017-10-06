@@ -10,7 +10,10 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+
+import android.text.Html;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -119,16 +122,18 @@ public class Branch extends Fragment {
         idTV.setText("Sr No");
         idTV.setTextColor(Color.parseColor("#009688"));
         idTV.setTextSize(15);
-        idTV.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
-        idTV.setPadding(20, 20, 5, 20);
+        idTV.setBackgroundResource(R.drawable.cell_shape);
+        //idTV.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
+        idTV.setPadding(10, 20, 10, 20);
         tr.addView(idTV);  // Adding textView to tablerow.
 
         TextView slNameTV = new TextView(getActivity());
         slNameTV.setText("Salon Name");
         slNameTV.setTextColor(Color.parseColor("#009688"));
+        slNameTV.setBackgroundResource(R.drawable.cell_shape);
         slNameTV.setTextSize(15);
-        slNameTV.setPadding(20, 20, 5, 20);
-        slNameTV.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
+        slNameTV.setPadding(10, 20, 10, 20);
+        //slNameTV.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
         tr.addView(slNameTV); // Adding textView to tablerow.
 
 
@@ -136,9 +141,10 @@ public class Branch extends Fragment {
         TextView brNameTV = new TextView(getActivity());
         brNameTV.setText("Branch Name");
         brNameTV.setTextColor(Color.parseColor("#009688"));
+        brNameTV.setBackgroundResource(R.drawable.cell_shape);
         brNameTV.setTextSize(15);
-        brNameTV.setPadding(20, 20, 5, 20);
-        brNameTV.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
+        brNameTV.setPadding(10, 20, 10, 20);
+        //brNameTV.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
         tr.addView(brNameTV); // Adding textView to tablerow.
 
        /* *//** Creating another textview **//*
@@ -171,19 +177,37 @@ public class Branch extends Fragment {
         TextView brCPMobTV = new TextView(getActivity());
         brCPMobTV.setText("Contact Number");
         brCPMobTV.setTextColor(Color.parseColor("#009688"));
+        brCPMobTV.setBackgroundResource(R.drawable.cell_shape);
         brCPMobTV.setTextSize(15);
-        brCPMobTV.setPadding(20, 20, 5, 20);
-        brCPMobTV.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
+        brCPMobTV.setPadding(10, 20, 10, 20);
+        //brCPMobTV.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
         tr.addView(brCPMobTV); // Adding textView to tablerow.
 
-        /*Button btnview = new Button(getActivity());
-        btnview.setText("View");
-        btnview.setTextColor(Color.parseColor("#009688"));
-        btnview.setTextSize(18);
-        btnview.setPadding(20, 20, 5, 20);
-        btnview.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
-        tr.addView(btnview); // Adding textView to tablerow.
-*/
+      /*  TableRow.LayoutParams blp;
+        blp = (TableRow.LayoutParams)check1.getLayoutParams();*/
+        /** Creating another textview **/
+        TextView act = new TextView(getActivity());
+        act.setText("Actions");
+        act.setTextColor(Color.parseColor("#009688"));
+        act.setBackgroundResource(R.drawable.cell_shape);
+        act.setTextSize(15);
+        act.setPadding(10, 20, 10, 20);
+        act.setGravity(Gravity.CENTER);
+        //act.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
+        tr.addView(act); // Adding textView to tablerow.
+        //theChild in this case is the child of TableRow
+        TableRow.LayoutParams params = (TableRow.LayoutParams) act.getLayoutParams();
+        params.span = 3; //amount of columns you will span
+        act.setLayoutParams(params);
+
+       /* TextView act2 = new TextView(getActivity());
+        act2.setText("Actions2");
+        act2.setTextColor(Color.parseColor("#009688"));
+        act2.setBackgroundResource(R.drawable.cell_shape);
+        act2.setTextSize(15);
+        act2.setPadding(10, 20, 10, 20);
+        act2.setGravity(Gravity.CENTER);
+        tr.addView(act2);*/
         // Add the TableRow to the TableLayout
         tl.addView(tr, new TableLayout.LayoutParams(
                 TableRow.LayoutParams.MATCH_PARENT,
@@ -235,8 +259,10 @@ public class Branch extends Fragment {
             //tvSn.setText(String.valueOf(BIdlist.get(i)));
             tvSn.setText(String.valueOf(i+1));
             tvSn.setTextColor(Color.BLACK);
+            tvSn.setBackgroundResource(R.drawable.cell_shape);
             //companyTV.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
-            tvSn.setPadding(20, 20, 5, 20);
+            tvSn.setPadding(10, 20, 10, 20);
+            tvSn.setGravity(Gravity.CENTER);
             tr.addView(tvSn);  // Adding textView to tablerow.
 
 
@@ -245,14 +271,18 @@ public class Branch extends Fragment {
             tvBid.setText(String.valueOf(SNamelist.get(i)));
             tvBid.setTextColor(Color.BLACK);
             //companyTV.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
-            tvBid.setPadding(20, 20, 5, 20);
+            tvBid.setPadding(10, 20, 10, 20);
+            tvBid.setGravity(Gravity.CENTER);
+            tvBid.setBackgroundResource(R.drawable.cell_shape);
             tr.addView(tvBid);  // Adding textView to tablerow.
 
             /** Creating another textview **/
             tvBrN = new TextView(getActivity());
             tvBrN.setText(String.valueOf(Bnamelist.get(i)));
             tvBrN.setTextColor(Color.BLACK);
-            tvBrN.setPadding(20, 20, 5, 20);
+            tvBrN.setGravity(Gravity.CENTER);
+            tvBrN.setBackgroundResource(R.drawable.cell_shape);
+            tvBrN.setPadding(10, 20, 10, 20);
             //valueTV.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
             tr.addView(tvBrN); // Adding textView to tablerow.
 
@@ -285,8 +315,10 @@ public class Branch extends Fragment {
             /** Creating another textview **/
             tvPrM = new TextView(getActivity());
             tvPrM.setText(String.valueOf(CPMoblist.get(i)));
+            tvPrM.setBackgroundResource(R.drawable.cell_shape);
             tvPrM.setTextColor(Color.BLACK);
-            tvPrM.setPadding(20, 20, 5, 20);
+            tvPrM.setGravity(Gravity.CENTER);
+            tvPrM.setPadding(10, 20, 10, 20);
             //valueTV.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
             tr.addView(tvPrM); // Adding textView to tablerow.
 
@@ -304,7 +336,8 @@ public class Branch extends Fragment {
             btnV = new ImageButton(getActivity());
             btnV.setImageResource(R.drawable.iconseye24);
             btnV.setBackgroundColor(Color.TRANSPARENT);
-            btnV.setPadding(20, 20, 5, 20);
+            btnV.setBackgroundResource(R.drawable.cell_shape);
+            btnV.setPadding(20, 20, 20, 20);
             btnV.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT));
             btnV.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -314,7 +347,6 @@ public class Branch extends Fragment {
 
                     DatabaseHandler db = new DatabaseHandler(getActivity());
                     MstBranches mstBranches = db.getSingleBranch(BIdlist.get(finalI));
-
 
                     /*LayoutInflater inflater = getActivity().getLayoutInflater();
                     View alertLayout = inflater.inflate(R.layout.dialog_viewlayout, null);
@@ -346,9 +378,13 @@ public class Branch extends Fragment {
                     cpnumber.setText(mstBranches.getBrCPMob());
 */
 
+                   // ContextThemeWrapper ctw = new ContextThemeWrapper( getActivity(), R.style.MyAlertDialogTheme );
+                    AlertDialog.Builder builder = new AlertDialog.Builder( getActivity(),R.style.CustomAlertDialog );
+                    //noinspection deprecation
+                    //builder.setTitle(Html.fromHtml("<b style="text-align : center;">Branch Detail</b>"));
+                    //builder.setTitle("Branch Detail");
+                    //builder.setTitle( Html.fromHtml("<font color='#FF7F27'>Branch Detail</font>"));
 
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.CustomAlertDialog);
-                    builder.setTitle("Branch Detail");
 
                     //builder.setView(alertLayout);
                    /* builder.setMessage( "Salon Name : " +SNamelist.get(finalI) + "\n" +
@@ -361,6 +397,14 @@ public class Branch extends Fragment {
 
                     Context dialogContext = builder.getContext();
                     LayoutInflater inflater = LayoutInflater.from(dialogContext);
+
+                    View alertHead = inflater.inflate(R.layout.alert_header,null);
+                    //builder.setView(alertHead);
+                    TextView tv = (TextView) alertHead.findViewById(R.id.tvAlertHeader);
+                    tv.setText("Branch Detail");
+                    builder.setCustomTitle(alertHead);
+                    //dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
                     View alertView = inflater.inflate(R.layout.frag_table, null);
                     builder.setView(alertView);
                     TableLayout tableLayout = (TableLayout)alertView.findViewById(R.id.maintable);
@@ -422,28 +466,36 @@ public class Branch extends Fragment {
                     builder.setNegativeButton("Delete",  new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                            builder.setMessage("Are you sure you want to delete this row?");
+                            final AlertDialog.Builder builder1 = new AlertDialog.Builder(getActivity());
+                            builder1.setMessage("Are you sure you want to delete this row?");
                             // add the buttons
-                            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            AlertDialog dialog2 = builder1.create();;
+
+                            //builder1.show();
+                            final AlertDialog finalDialog = dialog2;
+                            builder1.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     //Toast.makeText(getActivity(), "BId is "+ BIdlist.get(finalI), Toast.LENGTH_LONG).show();
                                     deleteBranch(BIdlist.get(finalI));
                                     TableRow parent = (TableRow) v.getParent();
                                     tl.removeView(parent);
-                                    dialog.dismiss();
+
+                                    finalDialog.dismiss();
                                     //finish();
                                 }
                             });
 
-                            builder.setNegativeButton("No",  new DialogInterface.OnClickListener() {
+                            final AlertDialog finalDialog1 = dialog2;
+                            builder1.setNegativeButton("No",  new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
+                                    finalDialog1.dismiss();
+
                                 }
                             });
-                            AlertDialog dialog2 = builder.create();
+
+                            dialog2 = builder1.create();
                             dialog2.show();
                             /*deleteBranch(BIdlist.get(finalI));
                             TableRow parent = (TableRow) v.getParent();
@@ -469,7 +521,8 @@ public class Branch extends Fragment {
             btnE = new ImageButton(getActivity());
             btnE.setImageResource(R.drawable.iconsedit24);
             btnE.setBackgroundColor(Color.TRANSPARENT);
-            btnE.setPadding(20, 20, 5, 20);
+            btnE.setBackgroundResource(R.drawable.cell_shape);
+            btnE.setPadding(20, 20, 20, 20);
             btnE.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT));
             btnE.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -486,7 +539,8 @@ public class Branch extends Fragment {
             btnD = new ImageButton(getActivity());
             btnD.setImageResource(R.drawable.iconsdelete24);
             btnD.setBackgroundColor(Color.TRANSPARENT);
-            btnD.setPadding(20, 20, 5, 20);
+            btnD.setPadding(20, 20, 20, 20);
+            btnD.setBackgroundResource(R.drawable.cell_shape);
             btnD.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT));
             btnD.setOnClickListener(new View.OnClickListener() {
                 @Override

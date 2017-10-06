@@ -17,10 +17,11 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
-    <style name="AlertDialogCustom" parent="Theme.AppCompat.Light.Dialog.Alert">
+    <style name="AlertDialogCustom" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="buttonBarPositiveButtonStyle">@style/positive</item>
         <item name="buttonBarNegativeButtonStyle">@style/negative</item>
         <item name="buttonBarNeutralButtonStyle">@style/neutral</item>
+        <item name="colorPrimaryDark">@color/colorPrimary</item>
     </style>
 
     <style name="positive">
@@ -42,6 +43,19 @@
     </style>
 
     <style name="CustomAlertDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <!--<item name="android:topDark">@drawable/cell_shape</item>-->
+
         <item name="android:windowBackground">@drawable/rounded_corners</item>
+<!--
+        &lt;!&ndash;<item name="android:fullDark">@drawable/rounded_corners</item>&ndash;&gt;
+        <item name="android:topBright">@drawable/cell_shape</item>
+        &lt;!&ndash;<item name="android:centerDark">@drawable/rounded_corners</item>&ndash;&gt;
+        &lt;!&ndash;<item name="android:bottomDark">@drawable/dialog_footer</item>&ndash;&gt;
+        <item name="android:fullBright">@drawable/rounded_corners</item>
+        <item name="android:centerBright">@drawable/rounded_corners</item>
+       &lt;!&ndash; <item name="android:bottomBright">@drawable/dialog_footer</item>
+        <item name="android:bottomMedium">@drawable/dialog_footer</item>&ndash;&gt;
+        <item name="android:centerMedium">@drawable/rounded_corners</item>-->
+
     </style>
 </resources>
