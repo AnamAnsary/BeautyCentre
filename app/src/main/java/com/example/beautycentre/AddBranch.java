@@ -144,12 +144,7 @@ public class AddBranch extends AppCompatActivity {
                             Log.w(TAG, "branch is : " +log);
 
                         }
-                        Intent i = new Intent(AddBranch.this, Dashboard.class);
-                        i.putExtra("frgToLoad", FRAGMENT_B);
-                        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        startActivity(i);
-                        finish();//finishing activity
+                        onBackPressed();
 
                     } else
                         Toast.makeText(AddBranch.this, "Please fill each fields", Toast.LENGTH_LONG).show();
@@ -175,10 +170,7 @@ public class AddBranch extends AppCompatActivity {
                         //Log.w(TAG, "onClick: sid is "+sid );
                         MstBranches mstBranches = new MstBranches(pos2, brname, bAdd, CPname, CPemail, CPmob, 1);
                         db.addBranch(mstBranches);
-                        Intent i = new Intent(AddBranch.this, Dashboard.class);
-                        i.putExtra("frgToLoad", FRAGMENT_B);
-                        startActivity(i);
-                        finish();//finishing activity
+                        onBackPressed();
 
                     } else
                         Toast.makeText(AddBranch.this, "Please fill each fields", Toast.LENGTH_LONG).show();
@@ -227,10 +219,7 @@ public class AddBranch extends AppCompatActivity {
         btBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(AddBranch.this, Dashboard.class);
-                i.putExtra("frgToLoad", FRAGMENT_B);
-                startActivity(i);
-                finish();//finishing activity
+               onBackPressed();
             }
         });
     }
@@ -239,6 +228,8 @@ public class AddBranch extends AppCompatActivity {
         //super.onBackPressed();
         Intent i = new Intent(AddBranch.this,Dashboard.class);
         i.putExtra("frgToLoad", FRAGMENT_B);
+        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(i);
         finish();//finishing activity
     }

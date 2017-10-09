@@ -32,6 +32,8 @@ import com.example.beautycentre.DatabaseTables.MstBranches;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.beautycentre.AddBranch.FRAGMENT_B;
+
 /**
  * Created by vmplapp on 12/9/17.
  */
@@ -342,11 +344,9 @@ public class Branch extends Fragment {
             btnV.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(final View v) {
-                   /* final TableRow parent = (TableRow) v.getParent();
-                    tl.removeView(parent);*/
-
                     DatabaseHandler db = new DatabaseHandler(getActivity());
                     MstBranches mstBranches = db.getSingleBranch(BIdlist.get(finalI));
+                    viewBranch(mstBranches);
 
                     /*LayoutInflater inflater = getActivity().getLayoutInflater();
                     View alertLayout = inflater.inflate(R.layout.dialog_viewlayout, null);
@@ -379,6 +379,10 @@ public class Branch extends Fragment {
 */
 
                    // ContextThemeWrapper ctw = new ContextThemeWrapper( getActivity(), R.style.MyAlertDialogTheme );
+
+                }
+
+                private void viewBranch(final MstBranches mstBranches) {
                     AlertDialog.Builder builder = new AlertDialog.Builder( getActivity(),R.style.CustomAlertDialog );
                     //noinspection deprecation
                     //builder.setTitle(Html.fromHtml("<b style="text-align : center;">Branch Detail</b>"));
@@ -466,8 +470,12 @@ public class Branch extends Fragment {
                     builder.setNegativeButton("Delete",  new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                            deleteDialog();
+                        }
+
+                        private void deleteDialog() {
                             final AlertDialog.Builder builder1 = new AlertDialog.Builder(getActivity());
-                            builder1.setMessage("Are you sure you want to delete this row?");
+                            builder1.setMessage("Are you sure you want to delete this record?");
                             // add the buttons
                             AlertDialog dialog2 = builder1.create();;
 
@@ -478,9 +486,14 @@ public class Branch extends Fragment {
                                 public void onClick(DialogInterface dialog, int which) {
                                     //Toast.makeText(getActivity(), "BId is "+ BIdlist.get(finalI), Toast.LENGTH_LONG).show();
                                     deleteBranch(BIdlist.get(finalI));
-                                    TableRow parent = (TableRow) v.getParent();
-                                    tl.removeView(parent);
-
+                                    Intent i = new Intent(getActivity(), Dashboard.class);
+                                    i.putExtra("frgToLoad", FRAGMENT_B);
+                                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                    startActivity(i);
+                                    //finish();
+                                  /*  TableRow parent = (TableRow) v.getParent();
+                                    tl.removeView(parent);*/
                                     finalDialog.dismiss();
                                     //finish();
                                 }
@@ -490,8 +503,8 @@ public class Branch extends Fragment {
                             builder1.setNegativeButton("No",  new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
+                                    viewBranch(mstBranches);
                                     finalDialog1.dismiss();
-
                                 }
                             });
 
@@ -512,7 +525,6 @@ public class Branch extends Fragment {
 
                     AlertDialog dialog = builder.create();
                     dialog.show();
-                    //Toast.makeText(getActivity(), "Id is "+ BIdlist.get(finalI), Toast.LENGTH_LONG).show();
 
                 }
             });
@@ -582,6 +594,7 @@ public class Branch extends Fragment {
                     TableRow.LayoutParams.WRAP_CONTENT));
         }
     }
+
 
     private void editBranch(Integer bid) {
         Intent intent = new Intent(getActivity(),AddBranch.class);

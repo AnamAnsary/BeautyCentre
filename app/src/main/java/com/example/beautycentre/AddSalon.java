@@ -3,20 +3,26 @@ package com.example.beautycentre;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
+import android.support.constraint.ConstraintSet;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.beautycentre.DatabaseClass.DatabaseHandler;
 import com.example.beautycentre.DatabaseTables.MstBranches;
 import com.example.beautycentre.DatabaseTables.MstProducts;
 import com.example.beautycentre.DatabaseTables.MstSalons;
+
+import java.util.List;
 
 /**
  * Created by vmplapp on 14/9/17.
@@ -26,6 +32,9 @@ public class AddSalon extends AppCompatActivity {
 
     public static final String FRAGMENT_S = "Fragment_Salon" ;
     private static final String TAG = "AddSalon";
+
+    ConstraintLayout mConstraintLayout;
+    LinearLayout llbuttons;
     EditText sname,desc,oname,bname,adrs,cPname,cPemail,cPmob;
     Button btnAdd,btBack;
     String slname,descriptn,owname,brname,bAdd,CPname,CPemail,CPmob;;
@@ -34,6 +43,8 @@ public class AddSalon extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_salon);
 
+        mConstraintLayout = (ConstraintLayout) findViewById(R.id.conslayout);
+        llbuttons = (LinearLayout) findViewById(R.id.llbuttons);
         sname = (EditText) findViewById(R.id.sname);
         desc = (EditText) findViewById(R.id.desc);
         oname = (EditText) findViewById(R.id.oname);
@@ -49,34 +60,87 @@ public class AddSalon extends AppCompatActivity {
 
         final DatabaseHandler db = new DatabaseHandler(this);
 
-        btnAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        if (getIntent().getExtras() != null) {
+            final int sid = getIntent().getExtras().getInt("SalonId");
+            Log.w(TAG, "Intent received is sid "+sid);
+            MstSalons mstSalons = db.getSingleSalon(sid);
 
-                slname = sname.getText().toString();
-                descriptn = desc.getText().toString();
-                owname = oname.getText().toString();
+            sname.setText(mstSalons.getSname());
+            desc.setText(mstSalons.getDescrip());
+            oname.setText(mstSalons.getOwner_name());
 
-                brname = bname.getText().toString();
-                bAdd = adrs.getText().toString();
-                CPname = cPname.getText().toString();
-                CPemail= cPemail.getText().toString();
-                CPmob = cPmob.getText().toString();
-                if(sname.length() != 0 && descriptn.length() != 0 && owname.length() != 0 &&
-                        brname.length() !=0 && bAdd.length() !=0 && CPname.length() !=0 && CPemail.length() !=0 && CPmob.length() != 0 )
-                {
+            findViewById(R.id.textInputLayout9).setVisibility(View.INVISIBLE);
+            findViewById(R.id.textInputLayout10).setVisibility(View.INVISIBLE);
+            findViewById(R.id.textInputLayout11).setVisibility(View.INVISIBLE);
+            findViewById(R.id.textInputLayout12).setVisibility(View.INVISIBLE);
+            findViewById(R.id.textInputLayout13).setVisibility(View.INVISIBLE);
 
-                    MstSalons mstSalons = new MstSalons(slname,descriptn,owname,1);
-                    db.addSalon(mstSalons);
-                    int lastId = db.getLastInsertedID();
-                    Log.w(TAG, "onClick: Last inserted salon id is " +lastId );
+          /*  bname.setVisibility(View.INVISIBLE);
+            adrs.setVisibility(View.INVISIBLE);
+            cPname.setVisibility(View.INVISIBLE);
+            cPmob.setVisibility(View.INVISIBLE);
+            cPemail.setVisibility(View.INVISIBLE);*/
 
-                    MstBranches mstBranches = new MstBranches(lastId, brname,bAdd,CPname,CPemail,CPmob,1);
-                    db.addBranch(mstBranches);
-                    Intent i = new Intent(AddSalon.this,Dashboard.class);
-                    i.putExtra("frgToLoad", FRAGMENT_S);
-                    startActivity(i);
-                    finish();//finishing activity
+            btnAdd.setText("Update");
+
+            ConstraintSet set = new ConstraintSet();
+            set.clone(mConstraintLayout);
+
+            set.connect(R.id.llbuttons, ConstraintSet.TOP, R.id.textInputLayout8, ConstraintSet.BOTTOM, 16);
+            //set.clear(spSalon.getId(), ConstraintSet.GONE);
+            set.applyTo(mConstraintLayout);
+
+            btnAdd.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    slname = sname.getText().toString();
+                    descriptn = desc.getText().toString();
+                    owname = oname.getText().toString();
+
+                    if(sname.length() != 0 && descriptn.length() != 0 && owname.length() != 0) {
+                        MstSalons mstSalons = new MstSalons(sid,slname, descriptn, owname, 1);
+                        db.updateSalon(mstSalons);
+                        onBackPressed();
+
+                    } else
+                        Toast.makeText(AddSalon.this, "Please fill each fields", Toast.LENGTH_LONG).show();
+                }
+            });
+
+        }
+        else {
+
+            btnAdd.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    slname = sname.getText().toString();
+                    descriptn = desc.getText().toString();
+                    owname = oname.getText().toString();
+
+                    brname = bname.getText().toString();
+                    bAdd = adrs.getText().toString();
+                    CPname = cPname.getText().toString();
+                    CPemail = cPemail.getText().toString();
+                    CPmob = cPmob.getText().toString();
+                    if (sname.length() != 0 && descriptn.length() != 0 && owname.length() != 0 &&
+                            brname.length() != 0 && bAdd.length() != 0 && CPname.length() != 0 && CPemail.length() != 0 && CPmob.length() != 0) {
+
+                        MstSalons mstSalons = new MstSalons(slname, descriptn, owname, 1);
+                        db.addSalon(mstSalons);
+                        int lastId = db.getLastInsertedID();
+                        Log.w(TAG, "onClick: Last inserted salon id is " + lastId);
+
+                        MstBranches mstBranches = new MstBranches(lastId, brname, bAdd, CPname, CPemail, CPmob, 1);
+                        db.addBranch(mstBranches);
+                        onBackPressed();
+                       /* Intent i = new Intent(AddSalon.this, Dashboard.class);
+                        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        i.putExtra("frgToLoad", FRAGMENT_S);
+                        startActivity(i);*/
+                        finish();//finishing activity
 
                   /*  Intent i = new Intent(AddSalon.this,AddBranchofSalon.class);
                     Bundle bundle = new Bundle();
@@ -93,20 +157,17 @@ public class AddSalon extends AppCompatActivity {
                     startActivity(i);
                     finish();
 */
-                }
-                else
-                    Toast.makeText(AddSalon.this, "Please fill each fields", Toast.LENGTH_LONG).show();
+                    } else
+                        Toast.makeText(AddSalon.this, "Please fill each fields", Toast.LENGTH_LONG).show();
 
-            }
-        });
+                }
+            });
+        }
 
         btBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(AddSalon.this,Dashboard.class);
-                i.putExtra("frgToLoad", FRAGMENT_S);
-                startActivity(i);
-                finish();//finishing activity
+                onBackPressed();
             }
         });
     }
@@ -115,6 +176,8 @@ public class AddSalon extends AppCompatActivity {
         //super.onBackPressed();
         Intent i = new Intent(AddSalon.this,Dashboard.class);
         i.putExtra("frgToLoad", FRAGMENT_S);
+        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(i);
         finish();//finishing activity
     }

@@ -2,6 +2,7 @@ package com.example.beautycentre;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.beautycentre.DatabaseClass.DatabaseHandler;
 import com.example.beautycentre.DatabaseTables.MstBranches;
@@ -25,6 +27,9 @@ import com.example.beautycentre.DatabaseTables.MstSalons;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.example.beautycentre.AddBranch.FRAGMENT_B;
+import static com.example.beautycentre.AddSalon.FRAGMENT_S;
 
 /**
  * Created by vmplapp on 12/9/17.
@@ -45,6 +50,8 @@ public class Salon extends Fragment {
     private ImageButton btnV;
     private ImageButton btnE;
     private ImageButton btnD;
+    private MstSalons mstSalons;
+    private int SIdSelected;
 
 
     @Nullable
@@ -234,123 +241,10 @@ public class Salon extends Fragment {
                 @Override
                 public void onClick(final View v) {
                     DatabaseHandler db = new DatabaseHandler(getActivity());
-                    MstSalons mstSalons = db.getSingleSalon(SIdlist.get(finalI));
-
-                    AlertDialog.Builder builder = new AlertDialog.Builder( getActivity(),R.style.CustomAlertDialog );
-                    Context dialogContext = builder.getContext();
-                    LayoutInflater inflater = LayoutInflater.from(dialogContext);
-
-                    View alertHead = inflater.inflate(R.layout.alert_header,null);
-                    //builder.setView(alertHead);
-                    TextView tv = (TextView) alertHead.findViewById(R.id.tvAlertHeader);
-                    tv.setText("Salon Detail");
-                    builder.setCustomTitle(alertHead);
-                    //dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-
-                    View alertView = inflater.inflate(R.layout.frag_table, null);
-                    builder.setView(alertView);
-                    TableLayout tableLayout = (TableLayout)alertView.findViewById(R.id.maintable);
-                    ArrayList<String> FRowList = new ArrayList<String>();
-                    ArrayList<String> SRowList = new ArrayList<String>();
-
-                    FRowList.add("Salon Name : ");
-                    FRowList.add("Owner Name : ");
-                    FRowList.add("Description : ");
-
-                    SRowList.add(mstSalons.getSname());
-                    SRowList.add(mstSalons.getOwner_name());
-                    SRowList.add(mstSalons.getDescrip());
-
-
-                    //TransactionDetails transactionDetails = new TransactionDetails();
-                    for(int j=0; j < FRowList.size(); j++ ){
-
-                        TableRow tableRow = new TableRow(dialogContext);
-                        tableRow.setLayoutParams(new LinearLayout.LayoutParams
-                                (LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-
-                        TextView textView1 = new TextView(dialogContext);
-                        textView1.setText(FRowList.get(j));
-                        textView1.setTextColor(Color.parseColor("#757575"));
-                        textView1.setTextSize(15);
-                        textView1.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
-                        textView1.setPadding(20, 15, 5, 15);
-                        textView1.setGravity(Gravity.RIGHT);
-                        tableRow.addView(textView1);
-
-                        TextView textView2 = new TextView(dialogContext);
-                        textView2.setText(SRowList.get(j));
-                        textView2.setTextColor(Color.parseColor("#000000"));
-                        textView2.setTextSize(15);
-                        //textView2.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
-                        textView2.setPadding(20, 15, 5, 15);
-                        tableRow.addView(textView2);
-
-                        tableLayout.addView(tableRow);
-                    }
-
-
-                    // add the buttons
-                    builder.setPositiveButton("Edit", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            //editBranch(BIdlist.get(finalI));
-                            dialog.dismiss();
-                            //finish();
-                        }
-                    });
-
-                    builder.setNegativeButton("Delete",  new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            final AlertDialog.Builder builder1 = new AlertDialog.Builder(getActivity());
-                            builder1.setMessage("Are you sure you want to delete this row?");
-                            // add the buttons
-                            AlertDialog dialog2 = builder1.create();;
-
-                            //builder1.show();
-                            final AlertDialog finalDialog = dialog2;
-                            builder1.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    //Toast.makeText(getActivity(), "BId is "+ BIdlist.get(finalI), Toast.LENGTH_LONG).show();
-                                    deleteSalon(SIdlist.get(finalI));
-                                    TableRow parent = (TableRow) v.getParent();
-                                    tl.removeView(parent);
-
-                                    finalDialog.dismiss();
-                                    //finish();
-                                }
-                            });
-
-                            final AlertDialog finalDialog1 = dialog2;
-                            builder1.setNegativeButton("No",  new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    finalDialog1.dismiss();
-
-                                }
-                            });
-
-                            dialog2 = builder1.create();
-                            dialog2.show();
-                            /*deleteBranch(BIdlist.get(finalI));
-                            TableRow parent = (TableRow) v.getParent();
-                            tl.removeView(parent);*/
-                        }
-                    });
-
-                    builder.setNeutralButton("Cancel",new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    });
-
-                    AlertDialog dialog = builder.create();
-                    dialog.show();
-                    //Toast.makeText(getActivity(), "Id is "+ BIdlist.get(finalI), Toast.LENGTH_LONG).show();
-
+                    mstSalons = db.getSingleSalon(SIdlist.get(finalI));
+                    SIdSelected = SIdlist.get(finalI);
+                    Log.w(TAG, "addData: SIdSelected "+ SIdSelected);
+                    viewSalon(mstSalons);
                 }
             });
             tr.addView(btnV);
@@ -362,6 +256,16 @@ public class Salon extends Fragment {
             btnE.setBackgroundResource(R.drawable.cell_shape);
             btnE.setPadding(20, 20, 20, 20);
             btnE.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT));
+            btnE.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    //Toast.makeText(getActivity(), "BId is "+ BIdlist.get(finalI), Toast.LENGTH_LONG).show();
+                    editSalon(SIdlist.get(finalI));
+                   /* final TableRow parent = (TableRow) v.getParent();
+                    tl.removeView(parent);*/
+                }
+            });
             tr.addView(btnE);
 
             btnD = new ImageButton(getActivity());
@@ -370,6 +274,15 @@ public class Salon extends Fragment {
             btnD.setPadding(20, 20, 20, 20);
             btnD.setBackgroundResource(R.drawable.cell_shape);
             btnD.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT));
+            btnD.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    SIdSelected = SIdlist.get(finalI);
+                    Log.w(TAG, "onClick: SId is "+SIdSelected );
+                    deleteDialog(false);
+                }
+
+            });
             tr.addView(btnD);
 
             // Add the TableRow to the TableLayout
@@ -377,6 +290,130 @@ public class Salon extends Fragment {
                     TableRow.LayoutParams.MATCH_PARENT,
                     TableRow.LayoutParams.WRAP_CONTENT));
         }
+    }
+
+    private void editSalon(Integer sid) {
+        Intent intent = new Intent(getActivity(),AddSalon.class);
+        intent.putExtra("SalonId",sid);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+    }
+
+    private void viewSalon(MstSalons mstSalons) {
+        AlertDialog.Builder builder = new AlertDialog.Builder( getActivity(),R.style.CustomAlertDialog );
+        Context dialogContext = builder.getContext();
+        LayoutInflater inflater = LayoutInflater.from(dialogContext);
+
+        View alertHead = inflater.inflate(R.layout.alert_header,null);
+        //builder.setView(alertHead);
+        TextView tv = (TextView) alertHead.findViewById(R.id.tvAlertHeader);
+        tv.setText("Salon Detail");
+        builder.setCustomTitle(alertHead);
+        //dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+        View alertView = inflater.inflate(R.layout.frag_table, null);
+        builder.setView(alertView);
+        TableLayout tableLayout = (TableLayout)alertView.findViewById(R.id.maintable);
+        ArrayList<String> FRowList = new ArrayList<String>();
+        ArrayList<String> SRowList = new ArrayList<String>();
+
+        FRowList.add("Salon Name : ");
+        FRowList.add("Owner Name : ");
+        FRowList.add("Description : ");
+
+        SRowList.add(mstSalons.getSname());
+        SRowList.add(mstSalons.getOwner_name());
+        SRowList.add(mstSalons.getDescrip());
+
+        for(int j=0; j < FRowList.size(); j++ ){
+
+            TableRow tableRow = new TableRow(dialogContext);
+            tableRow.setLayoutParams(new LinearLayout.LayoutParams
+                    (LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+
+            TextView textView1 = new TextView(dialogContext);
+            textView1.setText(FRowList.get(j));
+            textView1.setTextColor(Color.parseColor("#757575"));
+            textView1.setTextSize(15);
+            textView1.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
+            textView1.setPadding(20, 15, 5, 15);
+            textView1.setGravity(Gravity.RIGHT);
+            tableRow.addView(textView1);
+
+            TextView textView2 = new TextView(dialogContext);
+            textView2.setText(SRowList.get(j));
+            textView2.setTextColor(Color.parseColor("#000000"));
+            textView2.setTextSize(15);
+            //textView2.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
+            textView2.setPadding(20, 15, 5, 15);
+            tableRow.addView(textView2);
+
+            tableLayout.addView(tableRow);
+        }
+
+        // add the buttons
+        builder.setPositiveButton("Edit", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                editSalon(SIdSelected);
+                //editBranch(BIdlist.get(finalI));
+                dialog.dismiss();
+                //finish();
+            }
+        });
+
+        builder.setNegativeButton("Delete",  new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                deleteDialog(true);
+            }
+        });
+
+        builder.setNeutralButton("Cancel",new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private void deleteDialog(final boolean show) {
+        final AlertDialog.Builder builder1 = new AlertDialog.Builder(getActivity(),R.style.CustomAlertDialog );
+        builder1.setMessage("Are you sure you want to delete this record?");
+        // add the buttons
+        AlertDialog dialog2 = builder1.create();
+
+        //builder1.show();
+        final AlertDialog finalDialog = dialog2;
+        builder1.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Log.w(TAG, "onClick: SId is "+SIdSelected );
+                deleteSalon(SIdSelected);
+                Intent i = new Intent(getActivity(), Dashboard.class);
+                i.putExtra("frgToLoad", FRAGMENT_S);
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(i);
+                finalDialog.dismiss();
+            }
+        });
+
+        final AlertDialog finalDialog1 = dialog2;
+        builder1.setNegativeButton("No",  new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if(show == true)
+                viewSalon(mstSalons);
+                finalDialog1.dismiss();
+            }
+        });
+        dialog2 = builder1.create();
+        dialog2.show();
     }
 
     private void deleteSalon(Integer sid) {
@@ -408,8 +445,6 @@ public class Salon extends Fragment {
         });
 
     }*/
-
-
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {

@@ -437,22 +437,28 @@ public class DatabaseHandler extends SQLiteOpenHelper{
     public List<MstBranches> getAllBranches() {
         List<MstBranches> branchList = new ArrayList<MstBranches>();
         // Select All Query
-        String selectQuery = "SELECT  * FROM " + TABLE_BRANCHES;
+        /*String selectQuery = "SELECT  * FROM " + TABLE_BRANCHES;
 
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery(selectQuery,null);
+        Cursor cursor = db.rawQuery(selectQuery,null);*/
+
+        String MY_QUERY = "SELECT * FROM "+ TABLE_SALONS +" s INNER JOIN " + TABLE_BRANCHES + " b ON s."+KEY_ID+" = b."+KEY_SALONID;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor =  db.rawQuery(MY_QUERY,null);
 
         // looping through all rows and adding to list
         if (cursor.moveToFirst()) {
             do {
                 MstBranches branch = new MstBranches();
-                branch.setBid(Integer.parseInt(cursor.getString(0)));
-                branch.setSalonId(Integer.parseInt(cursor.getString(1)));
-                branch.setbName(cursor.getString(2));
-                branch.setBrAdd(cursor.getString(3));
-                branch.setBrCPName(cursor.getString(4));
-                branch.setBrCPEmail(cursor.getString(5));
-                branch.setBrCPMob(cursor.getString(6));
+                Log.w(TAG, "getAllBranches: "+Integer.parseInt(cursor.getString(0))+" 2nd "+cursor.getString(1)+"3rd "+cursor.getString(2)+" 4th "+cursor.getString(3)+" 5th"+Integer.parseInt(cursor.getString(4))+
+                        "6th"+Integer.parseInt(cursor.getString(5))+"7th "+Integer.parseInt(cursor.getString(6))+"8th "+cursor.getString(7)+"9th "+cursor.getString(8));
+                branch.setBid(Integer.parseInt(cursor.getString(5)));
+                branch.setSalonId(Integer.parseInt(cursor.getString(6)));
+                branch.setbName(cursor.getString(7));
+                branch.setBrAdd(cursor.getString(8));
+                branch.setBrCPName(cursor.getString(9));
+                branch.setBrCPEmail(cursor.getString(10));
+                branch.setBrCPMob(cursor.getString(11));
                 // Adding contact to list
                 branchList.add(branch);
             } while (cursor.moveToNext());
