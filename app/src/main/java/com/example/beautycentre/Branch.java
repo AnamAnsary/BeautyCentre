@@ -125,6 +125,7 @@ public class Branch extends Fragment {
         idTV.setTextColor(Color.parseColor("#009688"));
         idTV.setTextSize(15);
         idTV.setBackgroundResource(R.drawable.cell_shape);
+        idTV.setGravity(Gravity.CENTER);
         //idTV.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
         idTV.setPadding(10, 20, 10, 20);
         tr.addView(idTV);  // Adding textView to tablerow.
@@ -135,6 +136,7 @@ public class Branch extends Fragment {
         slNameTV.setBackgroundResource(R.drawable.cell_shape);
         slNameTV.setTextSize(15);
         slNameTV.setPadding(10, 20, 10, 20);
+        slNameTV.setGravity(Gravity.CENTER);
         //slNameTV.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
         tr.addView(slNameTV); // Adding textView to tablerow.
 
@@ -146,6 +148,7 @@ public class Branch extends Fragment {
         brNameTV.setBackgroundResource(R.drawable.cell_shape);
         brNameTV.setTextSize(15);
         brNameTV.setPadding(10, 20, 10, 20);
+        brNameTV.setGravity(Gravity.CENTER);
         //brNameTV.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
         tr.addView(brNameTV); // Adding textView to tablerow.
 
@@ -182,6 +185,7 @@ public class Branch extends Fragment {
         brCPMobTV.setBackgroundResource(R.drawable.cell_shape);
         brCPMobTV.setTextSize(15);
         brCPMobTV.setPadding(10, 20, 10, 20);
+        brCPMobTV.setGravity(Gravity.CENTER);
         //brCPMobTV.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
         tr.addView(brCPMobTV); // Adding textView to tablerow.
 
@@ -336,7 +340,7 @@ public class Branch extends Fragment {
             final int finalI = i;
             // Creation  button
             btnV = new ImageButton(getActivity());
-            btnV.setImageResource(R.drawable.iconseye24);
+            btnV.setImageResource(R.drawable.iconseye);
             btnV.setBackgroundColor(Color.TRANSPARENT);
             btnV.setBackgroundResource(R.drawable.cell_shape);
             btnV.setPadding(20, 20, 20, 20);
@@ -531,7 +535,7 @@ public class Branch extends Fragment {
             tr.addView(btnV);
 
             btnE = new ImageButton(getActivity());
-            btnE.setImageResource(R.drawable.iconsedit24);
+            btnE.setImageResource(R.drawable.iconsedit);
             btnE.setBackgroundColor(Color.TRANSPARENT);
             btnE.setBackgroundResource(R.drawable.cell_shape);
             btnE.setPadding(20, 20, 20, 20);
@@ -549,7 +553,7 @@ public class Branch extends Fragment {
             tr.addView(btnE);
 
             btnD = new ImageButton(getActivity());
-            btnD.setImageResource(R.drawable.iconsdelete24);
+            btnD.setImageResource(R.drawable.iconreddelete);
             btnD.setBackgroundColor(Color.TRANSPARENT);
             btnD.setPadding(20, 20, 20, 20);
             btnD.setBackgroundResource(R.drawable.cell_shape);

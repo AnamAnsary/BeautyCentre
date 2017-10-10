@@ -127,7 +127,7 @@ public class Salon extends Fragment {
         idTV.setTextColor(Color.parseColor("#009688"));
         idTV.setTextSize(15);
         idTV.setBackgroundResource(R.drawable.cell_shape);
-        //idTV.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
+        idTV.setGravity(Gravity.CENTER);
         idTV.setPadding(10, 20, 10, 20);
         tr.addView(idTV);  // Adding textView to tablerow.
 
@@ -137,6 +137,7 @@ public class Salon extends Fragment {
         slNameTV.setTextSize(15);
         slNameTV.setPadding(10, 20, 10, 20);
         slNameTV.setBackgroundResource(R.drawable.cell_shape);
+        slNameTV.setGravity(Gravity.CENTER);
         //slNameTV.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
         tr.addView(slNameTV); // Adding textView to tablerow.
 
@@ -148,6 +149,7 @@ public class Salon extends Fragment {
         owNameTV.setTextSize(15);
         owNameTV.setPadding(10, 20, 10, 20);
         owNameTV.setBackgroundResource(R.drawable.cell_shape);
+        owNameTV.setGravity(Gravity.CENTER);
         //owNameTV.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
         tr.addView(owNameTV); // Adding textView to tablerow.
 
@@ -232,7 +234,7 @@ public class Salon extends Fragment {
 
             final int finalI = i;
             btnV = new ImageButton(getActivity());
-            btnV.setImageResource(R.drawable.iconseye24);
+            btnV.setImageResource(R.drawable.iconseye);
             btnV.setBackgroundColor(Color.TRANSPARENT);
             btnV.setBackgroundResource(R.drawable.cell_shape);
             btnV.setPadding(20, 20, 20, 20);
@@ -251,7 +253,7 @@ public class Salon extends Fragment {
 
 
             btnE = new ImageButton(getActivity());
-            btnE.setImageResource(R.drawable.iconsedit24);
+            btnE.setImageResource(R.drawable.iconsedit);
             btnE.setBackgroundColor(Color.TRANSPARENT);
             btnE.setBackgroundResource(R.drawable.cell_shape);
             btnE.setPadding(20, 20, 20, 20);
@@ -269,7 +271,7 @@ public class Salon extends Fragment {
             tr.addView(btnE);
 
             btnD = new ImageButton(getActivity());
-            btnD.setImageResource(R.drawable.iconsdelete24);
+            btnD.setImageResource(R.drawable.iconreddelete);
             btnD.setBackgroundColor(Color.TRANSPARENT);
             btnD.setPadding(20, 20, 20, 20);
             btnD.setBackgroundResource(R.drawable.cell_shape);
