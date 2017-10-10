@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
@@ -158,9 +159,13 @@ public class Dashboard extends AppCompatActivity
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+
         View hdView =  navigationView.getHeaderView(0);
         welcome = (TextView) hdView.findViewById(R.id.welcomename);
         user_email = (TextView) hdView.findViewById(R.id.user_email);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            hdView.findViewById(R.id.imageView).setClipToOutline(true);
+        }
 
        /* // email
         String email = user.get(SessionManager.KEY_EMAIL);
@@ -182,24 +187,28 @@ public class Dashboard extends AppCompatActivity
                         fragment = new Product();
                         Log.w(TAG, "onCreate: Product frag to add");
                         ft.replace(R.id.content_frame, fragment, "Product");
+                        navigationView.getMenu().getItem(1).setChecked(true);
                         break;
                     case FRAGMENT_S:
                         // Load corresponding fragment
                         fragment = new Salon();
                         Log.w(TAG, "onCreate: Salon frag to add");
                         ft.replace(R.id.content_frame, fragment, "Salon");
+                        navigationView.getMenu().getItem(2).setChecked(true);
                         break;
                     case FRAGMENT_B:
                         // Load corresponding fragment
                         fragment = new Branch();
                         Log.w(TAG, "onCreate: Branch frag to add");
                         ft.replace(R.id.content_frame, fragment, "Branch");
+                        navigationView.getMenu().getItem(3).setChecked(true);
                         break;
                     case FRAGMENT_I:
                         // Load corresponding fragment
                         fragment = new Inventory();
                         Log.w(TAG, "onCreate: Inventory frag to add");
                         ft.replace(R.id.content_frame, fragment, "Inventory");
+                        navigationView.getMenu().getItem(4).setChecked(true);
                         break;
            /* case FRAGMENT_C:
                 // Load corresponding fragment
@@ -208,6 +217,7 @@ public class Dashboard extends AppCompatActivity
                         fragment = new Product();
                         Log.w(TAG, "onCreate: Product frag to add");
                         ft.replace(R.id.content_frame, fragment, "Product");
+                        navigationView.getMenu().getItem(1).setChecked(true);
                         break;
                 }
                /* getIntent().getExtras().remove("frgToLoad");
@@ -237,7 +247,7 @@ public class Dashboard extends AppCompatActivity
             drawer.closeDrawer(GravityCompat.START);
         } else if (flag==true){
             // setup the alert builder
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            AlertDialog.Builder builder = new AlertDialog.Builder(this,R.style.CustomAlertDialog);
             //builder.setTitle("Exit");
             //builder.setCancelable(false);
             builder.setMessage("Do you really want to exit?");
@@ -338,17 +348,33 @@ public class Dashboard extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_logout) {
-            Intent  i2 = new Intent(Dashboard.this,LoginActivity.class);
-
-            SharedPreferences sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedpreferences.edit();
-            editor.clear();
-            editor.commit();
-
-            i2.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            i2.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(i2);
-            finish();
+            AlertDialog.Builder builder = new AlertDialog.Builder(this,R.style.CustomAlertDialog);
+            builder.setTitle("Log Out");
+            builder.setMessage("Do you really want to log out?");
+            // add the buttons
+            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Intent  i2 = new Intent(Dashboard.this,LoginActivity.class);
+                    SharedPreferences sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedpreferences.edit();
+                    editor.clear();
+                    editor.commit();
+                    i2.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    i2.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(i2);
+                    finish();
+                }
+            });
+            builder.setNegativeButton("No",  new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
+            // create and show the alert dialog
+            AlertDialog dialog = builder.create();
+            dialog.show();
             //return true;
         }
 
@@ -404,6 +430,7 @@ public class Dashboard extends AppCompatActivity
                 fab.setVisibility(View.INVISIBLE);
                 fragment = new HomePage();
                 ft.replace(R.id.content_frame, fragment,"Dashboard_Frag");
+                navigationView.getMenu().getItem(0).setChecked(true);
                 break;
             case R.id.nav_product:
                 fragment = new Product();
@@ -426,17 +453,35 @@ public class Dashboard extends AppCompatActivity
                 startActivity(i);
                 break;
             case R.id.nav_logout:
-                Intent  i2 = new Intent(Dashboard.this,LoginActivity.class);
 
-                SharedPreferences sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedpreferences.edit();
-                editor.clear();
-                editor.commit();
+                AlertDialog.Builder builder = new AlertDialog.Builder(this,R.style.CustomAlertDialog);
+                builder.setTitle("Log Out");
+                builder.setMessage("Do you really want to log out?");
+                // add the buttons
+                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent  i2 = new Intent(Dashboard.this,LoginActivity.class);
+                        SharedPreferences sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedpreferences.edit();
+                        editor.clear();
+                        editor.commit();
+                        i2.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        i2.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(i2);
+                        finish();
+                    }
+                });
+                builder.setNegativeButton("No",  new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+                // create and show the alert dialog
+                AlertDialog dialog = builder.create();
+                dialog.show();
 
-                i2.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                i2.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(i2);
-                finish();
                 break;
             default:
                 fragment = new HomePage();

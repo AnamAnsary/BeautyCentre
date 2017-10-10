@@ -26,7 +26,6 @@ public class MstBranches {
     }
 
 
-
     public MstBranches(int bid, int salonId, String bName, String brAdd, String brCPName, String brCPEmail, String brCPMob, int active) {
 
         this.bid = bid;
@@ -35,7 +34,6 @@ public class MstBranches {
         this.brAdd = brAdd;
         this.brCPName = brCPName;
         this.brCPEmail = brCPEmail;
-
         this.brCPMob = brCPMob;
         this.active = active;
     }

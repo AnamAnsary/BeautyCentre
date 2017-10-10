@@ -333,6 +333,31 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         return branchDetail;
     }
 
+    public MstBranches getTopBranch(int salonid) {
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        String selectQuery = "SELECT * from " + TABLE_BRANCHES +
+                " WHERE " + KEY_SALONID + " = " + salonid + " AND ("
+                + KEY_ACTIVE + " = 2 OR (" + KEY_ACTIVE + " = 1 )) LIMIT 1";
+
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        int cursorSize = cursor.getCount();
+        Log.w(TAG, "getTopBranch: " +cursorSize );
+
+        if (cursor != null)
+            cursor.moveToFirst();
+
+        Log.w(TAG, "getTopBranch: " +Integer.parseInt(cursor.getString(0))+" " +Integer.parseInt(cursor.getString(1))+
+                " " +cursor.getString(2)+" " + cursor.getString(3)+" " +cursor.getString(4)+ " "
+                +cursor.getString(5)+" " +cursor.getString(6)+ " " +Integer.parseInt(cursor.getString(7)));
+
+        MstBranches branchDetail = new MstBranches (Integer.parseInt(cursor.getString(0)),Integer.parseInt(cursor.getString(1)),
+                cursor.getString(2),cursor.getString(3),cursor.getString(4),
+                cursor.getString(5),cursor.getString(6), Integer.parseInt(cursor.getString(7)));
+        cursor.close();
+        return branchDetail;
+    }
+
     public MstTransaction getSingleTransaction(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
 

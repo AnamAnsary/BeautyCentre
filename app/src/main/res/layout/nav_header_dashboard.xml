@@ -31,18 +31,21 @@
             android:id="@+id/imageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:srcCompat="@android:drawable/sym_def_app_icon" />
-
+            app:srcCompat="@android:drawable/sym_def_app_icon"
+            />
+       <!-- app:srcCompat="@android:drawable/sym_def_app_icon"-->
         <TextView
-            android:padding="10dp"
+            android:paddingLeft="10dp"
+            android:paddingStart="10dp"
             android:id="@+id/tvTitle"
             android:layout_gravity="bottom"
             android:layout_weight="1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Beauty Centre"
-            android:textSize="18sp"
-            android:textColor="#FFFFFF"/>
+            android:textSize="20sp"
+            android:textColor="#FFFFFF"
+            />
     </LinearLayout>
 
 

@@ -33,6 +33,7 @@ public class ChangePassword extends AppCompatActivity {
 
     EditText oldP,newP,cNewP;
     Button btncp;
+    Button btnback;
 
     SharedPreferences sharedpreferences;
 
@@ -52,6 +53,7 @@ public class ChangePassword extends AppCompatActivity {
         newP = (EditText) findViewById(R.id.newP);
         cNewP = (EditText) findViewById(R.id.cNewP);
         btncp = (Button) findViewById(R.id.btncp);
+        btnback = (Button) findViewById(R.id.btnback);
 
         btncp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -105,5 +107,20 @@ public class ChangePassword extends AppCompatActivity {
 
         });
 
+        btnback.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent i = new Intent(ChangePassword.this,Dashboard.class);
+        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(i);
+        finish();
     }
 }

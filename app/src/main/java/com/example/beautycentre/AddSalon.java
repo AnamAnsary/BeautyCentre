@@ -38,6 +38,9 @@ public class AddSalon extends AppCompatActivity {
     EditText sname,desc,oname,bname,adrs,cPname,cPemail,cPmob;
     Button btnAdd,btBack;
     String slname,descriptn,owname,brname,bAdd,CPname,CPemail,CPmob;;
+    private int branchIddisplayed;
+    private int active;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,16 +67,25 @@ public class AddSalon extends AppCompatActivity {
             final int sid = getIntent().getExtras().getInt("SalonId");
             Log.w(TAG, "Intent received is sid "+sid);
             MstSalons mstSalons = db.getSingleSalon(sid);
-
             sname.setText(mstSalons.getSname());
             desc.setText(mstSalons.getDescrip());
             oname.setText(mstSalons.getOwner_name());
 
-            findViewById(R.id.textInputLayout9).setVisibility(View.INVISIBLE);
+            MstBranches mstBranches = db.getTopBranch(sid);
+            branchIddisplayed = mstBranches.getBid();
+            active = mstBranches.getActive();
+
+            bname.setText(mstBranches.getbName());
+            adrs.setText(mstBranches.getBrAdd());
+            cPname.setText(mstBranches.getBrCPName());
+            cPemail.setText(mstBranches.getBrCPEmail());
+            cPmob.setText(mstBranches.getBrCPMob());
+
+           /* findViewById(R.id.textInputLayout9).setVisibility(View.INVISIBLE);
             findViewById(R.id.textInputLayout10).setVisibility(View.INVISIBLE);
             findViewById(R.id.textInputLayout11).setVisibility(View.INVISIBLE);
             findViewById(R.id.textInputLayout12).setVisibility(View.INVISIBLE);
-            findViewById(R.id.textInputLayout13).setVisibility(View.INVISIBLE);
+            findViewById(R.id.textInputLayout13).setVisibility(View.INVISIBLE);*/
 
           /*  bname.setVisibility(View.INVISIBLE);
             adrs.setVisibility(View.INVISIBLE);
@@ -83,12 +95,12 @@ public class AddSalon extends AppCompatActivity {
 
             btnAdd.setText("Update");
 
-            ConstraintSet set = new ConstraintSet();
+           /* ConstraintSet set = new ConstraintSet();
             set.clone(mConstraintLayout);
 
             set.connect(R.id.llbuttons, ConstraintSet.TOP, R.id.textInputLayout8, ConstraintSet.BOTTOM, 16);
             //set.clear(spSalon.getId(), ConstraintSet.GONE);
-            set.applyTo(mConstraintLayout);
+            set.applyTo(mConstraintLayout);*/
 
             btnAdd.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -98,9 +110,19 @@ public class AddSalon extends AppCompatActivity {
                     descriptn = desc.getText().toString();
                     owname = oname.getText().toString();
 
-                    if(sname.length() != 0 && descriptn.length() != 0 && owname.length() != 0) {
+                    brname = bname.getText().toString();
+                    bAdd = adrs.getText().toString();
+                    CPname = cPname.getText().toString();
+                    CPemail = cPemail.getText().toString();
+                    CPmob = cPmob.getText().toString();
+
+                    if(sname.length() != 0 && descriptn.length() != 0 && owname.length() != 0 &&
+                            brname.length() != 0 && bAdd.length() != 0 && CPname.length() != 0 && CPemail.length() != 0 && CPmob.length() != 0) {
                         MstSalons mstSalons = new MstSalons(sid,slname, descriptn, owname, 1);
                         db.updateSalon(mstSalons);
+
+                        MstBranches mstBranches = new MstBranches(branchIddisplayed,sid, brname, bAdd, CPname, CPemail, CPmob,active);
+                        db.updateBranch(mstBranches);
                         onBackPressed();
 
                     } else
@@ -132,7 +154,7 @@ public class AddSalon extends AppCompatActivity {
                         int lastId = db.getLastInsertedID();
                         Log.w(TAG, "onClick: Last inserted salon id is " + lastId);
 
-                        MstBranches mstBranches = new MstBranches(lastId, brname, bAdd, CPname, CPemail, CPmob, 1);
+                        MstBranches mstBranches = new MstBranches(lastId, brname, bAdd, CPname, CPemail, CPmob, 2);
                         db.addBranch(mstBranches);
                         onBackPressed();
                        /* Intent i = new Intent(AddSalon.this, Dashboard.class);

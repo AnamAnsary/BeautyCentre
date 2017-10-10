@@ -560,8 +560,8 @@ public class Branch extends Fragment {
                    /* final TableRow parent = (TableRow) v.getParent();
                     tl.removeView(parent);*/
                     Log.w(TAG, "Id is "+ BIdlist.get(finalI) );
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                    builder.setMessage("Are you sure you want to delete this row?");
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(),R.style.CustomAlertDialog);
+                    builder.setMessage("Are you sure you want to delete this record?");
                     // add the buttons
                     builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         @Override
