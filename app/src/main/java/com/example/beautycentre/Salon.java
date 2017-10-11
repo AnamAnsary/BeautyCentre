@@ -294,14 +294,6 @@ public class Salon extends Fragment {
         }
     }
 
-    private void editSalon(Integer sid) {
-        Intent intent = new Intent(getActivity(),AddSalon.class);
-        intent.putExtra("SalonId",sid);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
-    }
-
     private void viewSalon(MstSalons mstSalons) {
         AlertDialog.Builder builder = new AlertDialog.Builder( getActivity(),R.style.CustomAlertDialog );
         Context dialogContext = builder.getContext();
@@ -381,6 +373,14 @@ public class Salon extends Fragment {
 
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+    private void editSalon(Integer sid) {
+        Intent intent = new Intent(getActivity(),AddSalon.class);
+        intent.putExtra("SalonId",sid);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
     }
 
     private void deleteDialog(final boolean show) {

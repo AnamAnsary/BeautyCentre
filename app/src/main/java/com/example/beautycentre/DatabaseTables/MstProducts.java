@@ -44,7 +44,6 @@ public class MstProducts  {
     }
 
     public MstProducts() {
-
     }
 
     public int getPid() {

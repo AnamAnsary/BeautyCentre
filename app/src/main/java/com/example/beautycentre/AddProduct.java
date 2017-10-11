@@ -3,6 +3,7 @@ package com.example.beautycentre;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.constraint.ConstraintSet;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.beautycentre.DatabaseClass.DatabaseHandler;
@@ -31,6 +33,7 @@ public class AddProduct  extends AppCompatActivity implements AdapterView.OnItem
 
     public static final String FRAGMENT_P = "Fragment_Product";
     private static final String TAG = "AddProduct";
+    TextView tvProCateg,tvProBrand;
     EditText name,descr,qt,stAlert;
     Spinner bSpin,cSpin;
     Button btAdd,btBack;
@@ -44,6 +47,9 @@ public class AddProduct  extends AppCompatActivity implements AdapterView.OnItem
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_product);
+
+        tvProBrand = (TextView) findViewById(R.id.tvProBrand);
+        tvProCateg = (TextView) findViewById(R.id.tvProCateg);
 
         name = (EditText) findViewById(R.id.name);
         descr = (EditText) findViewById(R.id.descr);
@@ -60,70 +66,127 @@ public class AddProduct  extends AppCompatActivity implements AdapterView.OnItem
         cSpin.setOnItemSelectedListener(this);
 
         //Creating the ArrayAdapter instance having the country list
-        ArrayAdapter brandsArray = new ArrayAdapter(this,android.R.layout.simple_spinner_item,brands);
+        ArrayAdapter brandsArray = new ArrayAdapter(this, android.R.layout.simple_spinner_item, brands);
         brandsArray.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         //Setting the ArrayAdapter data on the Spinner
         bSpin.setAdapter(brandsArray);
 
         //Creating the ArrayAdapter instance having the country list
-        ArrayAdapter categoryArray = new ArrayAdapter(this,android.R.layout.simple_spinner_item,category);
+        ArrayAdapter categoryArray = new ArrayAdapter(this, android.R.layout.simple_spinner_item, category);
         categoryArray.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         //Setting the ArrayAdapter data on the Spinner
         cSpin.setAdapter(categoryArray);
 
 
-        btAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        if (getIntent().getExtras() != null) {
+            final int pid = getIntent().getExtras().getInt("ProductId");
+            Log.w(TAG, "Intent received is pid " + pid);
 
+            MstProducts mstProducts = db.getSingleProduct(pid);
 
-                pname = name.getText().toString();
-                descriptn = descr.getText().toString();
-                try {
-                    quantity = Integer.parseInt(qt.getText().toString());
-                    stAlQu = Integer.parseInt(stAlert.getText().toString());
-                }catch (NumberFormatException e){
-                    Toast.makeText(AddProduct.this, "Enter Valid Number", Toast.LENGTH_SHORT).show();
-                }
-                if(pname.length() !=0 && descriptn.length() !=0 && pbrand.length() !=0 && pcategory.length() !=0 )
-                {
-                    MstProducts mstProducts = new MstProducts(pname,descriptn,pbrand, pcategory, quantity, stAlQu, 1);
-                    db.addProduct(mstProducts);
+            name.setText(mstProducts.getPname());
+            descr.setText(mstProducts.getDescrip());
+            qt.setText(""+mstProducts.getQuantity());
+            stAlert.setText(""+mstProducts.getStockAlert());
 
-                    int proId = db.getLastInsertedIDFromProduct();
+            tvProCateg.setText("Selected Category:" + mstProducts.getPcategory());
+            tvProBrand.setText("Selected Brand: " + mstProducts.getPbrand());
 
-                    SharedPreferences shared = getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
-                    String username = shared.getString(Name,"");
+            pbrand =  mstProducts.getPbrand();
+            pcategory = mstProducts.getPcategory();
 
-                    MstTransaction mstTransaction = new MstTransaction(proId,username,"Purchase",quantity,1,1);
-                    db.addTransaction(mstTransaction);
+            btAdd.setText("Update");
 
-                    List<MstTransaction> totalTransList = db.getAllTransactions();
-                    for (MstTransaction i : totalTransList) {
-                        String log = "Id : " + i.getTid() +" , Name : " + i.getConcernedPname()+"PID : "+i.getPid()+
-                                "Type : "+i.getTtype()+"date : "+i.getTransDate()+ "isparent : "+i.getIsparent()+"quantity : "+i.getTransQuantity();
-                        Log.w(TAG, "Transaction info " + log );
+            btAdd.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
 
+                    pname = name.getText().toString();
+                    descriptn = descr.getText().toString();
+                    try {
+                        quantity = Integer.parseInt(qt.getText().toString());
+                        stAlQu = Integer.parseInt(stAlert.getText().toString());
+                    } catch (NumberFormatException e) {
+                        Toast.makeText(AddProduct.this, "Enter Valid Number", Toast.LENGTH_SHORT).show();
                     }
-                    callToFragment();
+                    if (pname.length() != 0 && descriptn.length() != 0 && pbrand.length() != 0 && pcategory.length() != 0) {
 
+                        MstProducts mstProducts = new MstProducts(pid,pname, descriptn, pbrand, pcategory, quantity, stAlQu, 1);
+                        db.updateProduct(mstProducts);
+
+                        callToFragment();
+
+                       /* MstProducts mstProducts = new MstProducts(pname, descriptn, pbrand, pcategory, quantity, stAlQu, 1);
+                        db.addProduct(mstProducts);
+
+                        int proId = db.getLastInsertedIDFromProduct();
+                        SharedPreferences shared = getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
+                        String username = shared.getString(Name, "");
+
+                        MstTransaction mstTransaction = new MstTransaction(proId, username, "Purchase", quantity, 1, 1);
+                        db.addTransaction(mstTransaction);
+
+                        callToFragment();*/
+
+                    } else
+                        Toast.makeText(AddProduct.this, "Please fill each fields", Toast.LENGTH_LONG).show();
                 }
-                else
-                Toast.makeText(AddProduct.this, "Please fill each fields", Toast.LENGTH_LONG).show();
-            }
-        });
+            });
 
-        btBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-               callToFragment();
-            }
-        });
+        } else {
+
+            btAdd.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    pname = name.getText().toString();
+                    descriptn = descr.getText().toString();
+                    try {
+                        quantity = Integer.parseInt(qt.getText().toString());
+                        stAlQu = Integer.parseInt(stAlert.getText().toString());
+                    } catch (NumberFormatException e) {
+                        Toast.makeText(AddProduct.this, "Enter Valid Number", Toast.LENGTH_SHORT).show();
+                    }
+                    if (pname.length() != 0 && descriptn.length() != 0 && pbrand.length() != 0 && pcategory.length() != 0) {
+                        MstProducts mstProducts = new MstProducts(pname, descriptn, pbrand, pcategory, quantity, stAlQu, 1);
+                        db.addProduct(mstProducts);
+
+                        int proId = db.getLastInsertedIDFromProduct();
+
+                        SharedPreferences shared = getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
+                        String username = shared.getString(Name, "");
+
+                        MstTransaction mstTransaction = new MstTransaction(proId, username, "Purchase", quantity, 1, 1);
+                        db.addTransaction(mstTransaction);
+
+                        List<MstTransaction> totalTransList = db.getAllTransactions();
+                        for (MstTransaction i : totalTransList) {
+                            String log = "Id : " + i.getTid() + " , Name : " + i.getConcernedPname() + "PID : " + i.getPid() +
+                                    "Type : " + i.getTtype() + "date : " + i.getTransDate() + "isparent : " + i.getIsparent() + "quantity : " + i.getTransQuantity();
+                            Log.w(TAG, "Transaction info " + log);
+
+                        }
+                        callToFragment();
+
+                    } else
+                        Toast.makeText(AddProduct.this, "Please fill each fields", Toast.LENGTH_LONG).show();
+                }
+            });
+
+            btBack.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    callToFragment();
+                }
+            });
+        }
     }
 
     private void callToFragment() {
         Intent i = new Intent(AddProduct.this,Dashboard.class);
         i.putExtra("frgToLoad", FRAGMENT_P);
+        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(i);
         finish();//finishing activity
     }
@@ -137,12 +200,16 @@ public class AddProduct  extends AppCompatActivity implements AdapterView.OnItem
         {
             //do this
             pbrand = brands[i];
-            Log.w(TAG, "onItemSelected: brand selected "+pbrand );
+            /*if (getIntent().getExtras() != null)
+                tvProBrand.setText("Selected Brand: " + pbrand);*/
+                Log.w(TAG, "onItemSelected: brand selected "+pbrand );
         }
         else if(spinner.getId() == R.id.catSp)
         {
             //do this
             pcategory = category[i];
+           /* if (getIntent().getExtras() != null)
+                tvProCateg.setText("Selected Category:" + pcategory);*/
             Log.w(TAG, "onItemSelected: category selected "+pcategory );
         }
 

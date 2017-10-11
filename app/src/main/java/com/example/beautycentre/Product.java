@@ -23,9 +23,13 @@ import android.widget.TableRow.LayoutParams;
 
 import com.example.beautycentre.DatabaseClass.DatabaseHandler;
 import com.example.beautycentre.DatabaseTables.MstProducts;
+import com.example.beautycentre.DatabaseTables.MstSalons;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.example.beautycentre.AddProduct.FRAGMENT_P;
+import static com.example.beautycentre.AddSalon.FRAGMENT_S;
 
 /**
  * Created by vmplapp on 12/9/17.
@@ -39,6 +43,7 @@ public class Product extends Fragment {
     TableRow tr;
     TextView pid,pname,pdesc,pbrand,pcateg,pqt,pst;
     private ImageButton btnV,btnE,btnD;
+    private int PIdSelected;
 
     MstProducts mstProducts;
 
@@ -329,8 +334,8 @@ public class Product extends Fragment {
 
                     DatabaseHandler db = new DatabaseHandler(getActivity());
                     mstProducts = db.getSingleProduct(PIdlist.get(finalI));
-                    //SIdSelected = SIdlist.get(finalI);
-                    //Log.w(TAG, "addData: SIdSelected "+ SIdSelected);
+                    PIdSelected = PIdlist.get(finalI);
+                    Log.w(TAG, "addData: PIdSelected "+ PIdSelected);
                     viewProduct(mstProducts);
                 }
             });
@@ -346,11 +351,7 @@ public class Product extends Fragment {
             btnE.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
-                    //Toast.makeText(getActivity(), "BId is "+ BIdlist.get(finalI), Toast.LENGTH_LONG).show();
-                    /*editSalon(SIdlist.get(finalI));*/
-                   /* final TableRow parent = (TableRow) v.getParent();
-                    tl.removeView(parent);*/
+                    editProduct(PIdlist.get(finalI));
                 }
             });
             tr.addView(btnE);
@@ -364,9 +365,9 @@ public class Product extends Fragment {
             btnD.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                  /*  SIdSelected = SIdlist.get(finalI);
-                    Log.w(TAG, "onClick: SId is "+SIdSelected );
-                    deleteDialog(false);*/
+                    PIdSelected = PIdlist.get(finalI);
+                    Log.w(TAG, "onClick: PId is "+PIdSelected );
+                    deleteDialog(false);
                 }
 
             });
@@ -443,7 +444,7 @@ public class Product extends Fragment {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 //editSalon(SIdSelected);
-                //editBranch(BIdlist.get(finalI));
+                editProduct(PIdSelected);
                 dialog.dismiss();
                 //finish();
             }
@@ -452,7 +453,7 @@ public class Product extends Fragment {
         builder.setNegativeButton("Delete",  new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                //deleteDialog(true);
+                deleteDialog(true);
             }
         });
 
@@ -465,6 +466,67 @@ public class Product extends Fragment {
 
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+    private void editProduct(int pId) {
+
+        Intent intent = new Intent(getActivity(),AddProduct.class);
+        intent.putExtra("ProductId",pId);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+
+    }
+
+    private void deleteDialog(final boolean show) {
+        final AlertDialog.Builder builder1 = new AlertDialog.Builder(getActivity(),R.style.CustomAlertDialog );
+        builder1.setMessage("Are you sure you want to delete this record?");
+        // add the buttons
+        AlertDialog dialog2 = builder1.create();
+
+        //builder1.show();
+        final AlertDialog finalDialog = dialog2;
+        builder1.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Log.w(TAG, "onClick: PId is "+PIdSelected );
+                deleteProduct(PIdSelected);
+                Intent i = new Intent(getActivity(), Dashboard.class);
+                i.putExtra("frgToLoad", FRAGMENT_P);
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(i);
+                finalDialog.dismiss();
+            }
+        });
+
+        final AlertDialog finalDialog1 = dialog2;
+        builder1.setNegativeButton("No",  new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if(show == true)
+                    viewProduct(mstProducts);
+                finalDialog1.dismiss();
+            }
+        });
+        dialog2 = builder1.create();
+        dialog2.show();
+
+    }
+
+    private void deleteProduct(int pid) {
+        DatabaseHandler db = new DatabaseHandler(getActivity());
+        MstProducts mstProducts = db.getSingleProduct(pid);
+        Log.w(TAG, "deleteProduct: product id " + mstProducts.getPid());
+        db.deleteProduct(mstProducts);
+        //PIdlist.remove(pid);
+        Log.w(TAG, "Deleted product");
+
+        List<MstProducts> users2 = db.getAllProducts();
+        for (MstProducts ur : users2) {
+            String log = "PId: " +ur.getPid() + " ,Name: " + ur.getPname() + " ,Quantity: " +ur.getQuantity();
+            Log.w(TAG, "product is : " +log);
+        }
     }
 
     @Override
