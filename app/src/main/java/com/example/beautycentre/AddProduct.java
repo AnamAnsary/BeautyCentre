@@ -89,8 +89,23 @@ public class AddProduct  extends AppCompatActivity implements AdapterView.OnItem
             qt.setText(""+mstProducts.getQuantity());
             stAlert.setText(""+mstProducts.getStockAlert());
 
-            tvProCateg.setText("Selected Category:" + mstProducts.getPcategory());
-            tvProBrand.setText("Selected Brand: " + mstProducts.getPbrand());
+           // spinnerObject.setSelection(INDEX_OF_CATEGORY2)
+            for(int k = 0; k < brands.length; k++)
+            {
+                Log.w(TAG, "onCreate: brand value "+brands[k]);
+                if(brands[k].equals( mstProducts.getPbrand()))
+                    bSpin.setSelection(k);
+            }
+            for(int k = 0; k < category.length; k++)
+            {
+                if(category[k].equals( mstProducts.getPcategory()))
+                    cSpin.setSelection(k);
+            }
+            //bSpin.setSelection(2);
+
+          /*  tvProCateg.setText("Selected Category:" + mstProducts.getPcategory());
+            tvProBrand.setText("Selected Brand: " + mstProducts.getPbrand());*/
+
 
             pbrand =  mstProducts.getPbrand();
             pcategory = mstProducts.getPcategory();
@@ -172,14 +187,14 @@ public class AddProduct  extends AppCompatActivity implements AdapterView.OnItem
                         Toast.makeText(AddProduct.this, "Please fill each fields", Toast.LENGTH_LONG).show();
                 }
             });
-
-            btBack.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    callToFragment();
-                }
-            });
         }
+
+        btBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                callToFragment();
+            }
+        });
     }
 
     private void callToFragment() {

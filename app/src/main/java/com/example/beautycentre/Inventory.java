@@ -1,15 +1,20 @@
 package com.example.beautycentre;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -27,11 +32,14 @@ import java.util.List;
 
 public class Inventory extends Fragment {
 
+    private static final String TAG = "Inventory";
     View rootView;
     TableLayout tl;
     TableRow tr;
     TextView pid,pname,pdesc,pbrand,pcateg,pqt,pst;
     private ImageButton btnV,btnE,btnD;
+
+    MstTransaction mstTransaction;
 
     private ArrayList<Integer> TIdlist;
     private ArrayList<Integer> PIdlist;
@@ -41,6 +49,9 @@ public class Inventory extends Fragment {
     private ArrayList<String> trDatelist;
     private ArrayList<Integer> quantlist;
     private ArrayList<String> PNamelist;
+    private Integer TIdSelected;
+    private String PnameSelected;
+
 
     @Nullable
     @Override
@@ -66,6 +77,7 @@ public class Inventory extends Fragment {
             //Log.w(TAG, "Name : " + log );
             TIdlist.add(i.getTid());
             PIdlist.add(i.getPid());
+            Log.w(TAG, "onCreateView: Id value " +i.getPid() );
             trnamelist.add(i.getConcernedPname());
             trTypelist.add(i.getTtype());
             quantlist.add(i.getTransQuantity());
@@ -82,11 +94,11 @@ public class Inventory extends Fragment {
 
         }
 
+        Log.w(TAG, "onCreateView: PIDlist " +PIdlist.size() );
         for(int i = 0; i < PIdlist.size(); i++)
         {
             MstProducts mstProducts = db.getSingleProduct(PIdlist.get(i));
             PNamelist.add(mstProducts.getPname());
-
         }
 
         tl = (TableLayout) rootView.findViewById(R.id.maintable);
@@ -326,11 +338,12 @@ public class Inventory extends Fragment {
                 @Override
                 public void onClick(final View v) {
 
-                  /*  DatabaseHandler db = new DatabaseHandler(getActivity());
-                    mstSalons = db.getSingleSalon(SIdlist.get(finalI));
-                    SIdSelected = SIdlist.get(finalI);
-                    Log.w(TAG, "addData: SIdSelected "+ SIdSelected);
-                    viewSalon(mstSalons);*/
+                    //DatabaseHandler db = new DatabaseHandler(getActivity());
+                    //mstTransaction = db.getSingleTransaction(TIdlist.get(finalI));
+                    TIdSelected = TIdlist.get(finalI);
+                    PnameSelected = PNamelist.get(finalI);
+                    Log.w(TAG, "addData: TIdSelected "+ TIdSelected);
+                    viewTransaction(TIdSelected, PnameSelected);
                 }
             });
             tr.addView(btnV);
@@ -375,6 +388,104 @@ public class Inventory extends Fragment {
                     TableRow.LayoutParams.MATCH_PARENT,
                     TableRow.LayoutParams.WRAP_CONTENT));
         }
+    }
+
+    private void viewTransaction(int tid, String pnameSelected) {
+        DatabaseHandler db = new DatabaseHandler(getActivity());
+        mstTransaction = db.getSingleTransaction(tid);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder( getActivity(),R.style.CustomAlertDialog );
+        Context dialogContext = builder.getContext();
+        LayoutInflater inflater = LayoutInflater.from(dialogContext);
+
+        View alertHead = inflater.inflate(R.layout.alert_header,null);
+        //builder.setView(alertHead);
+        TextView tv = (TextView) alertHead.findViewById(R.id.tvAlertHeader);
+        tv.setText("Transaction Detail");
+        builder.setCustomTitle(alertHead);
+        //dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+        View alertView = inflater.inflate(R.layout.frag_table, null);
+        builder.setView(alertView);
+        TableLayout tableLayout = (TableLayout)alertView.findViewById(R.id.maintable);
+        ArrayList<String> FRowList = new ArrayList<String>();
+        ArrayList<String> SRowList = new ArrayList<String>();
+
+        FRowList.add("Product Name : ");
+        FRowList.add("Concerned Person : ");
+        FRowList.add("Type : ");
+        FRowList.add("Status : ");
+        FRowList.add("Date : ");
+        FRowList.add("Quantity : ");
+
+        SRowList.add(pnameSelected);
+        SRowList.add(mstTransaction.getConcernedPname());
+        SRowList.add(mstTransaction.getTtype());
+        if(null == mstTransaction.getStatus())
+            SRowList.add("- -");
+        else
+            SRowList.add(mstTransaction.getStatus());
+        if(null == mstTransaction.getTransDate())
+            SRowList.add("- -");
+        else
+            SRowList.add(mstTransaction.getTransDate());
+        SRowList.add(String.valueOf(mstTransaction.getTransQuantity()));
+
+        for(int j=0; j < FRowList.size(); j++ ){
+
+            TableRow tableRow = new TableRow(dialogContext);
+            tableRow.setLayoutParams(new LinearLayout.LayoutParams
+                    (LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+
+            TextView textView1 = new TextView(dialogContext);
+            textView1.setText(FRowList.get(j));
+            textView1.setTextColor(Color.parseColor("#757575"));
+            textView1.setTextSize(15);
+            textView1.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
+            textView1.setPadding(20, 15, 5, 15);
+            textView1.setGravity(Gravity.RIGHT);
+            tableRow.addView(textView1);
+
+            TextView textView2 = new TextView(dialogContext);
+            textView2.setText(SRowList.get(j));
+            textView2.setTextColor(Color.parseColor("#000000"));
+            textView2.setTextSize(15);
+            //textView2.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
+            textView2.setPadding(20, 15, 5, 15);
+            tableRow.addView(textView2);
+
+            tableLayout.addView(tableRow);
+        }
+
+        // add the buttons
+        builder.setPositiveButton("Edit", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                //editProduct(PIdSelected);
+                dialog.dismiss();
+                //finish();
+            }
+        });
+
+        builder.setNegativeButton("Delete",  new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //deleteDialog(true);
+                dialog.dismiss();
+            }
+        });
+
+        builder.setNeutralButton("Cancel",new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
     }
 
 
