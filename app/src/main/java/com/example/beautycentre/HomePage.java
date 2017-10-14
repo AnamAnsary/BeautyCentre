@@ -69,9 +69,9 @@ public class HomePage extends Fragment {
             PIdlist.add(pr.getPid());
         }
 
-        if(Pnamelist.size() == 0){
+        /*if(Pnamelist.size() == 0){
             Toast.makeText(getActivity(), "There are no products available! Please add Products first", Toast.LENGTH_SHORT).show();
-        }
+        }*/
 
         ArrayAdapter proadapter = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_dropdown_item, Pnamelist);
         spPro.setAdapter(proadapter);
@@ -81,63 +81,67 @@ public class HomePage extends Fragment {
             @Override
             public void onClick(View view) {
 
-                MstProducts mstProducts = db.getSingleProduct(pos2);
-                if(mstProducts.equals(null))
+                if(Pnamelist.size() == 0){
                     Toast.makeText(getActivity(), "There are no products available! Please add Products first", Toast.LENGTH_SHORT).show();
-
-                int finalQty = db.getFinalQuantityValue(mstProducts.getPid());
-                Log.w(TAG, "onClick: Db returns " +finalQty );
-
-                proDetails = (ConstraintLayout) rootView.findViewById(R.id.tvProDetails);
-                hdView = proDetails.getRootView();
-                tableLayout = (TableLayout)hdView.findViewById(R.id.maintable);
-
-                ArrayList<String> FRowList = new ArrayList<String>();
-                ArrayList<String> SRowList = new ArrayList<String>();
-
-                FRowList.add("Product ID : ");
-                FRowList.add("Product Name : ");
-                FRowList.add("Description : ");
-                FRowList.add("Brand : ");
-                FRowList.add("Category : ");
-                FRowList.add("Quantity in Stock: ");
-
-                SRowList.add(String.valueOf(mstProducts.getPid()));
-                SRowList.add(mstProducts.getPname());
-                SRowList.add(mstProducts.getDescrip());
-                SRowList.add(mstProducts.getPbrand());
-                SRowList.add(mstProducts.getPcategory());
-                SRowList.add(String.valueOf(finalQty));
-
-                if(tableLayout != null){
-                    tableLayout.removeAllViews();
                 }
-                for(int j=0; j < FRowList.size(); j++ ){
+                else {
+                    MstProducts mstProducts = db.getSingleProduct(pos2);
+                    if (mstProducts.equals(null))
+                        Toast.makeText(getActivity(), "There are no products available! Please add Products first", Toast.LENGTH_SHORT).show();
 
-                    TableRow tableRow = new TableRow(getActivity());
-                    tableRow.setLayoutParams(new TableLayout.LayoutParams
-                            (TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT));
+                    int finalQty = db.getFinalQuantityValue(mstProducts.getPid());
+                    Log.w(TAG, "onClick: Db returns " + finalQty);
 
-                    TextView textView1 = new TextView(getActivity());
-                    textView1.setText(FRowList.get(j));
-                    textView1.setTextColor(Color.parseColor("#4db6ac"));
-                    textView1.setTextSize(15);
-                    textView1.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
-                    textView1.setPadding(20, 15, 5, 15);
-                    textView1.setGravity(Gravity.RIGHT);
-                    tableRow.addView(textView1);
+                    proDetails = (ConstraintLayout) rootView.findViewById(R.id.tvProDetails);
+                    hdView = proDetails.getRootView();
+                    tableLayout = (TableLayout) hdView.findViewById(R.id.maintable);
 
-                    TextView textView2 = new TextView(getActivity());
-                    textView2.setText(SRowList.get(j));
-                    textView2.setTextColor(Color.parseColor("#000000"));
-                    textView2.setTextSize(15);
-                    //textView2.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
-                    textView2.setPadding(20, 15, 5, 15);
-                    tableRow.addView(textView2);
+                    ArrayList<String> FRowList = new ArrayList<String>();
+                    ArrayList<String> SRowList = new ArrayList<String>();
 
-                    tableLayout.addView(tableRow);
-                }
-                //Log.w(TAG, "onClick: frow and srow "+FRowList.size()+" "+SRowList.size());
+                    FRowList.add("Product ID : ");
+                    FRowList.add("Product Name : ");
+                    FRowList.add("Description : ");
+                    FRowList.add("Brand : ");
+                    FRowList.add("Category : ");
+                    FRowList.add("Quantity in Stock: ");
+
+                    SRowList.add(String.valueOf(mstProducts.getPid()));
+                    SRowList.add(mstProducts.getPname());
+                    SRowList.add(mstProducts.getDescrip());
+                    SRowList.add(mstProducts.getPbrand());
+                    SRowList.add(mstProducts.getPcategory());
+                    SRowList.add(String.valueOf(finalQty));
+
+                    if (tableLayout != null) {
+                        tableLayout.removeAllViews();
+                    }
+                    for (int j = 0; j < FRowList.size(); j++) {
+
+                        TableRow tableRow = new TableRow(getActivity());
+                        tableRow.setLayoutParams(new TableLayout.LayoutParams
+                                (TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT));
+
+                        TextView textView1 = new TextView(getActivity());
+                        textView1.setText(FRowList.get(j));
+                        textView1.setTextColor(Color.parseColor("#4db6ac"));
+                        textView1.setTextSize(15);
+                        textView1.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
+                        textView1.setPadding(20, 15, 5, 15);
+                        textView1.setGravity(Gravity.RIGHT);
+                        tableRow.addView(textView1);
+
+                        TextView textView2 = new TextView(getActivity());
+                        textView2.setText(SRowList.get(j));
+                        textView2.setTextColor(Color.parseColor("#000000"));
+                        textView2.setTextSize(15);
+                        //textView2.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
+                        textView2.setPadding(20, 15, 5, 15);
+                        tableRow.addView(textView2);
+
+                        tableLayout.addView(tableRow);
+                    }
+                    //Log.w(TAG, "onClick: frow and srow "+FRowList.size()+" "+SRowList.size());
 
                /* proDetails.setTextSize(15);
                 proDetails.setTextColor(Color.parseColor("#009688"));
@@ -147,9 +151,10 @@ public class HomePage extends Fragment {
                 proDetails.setText("Product ID : " + mstProducts.getPid() + "\nProduct Name : "+ mstProducts.getPname() + "\nDescription : "+ mstProducts.getDescrip() +
                 "\nBrand : " + mstProducts.getPbrand() +"\nCategory : " +mstProducts.getPcategory() + "\nQuantity in Stock: "+ finalQty);
 */
-                FRowList.clear();
-                SRowList.clear();
-                //Log.w(TAG, "onClick: frow and srow "+FRowList.size()+" "+SRowList.size());
+                    FRowList.clear();
+                    SRowList.clear();
+                    //Log.w(TAG, "onClick: frow and srow "+FRowList.size()+" "+SRowList.size());
+                }
             }
         });
 

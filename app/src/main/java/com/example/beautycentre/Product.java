@@ -365,9 +365,9 @@ public class Product extends Fragment {
             btnD.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                   /* PIdSelected = PIdlist.get(finalI);
+                    PIdSelected = PIdlist.get(finalI);
                     Log.w(TAG, "onClick: PId is "+PIdSelected );
-                    deleteDialog(false);*/
+                    deleteDialog(false);
                 }
 
             });
@@ -453,7 +453,7 @@ public class Product extends Fragment {
         builder.setNegativeButton("Delete",  new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                //deleteDialog(true);
+                deleteDialog(true);
                 dialog.dismiss();
             }
         });

@@ -72,6 +72,7 @@ public class Inventory extends Fragment {
         PNamelist = new ArrayList<String>();
 
         List<MstTransaction> totalTransList = db.getAllTransactions();
+        Log.w(TAG, "onCreateView: "+totalTransList.size() );
         for (MstTransaction i : totalTransList){
             //String log = "Id : " + hodU.getId() +" , Name : " + hodU.getFullname();
             //Log.w(TAG, "Name : " + log );
@@ -95,6 +96,8 @@ public class Inventory extends Fragment {
         }
 
         Log.w(TAG, "onCreateView: PIDlist " +PIdlist.size() );
+        Log.w(TAG, "onCreateView: TIDlist " +TIdlist.size() );
+
         for(int i = 0; i < PIdlist.size(); i++)
         {
             MstProducts mstProducts = db.getSingleProduct(PIdlist.get(i));

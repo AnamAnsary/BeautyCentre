@@ -497,8 +497,10 @@ public class DatabaseHandler extends SQLiteOpenHelper{
     public List<MstTransaction> getAllTransactions() {
         List<MstTransaction> transactionList = new ArrayList<MstTransaction>();
         // Select All Query
-        String selectQuery = "SELECT * FROM " + TABLE_TRANSACTION +" t LEFT OUTER JOIN " + TABLE_PRODUCTS + " p ON t."+ KEY_PRODUCTID + " = p."+ KEY_ID;
 
+        String selectQuery = "SELECT * FROM " + TABLE_PRODUCTS +" p LEFT OUTER JOIN " + TABLE_TRANSACTION + " t ON p."+ KEY_ID + " = t."+ KEY_PRODUCTID;
+
+        //String selectQuery = "SELECT * FROM " + TABLE_TRANSACTION;
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(selectQuery,null);
 
@@ -506,6 +508,18 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         if (cursor.moveToFirst()) {
             do {
                 MstTransaction trans = new MstTransaction();
+                trans.setTid(Integer.parseInt(cursor.getString(8)));
+                trans.setPid(Integer.parseInt(cursor.getString(9)));
+                trans.setConcernedPname(cursor.getString(10));
+                trans.setTtype(cursor.getString(11));
+                trans.setStatus(cursor.getString(12));
+                trans.setTransDate(cursor.getString(13));
+                trans.setExpDate(cursor.getString(14));
+                trans.setTransQuantity(Integer.parseInt(cursor.getString(15)));
+                trans.setIsparent(Integer.parseInt(cursor.getString(16)));
+                trans.setActive(Integer.parseInt(cursor.getString(17)));
+
+              /*  MstTransaction trans = new MstTransaction();
                 trans.setTid(Integer.parseInt(cursor.getString(0)));
                 trans.setPid(Integer.parseInt(cursor.getString(1)));
                 trans.setConcernedPname(cursor.getString(2));
@@ -515,7 +529,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
                 trans.setExpDate(cursor.getString(6));
                 trans.setTransQuantity(Integer.parseInt(cursor.getString(7)));
                 trans.setIsparent(Integer.parseInt(cursor.getString(8)));
-                trans.setActive(Integer.parseInt(cursor.getString(9)));
+                trans.setActive(Integer.parseInt(cursor.getString(9)));*/
                 // Adding contact to list
                 transactionList.add(trans);
             } while (cursor.moveToNext());
