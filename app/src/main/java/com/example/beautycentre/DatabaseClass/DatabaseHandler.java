@@ -660,6 +660,15 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         db.close();
     }
 
+    public void deleteTransaction(MstTransaction mstTransaction) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_TRANSACTION, KEY_ID + " = ?",
+                new String[] { String.valueOf(mstTransaction.getTid()) });
+        Log.w(TAG, "Deleting transaction" );
+        db.close();
+    }
+
 
     public MstUsers checkUser(String email, String pass) {
 
@@ -776,4 +785,5 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         //return cursor.getInt(0);
         return FinalTotal;
     }
+
 }

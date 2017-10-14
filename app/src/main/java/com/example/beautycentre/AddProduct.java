@@ -87,6 +87,8 @@ public class AddProduct  extends AppCompatActivity implements AdapterView.OnItem
             name.setText(mstProducts.getPname());
             descr.setText(mstProducts.getDescrip());
             qt.setText(""+mstProducts.getQuantity());
+            qt.setFocusable(false);
+            qt.setClickable(true);
             stAlert.setText(""+mstProducts.getStockAlert());
 
            // spinnerObject.setSelection(INDEX_OF_CATEGORY2)

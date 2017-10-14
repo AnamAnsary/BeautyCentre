@@ -126,7 +126,6 @@ public class AddTransaction extends AppCompatActivity implements View.OnClickLis
             ArrayAdapter proadapter = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, Pnamelist);
             spProduct.setAdapter(proadapter);
 
-
             //Creating the ArrayAdapter instance having the country list
             ArrayAdapter typeArray = new ArrayAdapter(this, android.R.layout.simple_spinner_item, type);
             typeArray.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -212,7 +211,8 @@ public class AddTransaction extends AppCompatActivity implements View.OnClickLis
                     Log.w(TAG, "onItemClick: selection is " + selection);
                     for (int i = 0; i < Pnamelist.size(); i++) {
                         if (Pnamelist.get(i).equals(selection)) {
-                            pos2 = i + 1;
+                            pos2 = PIdlist.get(i);
+                            //pos2 = i + 1;
                             Log.w(TAG, "onItemClick: pos2 is " + pos2);
                             break;
                         }

@@ -2,6 +2,7 @@ package com.example.beautycentre;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -21,10 +22,14 @@ import android.widget.TextView;
 
 import com.example.beautycentre.DatabaseClass.DatabaseHandler;
 import com.example.beautycentre.DatabaseTables.MstProducts;
+import com.example.beautycentre.DatabaseTables.MstSalons;
 import com.example.beautycentre.DatabaseTables.MstTransaction;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.example.beautycentre.AddSalon.FRAGMENT_S;
+import static com.example.beautycentre.AddTransaction.FRAGMENT_I;
 
 /**
  * Created by vmplapp on 12/9/17.
@@ -379,9 +384,9 @@ public class Inventory extends Fragment {
             btnD.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                  /*  SIdSelected = SIdlist.get(finalI);
-                    Log.w(TAG, "onClick: SId is "+SIdSelected );
-                    deleteDialog(false);*/
+                    TIdSelected = TIdlist.get(finalI);
+                    Log.w(TAG, "onClick: TId is "+TIdSelected );
+                    deleteDialog(false);
                 }
 
             });
@@ -474,7 +479,7 @@ public class Inventory extends Fragment {
         builder.setNegativeButton("Delete",  new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                //deleteDialog(true);
+                deleteDialog(true);
                 dialog.dismiss();
             }
         });
@@ -491,6 +496,55 @@ public class Inventory extends Fragment {
 
     }
 
+    private void deleteDialog(final boolean show) {
+        final AlertDialog.Builder builder1 = new AlertDialog.Builder(getActivity(),R.style.CustomAlertDialog );
+        builder1.setMessage("Are you sure you want to delete this record?");
+        // add the buttons
+        AlertDialog dialog2 = builder1.create();
+
+        //builder1.show();
+        final AlertDialog finalDialog = dialog2;
+        builder1.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Log.w(TAG, "onClick: TId is " + TIdSelected );
+                deleteTransaction(TIdSelected);
+                Intent i = new Intent(getActivity(), Dashboard.class);
+                i.putExtra("frgToLoad", FRAGMENT_I);
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(i);
+                finalDialog.dismiss();
+            }
+        });
+
+        final AlertDialog finalDialog1 = dialog2;
+        builder1.setNegativeButton("No",  new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if(show == true)
+                    viewTransaction(TIdSelected, PnameSelected );
+                finalDialog1.dismiss();
+            }
+        });
+        dialog2 = builder1.create();
+        dialog2.show();
+    }
+
+    private void deleteTransaction(Integer tid) {
+        DatabaseHandler db = new DatabaseHandler(getActivity());
+        MstTransaction mstTransaction = db.getSingleTransaction(tid);
+        Log.w(TAG, "deleteSalon: salon id " +mstTransaction.getTid() );
+        db.deleteTransaction(mstTransaction);
+        //TIdlist.remove(tid);
+        Log.w(TAG, "Deleted transaction");
+
+        /*List<MstSalons> users2 = db.getAllSalons();
+        for (MstSalons ur : users2) {
+            String log = "SId: " +ur.getSid() + " ,Name: " + ur.getSname() + " ,Owner: " +ur.getOwner_name();
+            Log.w(TAG, "salon is : " +log);
+        }*/
+    }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {

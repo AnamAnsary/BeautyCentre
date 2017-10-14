@@ -64,6 +64,7 @@ public class HomePage extends Fragment {
         PIdlist = new ArrayList<Integer>();
         List<MstProducts> product = db.getAllProducts();
         for (MstProducts pr : product) {
+            Log.w(TAG, "onCreateView: getAllProducts "+pr.getPid()+" " +pr.getPname() );
             //PId_nameList.add(new MstProducts(pr.getPid(),pr.getPname()));
             Pnamelist.add(pr.getPname());
             PIdlist.add(pr.getPid());
@@ -167,7 +168,8 @@ public class HomePage extends Fragment {
                 Log.w(TAG, "onItemClick: selection is " + selection);
                 for (int i = 0; i < Pnamelist.size(); i++) {
                     if (Pnamelist.get(i).equals(selection)) {
-                        pos2 = i + 1;
+                        pos2 = PIdlist.get(i);
+                        //pos2 = i + 1;
                         Log.w(TAG, "onItemClick: pos2 is " + pos2);
                         break;
                     }
