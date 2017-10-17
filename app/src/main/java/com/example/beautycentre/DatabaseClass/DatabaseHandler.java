@@ -433,6 +433,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         return prodList;
     }
 
+
     public List<MstSalons> getAllSalons() {
         List<MstSalons> salonList = new ArrayList<MstSalons>();
         // Select All Query
@@ -540,6 +541,34 @@ public class DatabaseHandler extends SQLiteOpenHelper{
 
     }
 
+    public List<MstProducts> getAllStockAlertProducts() {
+        List<MstProducts> prodList = new ArrayList<MstProducts>();
+        // Select All Query
+        String selectQuery = "SELECT  * FROM " + TABLE_PRODUCTS + " where " + KEY_QUANTITY + " <= " + KEY_STOCKALERT ;
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery,null);
+
+        // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+                MstProducts prod = new MstProducts();
+                prod.setPid(Integer.parseInt(cursor.getString(0)));
+                prod.setPname(cursor.getString(1));
+                prod.setDescrip(cursor.getString(2));
+                prod.setPbrand(cursor.getString(3));
+                prod.setPcategory(cursor.getString(4));
+                prod.setQuantity(cursor.getInt(5));
+                prod.setStockAlert(cursor.getInt(6));
+                // Adding contact to list
+                prodList.add(prod);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        // return contact list
+        return prodList;
+
+    }
 
     // Getting contacts Count
     public int getUsersCount() {

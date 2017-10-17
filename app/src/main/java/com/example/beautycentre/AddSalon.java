@@ -60,7 +60,6 @@ public class AddSalon extends AppCompatActivity {
         btnAdd = (Button) findViewById(R.id.btnAdd);
         btBack = (Button) findViewById(R.id.btBack);
 
-
         final DatabaseHandler db = new DatabaseHandler(this);
 
         if (getIntent().getExtras() != null) {

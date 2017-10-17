@@ -447,6 +447,13 @@ public class Dashboard extends AppCompatActivity
             case R.id.nav_inventory:
                 fragment = new Inventory();
                 ft.replace(R.id.content_frame, fragment,"Inventory");
+                navigationView.getMenu().getItem(4).setChecked(true);
+                break;
+            case R.id.nav_stockAlert:
+                fab.setVisibility(View.INVISIBLE);
+                fragment = new StockAlert();
+                ft.replace(R.id.content_frame, fragment,"StockAlert");
+                navigationView.getMenu().getItem(5).setChecked(true);
                 break;
             case R.id.nav_changepwd:
                 Intent  i = new Intent(Dashboard.this,ChangePassword.class);
@@ -494,6 +501,10 @@ public class Dashboard extends AppCompatActivity
             if(fragment.getTag() == "Dashboard_Frag") {
                 fab.setVisibility(View.INVISIBLE);
                 flag = true;
+            }
+            else if(fragment.getTag() == "StockAlert") {
+                fab.setVisibility(View.INVISIBLE);
+                flag = false;
             }
             else {
                 fab.setVisibility(View.VISIBLE);

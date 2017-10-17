@@ -44,10 +44,11 @@ public class MstTransaction {
         this.active = active;
     }
 
-    public MstTransaction(int pid, String concernedPname, String ttype, int transQuantity, int isparent, int active) {
+    public MstTransaction(int pid, String concernedPname, String ttype, String transDate, int transQuantity, int isparent, int active) {
         this.pid = pid;
         this.concernedPname = concernedPname;
         this.ttype = ttype;
+        this.transDate = transDate;
         this.transQuantity = transQuantity;
         this.isparent = isparent;
         this.active = active;

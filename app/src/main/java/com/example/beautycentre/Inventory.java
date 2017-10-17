@@ -7,6 +7,8 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -19,6 +21,7 @@ import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.beautycentre.DatabaseClass.DatabaseHandler;
 import com.example.beautycentre.DatabaseTables.MstProducts;
@@ -56,6 +59,7 @@ public class Inventory extends Fragment {
     private ArrayList<String> PNamelist;
     private Integer TIdSelected;
     private String PnameSelected;
+    private CoordinatorLayout coordinatorLayout;
 
 
     @Nullable
@@ -207,7 +211,7 @@ public class Inventory extends Fragment {
         tr.addView(act); // Adding textView to tablerow.
         //theChild in this case is the child of TableRow
         TableRow.LayoutParams params = (TableRow.LayoutParams) act.getLayoutParams();
-        params.span = 3; //amount of columns you will span
+        params.span = 2; //amount of columns you will span
         act.setLayoutParams(params);
 
         // Add the TableRow to the TableLayout
@@ -356,25 +360,6 @@ public class Inventory extends Fragment {
             });
             tr.addView(btnV);
 
-
-            btnE = new ImageButton(getActivity());
-            btnE.setImageResource(R.drawable.iconsedit);
-            btnE.setBackgroundColor(Color.TRANSPARENT);
-            btnE.setBackgroundResource(R.drawable.cell_shape);
-            btnE.setPadding(20, 20, 20, 20);
-            btnE.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT));
-            btnE.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    //Toast.makeText(getActivity(), "BId is "+ BIdlist.get(finalI), Toast.LENGTH_LONG).show();
-                    /*editSalon(SIdlist.get(finalI));*/
-                   /* final TableRow parent = (TableRow) v.getParent();
-                    tl.removeView(parent);*/
-                }
-            });
-            tr.addView(btnE);
-
             btnD = new ImageButton(getActivity());
             btnD.setImageResource(R.drawable.iconreddelete);
             btnD.setBackgroundColor(Color.TRANSPARENT);
@@ -465,7 +450,7 @@ public class Inventory extends Fragment {
             tableLayout.addView(tableRow);
         }
 
-        // add the buttons
+        /*// add the buttons
         builder.setPositiveButton("Edit", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -474,7 +459,7 @@ public class Inventory extends Fragment {
                 dialog.dismiss();
                 //finish();
             }
-        });
+        });*/
 
         builder.setNegativeButton("Delete",  new DialogInterface.OnClickListener() {
             @Override
@@ -508,12 +493,25 @@ public class Inventory extends Fragment {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 Log.w(TAG, "onClick: TId is " + TIdSelected );
-                deleteTransaction(TIdSelected);
-                Intent i = new Intent(getActivity(), Dashboard.class);
-                i.putExtra("frgToLoad", FRAGMENT_I);
-                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(i);
+                DatabaseHandler db = new DatabaseHandler(getActivity());
+                MstTransaction mstTransaction1 = db.getSingleTransaction(TIdSelected);
+                if(mstTransaction1.getIsparent() == 1)
+                {
+                   /* Snackbar snackbar1 = Snackbar.make(coordinatorLayout, "Cannot delete! This is the initial transaction done while adding product.", Snackbar.LENGTH_SHORT);
+                    snackbar1.show();*/
+                    Toast.makeText(getActivity(),"Cannot delete! This is the initial transaction done while adding product.", Toast.LENGTH_LONG).show();
+
+                }
+                else {
+                    deleteTransaction(TIdSelected);
+                    Toast.makeText(getActivity(), "Deleted Transaction!", Toast.LENGTH_LONG).show();
+                    Intent i = new Intent(getActivity(), Dashboard.class);
+                    i.putExtra("frgToLoad", FRAGMENT_I);
+                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(i);
+                }
+
                 finalDialog.dismiss();
             }
         });

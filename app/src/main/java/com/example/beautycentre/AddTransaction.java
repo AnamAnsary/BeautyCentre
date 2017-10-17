@@ -338,7 +338,7 @@ public class AddTransaction extends AppCompatActivity implements View.OnClickLis
         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
             Calendar calendar = Calendar.getInstance();
             calendar.set(year, monthOfYear, dayOfMonth);
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
             if (flag == FLAG_START_DATE) {
                 etTransDate.setText(format.format(calendar.getTime()));
             } else if (flag == FLAG_END_DATE) {

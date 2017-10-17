@@ -20,6 +20,8 @@ import com.example.beautycentre.DatabaseTables.MstBranches;
 import com.example.beautycentre.DatabaseTables.MstProducts;
 import com.example.beautycentre.DatabaseTables.MstTransaction;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 
 import static com.example.beautycentre.Dashboard.MyPREFERENCES;
@@ -165,6 +167,14 @@ public class AddProduct  extends AppCompatActivity implements AdapterView.OnItem
                         Toast.makeText(AddProduct.this, "Enter Valid Number", Toast.LENGTH_SHORT).show();
                     }
                     if (pname.length() != 0 && descriptn.length() != 0 && pbrand.length() != 0 && pcategory.length() != 0) {
+
+
+                        Calendar c = Calendar.getInstance();
+                        //Log.w(TAG, "onClick: Current time =>  "+ c.getTime());
+                        SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+                        String formattedDate = df.format(c.getTime());
+                        Log.w(TAG, "onClick: Date "+formattedDate );
+
                         MstProducts mstProducts = new MstProducts(pname, descriptn, pbrand, pcategory, quantity, stAlQu, 1);
                         db.addProduct(mstProducts);
 
@@ -173,7 +183,7 @@ public class AddProduct  extends AppCompatActivity implements AdapterView.OnItem
                         SharedPreferences shared = getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
                         String username = shared.getString(Name, "");
 
-                        MstTransaction mstTransaction = new MstTransaction(proId, username, "Purchase", quantity, 1, 1);
+                        MstTransaction mstTransaction = new MstTransaction(proId, username, "Purchase", formattedDate, quantity, 1, 1);
                         db.addTransaction(mstTransaction);
 
                         List<MstTransaction> totalTransList = db.getAllTransactions();

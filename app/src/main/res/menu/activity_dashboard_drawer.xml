@@ -73,9 +73,20 @@
             android:id="@+id/nav_branches"
             android:title="Branches" />
       <!--  android:icon="@drawable/ic_menu_slideshow"-->
-        <item
-            android:id="@+id/nav_inventory"
-            android:title="Inventory" />
+
+        <item android:title="Inventory">
+            <menu>
+                <group android:checkableBehavior="single" android:id="@+id/you_group">
+                <item
+                    android:id="@+id/nav_inventory"
+                    android:title="Transaction" />
+                <item
+                    android:id="@+id/nav_stockAlert"
+                    android:title="Stock Alert" />
+                </group>
+            </menu>
+        </item>
+
       <!--  android:icon="@drawable/ic_menu_manage"-->
     </group>
 
