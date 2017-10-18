@@ -46,6 +46,7 @@ public class ChangePassword extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.changepwd);
+        setTitle("Change Password");
 
         final DatabaseHandler db = new DatabaseHandler(this);
 

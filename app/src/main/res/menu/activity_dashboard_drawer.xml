@@ -58,34 +58,43 @@
         <item
             android:id="@+id/nav_dashboard"
             android:title="Dashboard" />
-
-        <item
-            android:id="@+id/nav_product"
-            android:title="Products" />
 <!--
         android:icon="@drawable/ic_menu_camera"
 -->
-        <item
-            android:id="@+id/nav_salon"
-            android:title="Salons" />
-       <!-- android:icon="@drawable/ic_menu_gallery"-->
-        <item
-            android:id="@+id/nav_branches"
-            android:title="Branches" />
-      <!--  android:icon="@drawable/ic_menu_slideshow"-->
-
         <item android:title="Inventory">
             <menu>
-                <group android:checkableBehavior="single" android:id="@+id/you_group">
-                <item
-                    android:id="@+id/nav_inventory"
-                    android:title="Transaction" />
-                <item
-                    android:id="@+id/nav_stockAlert"
-                    android:title="Stock Alert" />
+                <group android:checkableBehavior="single" android:id="@+id/inventoryGrp">
+
+                    <item
+                        android:id="@+id/nav_product"
+                        android:title="Products" />
+                    <item
+                        android:id="@+id/nav_inventory"
+                        android:title="Transactions" />
+                    <item
+                        android:id="@+id/nav_stockAlert"
+                        android:title="Stock Alerts" />
                 </group>
             </menu>
         </item>
+
+
+        <item android:title="Ledgers">
+            <menu>
+                <group android:checkableBehavior="single" android:id="@+id/ledgersGrp">
+                    <item
+                        android:id="@+id/nav_salon"
+                        android:title="Salons" />
+       <!-- android:icon="@drawable/ic_menu_gallery"-->
+                    <item
+                        android:id="@+id/nav_branches"
+                        android:title="Branches" />
+                </group>
+            </menu>
+        </item>
+      <!--  android:icon="@drawable/ic_menu_slideshow"-->
+
+
 
       <!--  android:icon="@drawable/ic_menu_manage"-->
     </group>

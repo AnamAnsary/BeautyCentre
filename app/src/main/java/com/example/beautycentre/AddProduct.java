@@ -43,12 +43,13 @@ public class AddProduct  extends AppCompatActivity implements AdapterView.OnItem
 
     int quantity = 0, stAlQu = 0;
 
-    String[] brands = { "Loreal Paris", "Avon", "M.A.C.", "Alba", "Clean & Clear", "Maybelline", "Lakme", "Other" };
-    String[] category = { "Nails and Accessories", "Gloves", "Equipments", "Brushes", "Spa Accessories","Makeup Chair", "Hair Accessories","Make-Up","Other" };
+    String[] brands = { "--Select--","Loreal Paris", "M.A.C.", "Alba", "Clean & Clear", "Maybelline", "Lakme", "Other" };
+    String[] category = { "--Select--","Nails and Accessories", "Gloves", "Equipments", "Brushes", "Spa Accessories","Makeup Chair", "Hair Accessories","Make-Up","Other" };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_product);
+        setTitle("Add Product");
 
         tvProBrand = (TextView) findViewById(R.id.tvProBrand);
         tvProCateg = (TextView) findViewById(R.id.tvProCateg);
@@ -166,36 +167,42 @@ public class AddProduct  extends AppCompatActivity implements AdapterView.OnItem
                     } catch (NumberFormatException e) {
                         Toast.makeText(AddProduct.this, "Enter Valid Number", Toast.LENGTH_SHORT).show();
                     }
+
                     if (pname.length() != 0 && descriptn.length() != 0 && pbrand.length() != 0 && pcategory.length() != 0) {
 
+                        if(pbrand ==  brands[0])
+                            Toast.makeText(AddProduct.this, "Please select Product Brand.", Toast.LENGTH_SHORT).show();
+                        else if (pcategory == category[0])
+                            Toast.makeText(AddProduct.this, "Please select Product Category.", Toast.LENGTH_SHORT).show();
+                        else {
+                            Calendar c = Calendar.getInstance();
+                            //Log.w(TAG, "onClick: Current time =>  "+ c.getTime());
+                            SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+                            String formattedDate = df.format(c.getTime());
+                            Log.w(TAG, "onClick: Date "+formattedDate );
 
-                        Calendar c = Calendar.getInstance();
-                        //Log.w(TAG, "onClick: Current time =>  "+ c.getTime());
-                        SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
-                        String formattedDate = df.format(c.getTime());
-                        Log.w(TAG, "onClick: Date "+formattedDate );
+                            MstProducts mstProducts = new MstProducts(pname, descriptn, pbrand, pcategory, quantity, stAlQu, 1);
+                            db.addProduct(mstProducts);
 
-                        MstProducts mstProducts = new MstProducts(pname, descriptn, pbrand, pcategory, quantity, stAlQu, 1);
-                        db.addProduct(mstProducts);
+                            int proId = db.getLastInsertedIDFromProduct();
 
-                        int proId = db.getLastInsertedIDFromProduct();
+                            SharedPreferences shared = getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
+                            String username = shared.getString(Name, "");
 
-                        SharedPreferences shared = getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
-                        String username = shared.getString(Name, "");
+                            MstTransaction mstTransaction = new MstTransaction(proId, username, "Purchase", formattedDate, quantity, 1, 1);
+                            db.addTransaction(mstTransaction);
 
-                        MstTransaction mstTransaction = new MstTransaction(proId, username, "Purchase", formattedDate, quantity, 1, 1);
-                        db.addTransaction(mstTransaction);
-
-                        List<MstTransaction> totalTransList = db.getAllTransactions();
-                        for (MstTransaction i : totalTransList) {
-                            String log = "Id : " + i.getTid() + " , Name : " + i.getConcernedPname() + "PID : " + i.getPid() +
+                            List<MstTransaction> totalTransList = db.getAllTransactions();
+                            for (MstTransaction i : totalTransList) {
+                                String log = "Id : " + i.getTid() + " , Name : " + i.getConcernedPname() + "PID : " + i.getPid() +
                                     "Type : " + i.getTtype() + "date : " + i.getTransDate() + "isparent : " + i.getIsparent() + "quantity : " + i.getTransQuantity();
                             Log.w(TAG, "Transaction info " + log);
 
                         }
                         callToFragment();
-
-                    } else
+                    }
+                    }
+                    else
                         Toast.makeText(AddProduct.this, "Please fill each fields", Toast.LENGTH_LONG).show();
                 }
             });
@@ -239,7 +246,6 @@ public class AddProduct  extends AppCompatActivity implements AdapterView.OnItem
                 tvProCateg.setText("Selected Category:" + pcategory);*/
             Log.w(TAG, "onItemSelected: category selected "+pcategory );
         }
-
     }
 
     @Override

@@ -79,6 +79,7 @@ public class AddTransaction extends AppCompatActivity implements View.OnClickLis
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_trans);
+        setTitle("Add Transaction");
 
         tvStoreVndr = (TextView) findViewById(R.id.tvStoreVndr);
 
@@ -106,6 +107,9 @@ public class AddTransaction extends AppCompatActivity implements View.OnClickLis
         //PId_nameList = new ArrayList<MstProducts>();
         Pnamelist = new ArrayList<String>();
         PIdlist = new ArrayList<Integer>();
+
+        Pnamelist.add(0,"--Select--");
+        PIdlist.add(0,-1);
         List<MstProducts> product = db.getAllProducts();
         for (MstProducts pr : product) {
             //PId_nameList.add(new MstProducts(pr.getPid(),pr.getPname()));
@@ -131,7 +135,6 @@ public class AddTransaction extends AppCompatActivity implements View.OnClickLis
             typeArray.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             //Setting the ArrayAdapter data on the Spinner
             sptransType.setAdapter(typeArray);
-
 
             btnsave.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -213,7 +216,7 @@ public class AddTransaction extends AppCompatActivity implements View.OnClickLis
                         if (Pnamelist.get(i).equals(selection)) {
                             pos2 = PIdlist.get(i);
                             //pos2 = i + 1;
-                            Log.w(TAG, "onItemClick: pos2 is " + pos2);
+                            Log.w(TAG, "onItemClick: pos2 means PID is " + pos2);
                             break;
                         }
                     }

@@ -45,6 +45,7 @@ public class AddSalon extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_salon);
+        setTitle("Add Salon");
 
         mConstraintLayout = (ConstraintLayout) findViewById(R.id.conslayout);
         llbuttons = (LinearLayout) findViewById(R.id.llbuttons);

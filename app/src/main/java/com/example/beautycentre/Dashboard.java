@@ -187,28 +187,30 @@ public class Dashboard extends AppCompatActivity
                         fragment = new Product();
                         Log.w(TAG, "onCreate: Product frag to add");
                         ft.replace(R.id.content_frame, fragment, "Product");
-                        navigationView.getMenu().getItem(1).setChecked(true);
+                        //navigationView.getMenu().findItem(R.id.nav_product).setChecked(true);
+                        //navigationView.getMenu().getItem(1).setChecked(true);
                         break;
                     case FRAGMENT_S:
                         // Load corresponding fragment
                         fragment = new Salon();
                         Log.w(TAG, "onCreate: Salon frag to add");
                         ft.replace(R.id.content_frame, fragment, "Salon");
-                        navigationView.getMenu().getItem(2).setChecked(true);
+                        //navigationView.getMenu().findItem(R.id.nav_salon).setChecked(true);
                         break;
                     case FRAGMENT_B:
                         // Load corresponding fragment
                         fragment = new Branch();
                         Log.w(TAG, "onCreate: Branch frag to add");
                         ft.replace(R.id.content_frame, fragment, "Branch");
-                        navigationView.getMenu().getItem(3).setChecked(true);
+                        //navigationView.getMenu().findItem(R.id.nav_branches).setChecked(true);
                         break;
                     case FRAGMENT_I:
                         // Load corresponding fragment
                         fragment = new Inventory();
                         Log.w(TAG, "onCreate: Inventory frag to add");
                         ft.replace(R.id.content_frame, fragment, "Inventory");
-                        navigationView.getMenu().getItem(4).setChecked(true);
+                        //navigationView.getMenu().findItem(R.id.nav_inventory).setChecked(true);
+                        Log.w(TAG, "Transaction selected");
                         break;
            /* case FRAGMENT_C:
                 // Load corresponding fragment
@@ -217,7 +219,7 @@ public class Dashboard extends AppCompatActivity
                         fragment = new Product();
                         Log.w(TAG, "onCreate: Product frag to add");
                         ft.replace(R.id.content_frame, fragment, "Product");
-                        navigationView.getMenu().getItem(1).setChecked(true);
+                        //navigationView.getMenu().findItem(R.id.nav_product).setChecked(true);
                         break;
                 }
                /* getIntent().getExtras().remove("frgToLoad");
@@ -235,9 +237,11 @@ public class Dashboard extends AppCompatActivity
                 displaySelectedScreen(R.id.nav_dashboard);
 
         }
-        else
+        else {
+            //getIntent().removeExtra("frgToLoad");
             //add this line to display menu1 when the activity is loaded
             displaySelectedScreen(R.id.nav_dashboard);
+        }
     }
 
     @Override
@@ -430,30 +434,40 @@ public class Dashboard extends AppCompatActivity
                 fab.setVisibility(View.INVISIBLE);
                 fragment = new HomePage();
                 ft.replace(R.id.content_frame, fragment,"Dashboard_Frag");
-                navigationView.getMenu().getItem(0).setChecked(true);
+                navigationView.setCheckedItem(R.id.nav_dashboard);
+                //navigationView.getMenu().getItem(0).setChecked(true);
                 break;
             case R.id.nav_product:
                 fragment = new Product();
                 ft.replace(R.id.content_frame, fragment,"Product");
+                navigationView.setCheckedItem(R.id.nav_product);
+                //navigationView.getMenu().findItem(R.id.nav_product).setChecked(true);
                 break;
             case R.id.nav_salon:
                 fragment = new Salon();
                 ft.replace(R.id.content_frame, fragment,"Salon");
+                navigationView.setCheckedItem(R.id.nav_salon);
+                //navigationView.getMenu().findItem(R.id.nav_salon).setChecked(true);
                 break;
             case R.id.nav_branches:
                 fragment = new Branch();
                 ft.replace(R.id.content_frame, fragment,"Branch");
+                navigationView.setCheckedItem(R.id.nav_branches);
+                //navigationView.getMenu().findItem(R.id.nav_branches).setChecked(true);
                 break;
             case R.id.nav_inventory:
                 fragment = new Inventory();
                 ft.replace(R.id.content_frame, fragment,"Inventory");
-                navigationView.getMenu().getItem(4).setChecked(true);
+                navigationView.setCheckedItem(R.id.nav_inventory);
+                //navigationView.getMenu().findItem(R.id.nav_inventory).setChecked(true);
                 break;
             case R.id.nav_stockAlert:
                 fab.setVisibility(View.INVISIBLE);
                 fragment = new StockAlert();
                 ft.replace(R.id.content_frame, fragment,"StockAlert");
-                navigationView.getMenu().getItem(5).setChecked(true);
+                navigationView.setCheckedItem(R.id.nav_stockAlert);
+                //navigationView.getMenu().findItem(R.id.nav_stockAlert).setChecked(true);
+                Log.w(TAG, "StockAlert selected");
                 break;
             case R.id.nav_changepwd:
                 Intent  i = new Intent(Dashboard.this,ChangePassword.class);

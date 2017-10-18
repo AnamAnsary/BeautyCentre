@@ -49,6 +49,7 @@ public class AddBranch extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_branch);
+        setTitle("Add Branch");
 
         mConstraintLayout = (ConstraintLayout) findViewById(R.id.conslayout);
         tvSalon = (TextView) findViewById(R.id.tvSalon);
@@ -65,6 +66,8 @@ public class AddBranch extends AppCompatActivity {
 
         Snamelist = new ArrayList<String>();
         SIdlist = new ArrayList<Integer>();
+        Snamelist.add(0,"--Select--");
+        SIdlist.add(0,-1);
         List<MstSalons> salon = db.getAllSalons();
         for (MstSalons sl : salon) {
             Snamelist.add(sl.getSname());
@@ -165,7 +168,6 @@ public class AddBranch extends AppCompatActivity {
 
                     if (pos2 != -1 && brname.length() != 0 && bAdd.length() != 0 && CPname.length() != 0 && CPemail.length() != 0 && CPmob.length() != 0) {
                         // MstProducts mstProducts = new MstProducts(pname,descriptn,quantity,quantity,1);
-
                         // sid = db.getSIDfromSalon(salname);
                         //Log.w(TAG, "onClick: sid is "+sid );
                         MstBranches mstBranches = new MstBranches(pos2, brname, bAdd, CPname, CPemail, CPmob, 1);
@@ -203,7 +205,7 @@ public class AddBranch extends AppCompatActivity {
                 Log.w(TAG, "onItemClick: selection is " + selection);
                 for (int i = 0; i < Snamelist.size(); i++) {
                     if (Snamelist.get(i).equals(selection)) {
-                        pos2 = i + 1;
+                        pos2 = SIdlist.get(i);
                         Log.w(TAG, "onItemClick: pos2 is " + pos2);
                         break;
                     }

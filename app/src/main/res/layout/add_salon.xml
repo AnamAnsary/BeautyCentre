@@ -181,7 +181,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Enter Contact Person Mobile number"
-            android:inputType="number" />
+            android:inputType="number"
+            android:maxLength="10" />
     </android.support.design.widget.TextInputLayout>
 
     <LinearLayout
