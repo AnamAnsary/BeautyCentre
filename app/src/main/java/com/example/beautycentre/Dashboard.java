@@ -187,7 +187,7 @@ public class Dashboard extends AppCompatActivity
                         fragment = new Product();
                         Log.w(TAG, "onCreate: Product frag to add");
                         ft.replace(R.id.content_frame, fragment, "Product");
-                        //navigationView.getMenu().findItem(R.id.nav_product).setChecked(true);
+                        navigationView.getMenu().findItem(R.id.nav_product).setChecked(true);
                         //navigationView.getMenu().getItem(1).setChecked(true);
                         break;
                     case FRAGMENT_S:
@@ -195,32 +195,32 @@ public class Dashboard extends AppCompatActivity
                         fragment = new Salon();
                         Log.w(TAG, "onCreate: Salon frag to add");
                         ft.replace(R.id.content_frame, fragment, "Salon");
-                        //navigationView.getMenu().findItem(R.id.nav_salon).setChecked(true);
+                        navigationView.getMenu().findItem(R.id.nav_salon).setChecked(true);
                         break;
                     case FRAGMENT_B:
                         // Load corresponding fragment
                         fragment = new Branch();
                         Log.w(TAG, "onCreate: Branch frag to add");
                         ft.replace(R.id.content_frame, fragment, "Branch");
-                        //navigationView.getMenu().findItem(R.id.nav_branches).setChecked(true);
+                        navigationView.getMenu().findItem(R.id.nav_branches).setChecked(true);
                         break;
                     case FRAGMENT_I:
                         // Load corresponding fragment
                         fragment = new Inventory();
                         Log.w(TAG, "onCreate: Inventory frag to add");
                         ft.replace(R.id.content_frame, fragment, "Inventory");
-                        //navigationView.getMenu().findItem(R.id.nav_inventory).setChecked(true);
+                        navigationView.getMenu().findItem(R.id.nav_inventory).setChecked(true);
                         Log.w(TAG, "Transaction selected");
                         break;
            /* case FRAGMENT_C:
                 // Load corresponding fragment
                 break;*/
                     default:
-                        fragment = new Product();
-                        Log.w(TAG, "onCreate: Product frag to add");
-                        ft.replace(R.id.content_frame, fragment, "Product");
-                        //navigationView.getMenu().findItem(R.id.nav_product).setChecked(true);
+                        fragment = new HomePage();
+                        ft.replace(R.id.content_frame, fragment,"Dashboard_Frag");
+                        navigationView.getMenu().findItem(R.id.nav_dashboard).setChecked(true);
                         break;
+
                 }
                /* getIntent().getExtras().remove("frgToLoad");
                 Log.w(TAG, "After just remove value is "+getIntent().getExtras().getString("frgToLoad") );*/
@@ -424,6 +424,7 @@ public class Dashboard extends AppCompatActivity
             itemId = Integer.parseInt(intentFragment.getString("frgToLoad"));
         }*/
 
+        navigationView.getMenu().close();
         //creating fragment object
         Fragment fragment = null;
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
