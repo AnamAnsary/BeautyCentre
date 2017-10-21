@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.constraint.ConstraintSet;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -37,6 +38,7 @@ public class AddBranch extends AppCompatActivity {
     private static final String TAG = "AddBranch";
     ConstraintLayout mConstraintLayout;
     TextView tvSalon;
+    TextView brCr1,brCr2,brCr3;
     EditText bname,adrs,cPname,cPemail,cPmob;
     Spinner spSalon;
     Button btnAdd,btBack;
@@ -49,7 +51,21 @@ public class AddBranch extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_branch);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         setTitle("Add Branch");
+
+        brCr1 = (TextView) findViewById(R.id.crumbWithArrow);
+        brCr2 = (TextView) findViewById(R.id.crumb2Text);
+        brCr3  = (TextView) findViewById(R.id.crumb3Text);
+
+        brCr1.setVisibility(View.VISIBLE);
+        brCr2.setVisibility(View.VISIBLE);
+        brCr3.setVisibility(View.VISIBLE);
+        brCr1.setText("Dashboard > ");
+        brCr2.setText("Branches > ");
+        brCr3.setText("Add Branch");
 
         mConstraintLayout = (ConstraintLayout) findViewById(R.id.conslayout);
         tvSalon = (TextView) findViewById(R.id.tvSalon);

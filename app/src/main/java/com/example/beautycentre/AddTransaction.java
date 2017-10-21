@@ -11,6 +11,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -47,6 +48,7 @@ public class AddTransaction extends AppCompatActivity implements View.OnClickLis
     private static final String TAG = "AddTransaction";
     public static final String FRAGMENT_I = "Fragment_Inventory";
     TextView tvStoreVndr;
+    TextView brCr1,brCr2,brCr3;
     static EditText etTransDate;
     static EditText etExpDate;
     EditText qty;
@@ -79,7 +81,20 @@ public class AddTransaction extends AppCompatActivity implements View.OnClickLis
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_trans);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         setTitle("Add Transaction");
+
+        brCr1 = (TextView) findViewById(R.id.crumbWithArrow);
+        brCr2 = (TextView) findViewById(R.id.crumb2Text);
+        brCr3  = (TextView) findViewById(R.id.crumb3Text);
+
+        brCr1.setVisibility(View.VISIBLE);
+        brCr2.setVisibility(View.VISIBLE);
+        brCr3.setVisibility(View.VISIBLE);
+        brCr1.setText("Dashboard > ");
+        brCr2.setText("Transactions > ");
+        brCr3.setText("Add Transaction");
 
         tvStoreVndr = (TextView) findViewById(R.id.tvStoreVndr);
 

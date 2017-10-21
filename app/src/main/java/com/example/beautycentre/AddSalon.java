@@ -10,11 +10,13 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutCompat;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.beautycentre.DatabaseClass.DatabaseHandler;
@@ -35,6 +37,7 @@ public class AddSalon extends AppCompatActivity {
 
     ConstraintLayout mConstraintLayout;
     LinearLayout llbuttons;
+    TextView brCr1,brCr2,brCr3;
     EditText sname,desc,oname,bname,adrs,cPname,cPemail,cPmob;
     Button btnAdd,btBack;
     String slname,descriptn,owname,brname,bAdd,CPname,CPemail,CPmob;;
@@ -45,7 +48,21 @@ public class AddSalon extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_salon);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         setTitle("Add Salon");
+
+        brCr1 = (TextView) findViewById(R.id.crumbWithArrow);
+        brCr2 = (TextView) findViewById(R.id.crumb2Text);
+        brCr3  = (TextView) findViewById(R.id.crumb3Text);
+
+        brCr1.setVisibility(View.VISIBLE);
+        brCr2.setVisibility(View.VISIBLE);
+        brCr3.setVisibility(View.VISIBLE);
+        brCr1.setText("Dashboard > ");
+        brCr2.setText("Salons > ");
+        brCr3.setText("Add Salon");
+
 
         mConstraintLayout = (ConstraintLayout) findViewById(R.id.conslayout);
         llbuttons = (LinearLayout) findViewById(R.id.llbuttons);

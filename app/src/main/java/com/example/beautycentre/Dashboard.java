@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -57,6 +58,7 @@ public class Dashboard extends AppCompatActivity
     FrameLayout fragDash;
     DrawerLayout drawer;
     TextView welcome,user_email;
+    TextView brCr1,brCr2;
     FloatingActionButton fab;
     String intentFragment;
     boolean doubleBackToExitPressedOnce = false;
@@ -67,6 +69,12 @@ public class Dashboard extends AppCompatActivity
         setContentView(R.layout.activity_dashboard);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        brCr1 = (TextView) findViewById(R.id.crumbWithArrow);
+        brCr2 = (TextView) findViewById(R.id.crumb2Text);
+
+        //brCr1.setText("Dashboard > ");
+        brCr2.setVisibility(View.INVISIBLE);
 
         sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         String name = sharedpreferences.getString(Name,null);
@@ -151,6 +159,7 @@ public class Dashboard extends AppCompatActivity
 
 
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
@@ -188,6 +197,7 @@ public class Dashboard extends AppCompatActivity
                         Log.w(TAG, "onCreate: Product frag to add");
                         ft.replace(R.id.content_frame, fragment, "Product");
                         navigationView.getMenu().findItem(R.id.nav_product).setChecked(true);
+                        brCr2.setText("Products");
                         //navigationView.getMenu().getItem(1).setChecked(true);
                         break;
                     case FRAGMENT_S:
@@ -196,6 +206,7 @@ public class Dashboard extends AppCompatActivity
                         Log.w(TAG, "onCreate: Salon frag to add");
                         ft.replace(R.id.content_frame, fragment, "Salon");
                         navigationView.getMenu().findItem(R.id.nav_salon).setChecked(true);
+                        brCr2.setText("Salons");
                         break;
                     case FRAGMENT_B:
                         // Load corresponding fragment
@@ -203,6 +214,7 @@ public class Dashboard extends AppCompatActivity
                         Log.w(TAG, "onCreate: Branch frag to add");
                         ft.replace(R.id.content_frame, fragment, "Branch");
                         navigationView.getMenu().findItem(R.id.nav_branches).setChecked(true);
+                        brCr2.setText("Branches");
                         break;
                     case FRAGMENT_I:
                         // Load corresponding fragment
@@ -210,7 +222,7 @@ public class Dashboard extends AppCompatActivity
                         Log.w(TAG, "onCreate: Inventory frag to add");
                         ft.replace(R.id.content_frame, fragment, "Inventory");
                         navigationView.getMenu().findItem(R.id.nav_inventory).setChecked(true);
-                        Log.w(TAG, "Transaction selected");
+                        brCr2.setText("Transactions");
                         break;
            /* case FRAGMENT_C:
                 // Load corresponding fragment
@@ -228,6 +240,7 @@ public class Dashboard extends AppCompatActivity
                //  Log.w(TAG, "After remove extra value is "+getIntent().getExtras().getString("frgToLoad") );
                // ft.addToBackStack(null);
                 fab.setVisibility(View.VISIBLE);
+                brCr2.setVisibility(View.VISIBLE);
                 flag = false;
                 ft.commit();
 
@@ -442,24 +455,28 @@ public class Dashboard extends AppCompatActivity
                 fragment = new Product();
                 ft.replace(R.id.content_frame, fragment,"Product");
                 navigationView.setCheckedItem(R.id.nav_product);
+                brCr2.setText("Products");
                 //navigationView.getMenu().findItem(R.id.nav_product).setChecked(true);
                 break;
             case R.id.nav_salon:
                 fragment = new Salon();
                 ft.replace(R.id.content_frame, fragment,"Salon");
                 navigationView.setCheckedItem(R.id.nav_salon);
+                brCr2.setText("Salons");
                 //navigationView.getMenu().findItem(R.id.nav_salon).setChecked(true);
                 break;
             case R.id.nav_branches:
                 fragment = new Branch();
                 ft.replace(R.id.content_frame, fragment,"Branch");
                 navigationView.setCheckedItem(R.id.nav_branches);
+                brCr2.setText("Branches");
                 //navigationView.getMenu().findItem(R.id.nav_branches).setChecked(true);
                 break;
             case R.id.nav_inventory:
                 fragment = new Inventory();
                 ft.replace(R.id.content_frame, fragment,"Inventory");
                 navigationView.setCheckedItem(R.id.nav_inventory);
+                brCr2.setText("Transactions");
                 //navigationView.getMenu().findItem(R.id.nav_inventory).setChecked(true);
                 break;
             case R.id.nav_stockAlert:
@@ -467,6 +484,7 @@ public class Dashboard extends AppCompatActivity
                 fragment = new StockAlert();
                 ft.replace(R.id.content_frame, fragment,"StockAlert");
                 navigationView.setCheckedItem(R.id.nav_stockAlert);
+                brCr2.setText("Stock Alerts");
                 //navigationView.getMenu().findItem(R.id.nav_stockAlert).setChecked(true);
                 Log.w(TAG, "StockAlert selected");
                 break;
@@ -515,14 +533,17 @@ public class Dashboard extends AppCompatActivity
         if (fragment != null) {
             if(fragment.getTag() == "Dashboard_Frag") {
                 fab.setVisibility(View.INVISIBLE);
+                brCr2.setVisibility(View.INVISIBLE);
                 flag = true;
             }
             else if(fragment.getTag() == "StockAlert") {
+                brCr2.setVisibility(View.VISIBLE);
                 fab.setVisibility(View.INVISIBLE);
                 flag = false;
             }
             else {
                 fab.setVisibility(View.VISIBLE);
+                brCr2.setVisibility(View.VISIBLE);
                 flag = false;
             }
             ft.commit();

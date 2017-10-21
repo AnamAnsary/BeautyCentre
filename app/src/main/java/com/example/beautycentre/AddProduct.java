@@ -5,8 +5,10 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.constraint.ConstraintSet;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -35,6 +37,7 @@ public class AddProduct  extends AppCompatActivity implements AdapterView.OnItem
 
     public static final String FRAGMENT_P = "Fragment_Product";
     private static final String TAG = "AddProduct";
+    TextView brCr1,brCr2,brCr3;
     TextView tvProCateg,tvProBrand;
     EditText name,descr,qt,stAlert;
     Spinner bSpin,cSpin;
@@ -48,8 +51,23 @@ public class AddProduct  extends AppCompatActivity implements AdapterView.OnItem
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.add_product);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         setTitle("Add Product");
+
+        brCr1 = (TextView) findViewById(R.id.crumbWithArrow);
+        brCr2 = (TextView) findViewById(R.id.crumb2Text);
+        brCr3  = (TextView) findViewById(R.id.crumb3Text);
+
+        brCr1.setVisibility(View.VISIBLE);
+        brCr2.setVisibility(View.VISIBLE);
+        brCr3.setVisibility(View.VISIBLE);
+        brCr1.setText("Dashboard > ");
+        brCr2.setText("Products > ");
+        brCr3.setText("Add Product");
 
         tvProBrand = (TextView) findViewById(R.id.tvProBrand);
         tvProCateg = (TextView) findViewById(R.id.tvProCateg);
